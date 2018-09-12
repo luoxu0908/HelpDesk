@@ -750,7 +750,7 @@ function addNewUser() {
 
 function addNewPerson() {
     var displayName = '', entityKey = '', mobile = '', email = '', country = '', postalCode = '', city = '', state = '', block = '', street = '', unit = '',
-    building = '', role = '0', poc1Name = '', poc1Contact = '', poc1Email = '', poc1Designation = '', poc1Department = '', poc2Name = '', poc2Contact = '',
+    building = '', role = '', poc1Name = '', poc1Contact = '', poc1Email = '', poc1Designation = '', poc1Department = '', poc2Name = '', poc2Contact = '',
     poc2Email = '', poc2Designation = '', poc2Department = '', Username = '', Password = '';
     displayName = $('#newPersonForm #displayName').val();
     entityKey = $('#newPersonForm #entityKey').val();
@@ -758,6 +758,7 @@ function addNewPerson() {
     email = $('#newPersonForm #email').val();
     Username = $('#newPersonForm #Username').val();
     Password = $('#newPersonForm #Password').val();
+    role=$('#newPersonForm #role').val();
     if (displayName == '' || entityKey == '' || mobile == '' || email == '' || role == '' || Username == '' || Password == '') {
         alert('Please fill in all mandatory fields!');
         return false;
