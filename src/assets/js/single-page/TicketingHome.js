@@ -546,7 +546,7 @@ function getProductOwn() {
                         htmlString += "<td><a href=" + hmtlHref + " target='_blank'>" + products[i].PackageDesc + "</a></td>";
                         htmlString += '<td>' + products[i].StartDate + '</td>';
                         htmlString += '<td>' + expiryDate + '</td>';
-                        htmlString += '<td>' + products[i].ContractType  + '</td>';
+                        htmlString += '<td>' + products[i].TotalHours  + '</td>';
                         htmlString += '<td>' + products[i].ManHoursBought + '</td>';
                         htmlString += '<td>' + products[i].ManHoursUsed + '</td>';
                         htmlString += '<td>' + products[i].ManHoursLeft + '</td>';
