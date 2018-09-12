@@ -36,10 +36,10 @@
         <thead>
           <tr>
             <th></th>
-            <th>Product</th>
             <th>Package Type</th>
+            <th>Start Date</th>
             <th>Expiry Date</th>
-            <th>Quantity</th>
+            <th>Contarct Type</th>
             <th>Total man-hours</th>
             <th>Utilized Man-hour(s)</th>
             <th>Remaining Man-hour(s)</th>
@@ -426,87 +426,78 @@
     <button type="button" id="submit"  class="cell small-12 medium-offset-4 medium-4 newCaseSubmitButton">Submit</button>
   </footer>
 </form>
-<form id="packageAddForm" class="reveal lightBg" data-reveal >
-  <header onloadedmetadata="" class="grid-x grid-padding-x">
-    <h3 class="cell">New Package</h3>
-    <button class="close-button" data-close aria-label="Close modal" type="button">
-    <span aria-hidden="true">&times;</span>
-    </button>
-  </header>
-  <div class="grid-x grid-padding-x">
-    <div class="cell">
-      <label>
-      Organisation <span style="color:red">*</span>
-      <select id="organisation" name="organisation">
-      </select>
-      </label>
+<form id="packageAddForm" class="reveal lightBg" data-reveal>
+    <header onloadedmetadata="" class="grid-x grid-padding-x">
+        <h3 class="cell">New Package</h3>
+        <button class="close-button" data-close aria-label="Close modal" type="button">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </header>
+    <div class="grid-x grid-padding-x">
+        <div class="cell">
+            <label>
+                Organisation <span style="color:red">*</span>
+                <select id="organisation" name="organisation"></select>
+            </label>
+        </div>
     </div>
-  </div>
-  <div class="grid-x grid-padding-x">
-    <div class="cell">
-      <label>
-      Product <span style="color:red">*</span>
-      <input type="text" id="product" name="product"/>
-      </label>
+    <div class="grid-x grid-padding-x">
+        <div class="cell">
+            <label>
+                Package Type <span style="color:red">*</span>
+                <select id="type" name="type">
+                    <option value="">-- Please Select --</option>
+                    <option value="Maintenance">Mantainance & Support </option>
+                    <option value="Assurance">Software Assurance</option>
+                    <option value="AssurancePlus">Assurance Plus</option>
+                </select>
+            </label>
+        </div>
     </div>
-  </div>
-  <div class="grid-x grid-padding-x">
-    <div class="cell">
-      <label>
-        Package Type <span style="color:red">*</span>
-        <select id="type" name="type">
-          <option value="">-- Please Select --</option>
-          <option value="Maintenance">Mantainance & Support </option>
-          <option value="Assurance">Software Assurance</option>
-          <option value="AssurancePlus">Assurance Plus</option>
-        </select>
-      </label>
+    <div class="grid-x grid-padding-x">
+        <div class="cell">
+            <label>
+                Contract Type <span style="color:red">*</span>
+                <select id="ContractType" name="ContractType"></select>
+            </label>
+        </div>
     </div>
-  </div>
-  <div class="grid-x grid-padding-x">
-    <div class="cell">
-      <label>
-      Quantity <span style="color:red">*</span>
-      <input type="number" id="quantity" name="quantity" value="1"/>
-      </label>
+    <div class="grid-x grid-padding-x">
+        <div class="cell small-12 medium-6">
+            <label>
+                Start Date <span style="color:red">*</span>
+                <input type="date" id="packageStartDate" name="packageStartDate" />
+            </label>
+        </div>
+        <div class="cell small-12 medium-6">
+            <label>
+                Expiry Date <span style="color:red">*</span>
+                <input type="date" id="packageExpiryDate" name="packageExpiryDate" />
+            </label>
+        </div>
     </div>
-  </div>
-  <div class="grid-x grid-padding-x">
-    <div class="cell small-12 medium-6">
-      <label>
-      Start Date <span style="color:red">*</span>
-      <input type="date" id="packageStartDate" name="packageStartDate" />
-      </label>
+    <div class="grid-x grid-padding-x" style="display:none">
+        <div class="cell small-12 medium-4">
+            <label>
+                Assurance Plus
+                <input type="checkbox" id="assurancePlus" name="assurancePlus" />
+            </label>
+        </div>
+        <div class="cell small-12 medium-2">
+            <input type="text" style="display: none" id="assurancePlusNo" name="assurancePlusNo" />
+        </div>
     </div>
-    <div class="cell small-12 medium-6">
-      <label>
-      Expiry Date <span style="color:red">*</span>
-      <input type="date" id="packageExpiryDate" name="packageExpiryDate" />
-      </label>
+    <div class="grid-x grid-padding-x">
+        <div class="cell">
+            <label>
+                Remarks
+                <textarea id="remarks" name="remarks"></textarea>
+            </label>
+        </div>
     </div>
-  </div>
-  <div class="grid-x grid-padding-x" style="display:none">
-    <div class="cell small-12 medium-4">
-      <label>
-        Assurance Plus
-        <input type="checkbox" id="assurancePlus" name="assurancePlus" />
-      </label>
-    </div>
-    <div class="cell small-12 medium-2">
-        <input type="text" style="display: none" id="assurancePlusNo" name="assurancePlusNo"/>
-    </div>
-  </div>
-  <div class="grid-x grid-padding-x">
-    <div class="cell">
-      <label>
-      Remarks
-      <textarea id="remarks" name="remarks"></textarea>
-      </label>
-    </div>
-  </div>
-  <footer class="grid-x grid-margin-x">
-    <button type="button" id="submit"  class="cell small-12 medium-offset-4 medium-4 newPackagaSubmitButton">Submit</button>
-  </footer>
+    <footer class="grid-x grid-margin-x">
+        <button type="button" id="submit" class="cell small-12 medium-offset-4 medium-4 newPackagaSubmitButton">Submit</button>
+    </footer>
 </form>
 <form id="newUserForm" class="reveal lightBg" data-reveal >
   <header onloadedmetadata="" class="grid-x grid-padding-x">
