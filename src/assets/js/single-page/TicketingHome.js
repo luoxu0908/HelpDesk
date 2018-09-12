@@ -129,7 +129,7 @@ $(function () {
           }
       });
 
-    GetCountry();
+    GetCountry();GetContarctType();
     $.when(checkRoleAccess, getOrgnaisationList()).then(function (x) {
 
         if (RoleName == 'Admin' || RoleName == 'Security Admin') {
@@ -543,11 +543,10 @@ function getProductOwn() {
                         } else {
                             htmlString += "<td></td>";
                         }
-
-                        htmlString += '<td>' + products[i].Product + '</td>';
                         htmlString += "<td><a href=" + hmtlHref + " target='_blank'>" + products[i].PackageDesc + "</a></td>";
+                        htmlString += '<td>' + products[i].StartDate + '</td>';
                         htmlString += '<td>' + expiryDate + '</td>';
-                        htmlString += '<td>' + products[i].AssuranceNo + '</td>';
+                        htmlString += '<td>' + products[i].ContractType  + '</td>';
                         htmlString += '<td>' + products[i].ManHoursBought + '</td>';
                         htmlString += '<td>' + products[i].ManHoursUsed + '</td>';
                         htmlString += '<td>' + products[i].ManHoursLeft + '</td>';
@@ -615,32 +614,19 @@ function getOrgProductList(Organization) {
 
 
 function addNewPackage() {
-    var RoleID, PackageType, Product, StartDate, ExpiryDate, AssurancePlus, NoAssPlus, Quantity, Remarks;
+    var RoleID, PackageType, ContractType, StartDate, ExpiryDate, Remarks;
     RoleID = $('#packageAddForm #organisation').val();
-    Product = $('#packageAddForm #product').val();
     PackageType = $('#packageAddForm #type').val();
+    ContractType = $('#packageAddForm #ContractType').val();
     StartDate = $('#packageAddForm #packageStartDate').val();
     ExpiryDate = $('#packageAddForm #packageExpiryDate').val();
-    Quantity = $('#packageAddForm #quantity').val();
-    if ($("#packageAddForm #assurancePlus").is(':checked')) {
-        AssurancePlus = 1;
-    } else {
-        AssurancePlus = 0;
-    }
-    Remarks = $('#packageAddForm #remarks').val();
-    Quantity = parseInt(Quantity);
 
-    if (RoleID.length == 0 || PackageType.length == 0 || Product.length == 0 || StartDate.length == 0 || ExpiryDate.length == 0) {
+    Remarks = $('#packageAddForm #remarks').val();
+    if (RoleID.length == 0 || PackageType.length == 0 || ContractType.length == 0 || StartDate.length == 0 || ExpiryDate.length == 0) {
         alert('Please fill in all mandatory fields!');
         return false;
     }
-    if (isNaN(Quantity)) {
-        alert('Please fill in Quantity fields!');
-        return false;
-    }
-    //NoAssPlus = $('#packageAddForm #assurancePlusNo').val() * 5 * 8;
-    NoAssPlus = Quantity * 5 * 8;
-    var data = { 'RoleID': RoleID, 'PackageType': PackageType, 'Product': Product, 'StartDate': StartDate, 'ExpiryDate': ExpiryDate, 'Remarks': Remarks, 'AssurancePlus': AssurancePlus, 'NoAssPlus': NoAssPlus, 'Quantity': Quantity };
+    var data = { 'RoleID': RoleID, 'PackageType': PackageType, 'ContractType': ContractType, 'StartDate': StartDate, 'ExpiryDate': ExpiryDate, 'Remarks': Remarks };
     $.ajax({
         url: apiSrc + "BCMain/Ctc1.AddNewPackage.json",
         method: "POST",
@@ -758,7 +744,7 @@ function addNewPerson() {
     email = $('#newPersonForm #email').val();
     Username = $('#newPersonForm #Username').val();
     Password = $('#newPersonForm #Password').val();
-    role=$('#newPersonForm #role').val();
+    role= $('#newPersonForm #role').val();
     if (displayName == '' || entityKey == '' || mobile == '' || email == '' || role == '' || Username == '' || Password == '') {
         alert('Please fill in all mandatory fields!');
         return false;
@@ -831,11 +817,10 @@ function convertDateTime(inputFormat, type) {
 
 function clearPackageForm() {
     RoleID = $('#packageAddForm #organisation').val('');
-    Product = $('#packageAddForm #product').val('');
+    ContractType = $('#packageAddForm #ContractType').val('');
     PackageType = $('#packageAddForm #type').val('');
     StartDate = $('#packageAddForm #packageStartDate').val('');
     ExpiryDate = $('#packageAddForm #packageExpiryDate').val('');
-    NoAssPlus = $('#packageAddForm #assurancePlusNo').val('');
     Remarks = $('#packageAddForm #remarks').val('');
 }
 
@@ -901,6 +886,39 @@ function getGUID() {
     });
     return uuid;
 };
+
+function GetContarctType() {
+    $('#newUserForm #country').html('');
+    $('#newUserForm #country').append('<option value="">-- Please Select --</option>');
+    var data = { 'LookupCat': 'ContractType' };
+    return $.ajax({
+        url: apiSrc + "BCMain/iCtc1.GetLookupVal.json",
+        method: "POST",
+        dataType: "json",
+        xhrFields: { withCredentials: true },
+        data: {
+            'data': JSON.stringify(data),
+            'WebPartKey': WebPartVal,
+            'ReqGUID': getGUID()
+        },
+        success: function (data) {
+            if ((data) && (data.d.RetVal === -1)) {
+                if (data.d.RetData.Tbl.Rows.length > 0) {
+                    var ContractType = data.d.RetData.Tbl.Rows;
+                    for (var i = 0; i < ContractType.length; i++) {
+                        $('#packageAddForm #ContractType').append('<option value="' + ContractType[i].Description + '">' + ContractType[i].Description + '</option>');
+                    }
+                }
+            }
+            else {
+                alert(data.d.RetMsg);
+            }
+        },
+        error: function (data) {
+            alert("Error: " + data.responseJSON.d.RetMsg);
+        }
+    });
+}
 
 function GetCountry() {
     $('#newUserForm #country').html('');
