@@ -87,7 +87,8 @@ $(function () {
           }
       });
 
-    GetCountry();GetContarctType();
+    GetCountry();GetDropDownList('packageAddForm','ContractType','ContractType');
+    GetDropDownList('packageAddForm','type','PackageType');
     $.when(checkRoleAccess, getOrgnaisationList()).then(function (x) {
 
         if (RoleName == 'Admin' || RoleName == 'Security Admin') {
@@ -845,38 +846,38 @@ function getGUID() {
     return uuid;
 };
 
-function GetContarctType() {
-    $('#newUserForm #country').html('');
-    $('#newUserForm #country').append('<option value="">-- Please Select --</option>');
-    var data = { 'LookupCat': 'ContractType' };
-    return $.ajax({
-        url: apiSrc + "BCMain/iCtc1.GetLookupVal.json",
-        method: "POST",
-        dataType: "json",
-        xhrFields: { withCredentials: true },
-        data: {
-            'data': JSON.stringify(data),
-            'WebPartKey': WebPartVal,
-            'ReqGUID': getGUID()
-        },
-        success: function (data) {
-            if ((data) && (data.d.RetVal === -1)) {
-                if (data.d.RetData.Tbl.Rows.length > 0) {
-                    var ContractType = data.d.RetData.Tbl.Rows;
-                    for (var i = 0; i < ContractType.length; i++) {
-                        $('#packageAddForm #ContractType').append('<option value="' + ContractType[i].Description + '">' + ContractType[i].Description + '</option>');
-                    }
-                }
-            }
-            else {
-                alert(data.d.RetMsg);
-            }
-        },
-        error: function (data) {
-            alert("Error: " + data.responseJSON.d.RetMsg);
-        }
-    });
-}
+function GetDropDownList(FatherId,Id,LookupCat) {
+      $('#' + FatherId + ' #' + Id + '').html('');
+      $('#' + FatherId + ' #' + Id + '').append('<option value="">-- Please Select --</option>');
+      var data = { 'LookupCat': LookupCat };
+      return $.ajax({
+          url: apiSrc + "BCMain/iCtc1.GetTicketLookupVal.json",
+          method: "POST",
+          dataType: "json",
+          xhrFields: { withCredentials: true },
+          data: {
+              'data': JSON.stringify(data),
+              'WebPartKey': WebPartVal,
+              'ReqGUID': getGUID()
+          },
+          success: function (data) {
+              if ((data) && (data.d.RetVal === -1)) {
+                  if (data.d.RetData.Tbl.Rows.length > 0) {
+                      var Result = data.d.RetData.Tbl.Rows;
+                      for (var i = 0; i < Result.length; i++) {
+                          $('#' + FatherId + ' #' + Id + '').append('<option value="' + Result[i].Description + '">' + Result[i].Description + '</option>');
+                      }
+                  }
+              }
+              else {
+                  alert(data.d.RetMsg);
+              }
+          },
+          error: function (data) {
+              alert("Error: " + data.responseJSON.d.RetMsg);
+          }
+      });
+  }
 
 function GetCountry() {
     $('#newUserForm #country').html('');
