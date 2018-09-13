@@ -139,23 +139,7 @@
           </label>
         </div>
       </div>
-      <div class="grid-x grid-padding-x">
-        <div class="cell small-12 medium-6">
-          <label>Product
-          <input type="text" id="product" name="product" />
-          </label>
-        </div>
-        <div class="cell small-12 medium-6">
-          <label>
-            Involvement
-            <select id="person" name="person">
-            <option value="">-- Select Staff --</option>
-            <option value="1">Admin</option>
-            <option value="6">Li Feng</option>
-            </select>
-          </label>
-        </div>
-      </div>
+
       <div class="grid-x grid-padding-x">
         <fieldset class="cell">
           <div class="grid-x grid-margin-x">
@@ -172,7 +156,18 @@
           </div>
         </fieldset>
       </div>
-
+      <div class="grid-x grid-padding-x">
+        <div class="cell small-12 medium-6">
+          <label>
+            Involvement
+            <select id="person" name="person">
+            <option value="">-- Select Staff --</option>
+            <option value="1">Admin</option>
+            <option value="6">Li Feng</option>
+            </select>
+          </label>
+        </div>
+      </div>
       <footer class="grid-x grid-margin-x">
         <button type="button" class="cell small-12 medium-offset-4 medium-4 button2 tabBoxButtonSubmit">Filter</button>
       </footer>
@@ -184,13 +179,14 @@
         <tr>
           <th colspan="2">Case ID#</th>
           <th >Subject</th>
-          <th>Product</th>
           <th>Type</th>
           <th>Priority Level</th>
           <th>Organisation</th>
           <th>Created Date</th>
           <th>Schedule From Date</th>
           <th>Schedule To Date</th>
+          <th>Category</th>
+          <th>Location</th>
           <th>Status</th>
           <th>Involvement</th>
         </tr>
@@ -379,25 +375,25 @@
   <div class="grid-x grid-padding-x">
     <div class="cell">
       <label>
-      Product<span style="color:red">*</span>
-      <select id="product" name="product">
+      Type<span style="color:red">*</span>
+      <select id="Type" name="Type">
       </select>
       </label>
     </div>
   </div>
+
   <div class="grid-x grid-padding-x" id="CreatCasecategory">
     <div class="cell">
       <label>
         Category
         <select id="category" name="category">
-          <option value="">-- Please Select --</option>
-          <option value="Support Request">Support Request</option>
-          <option value="Bugs">Bugs</option>
-          <option value="CR">Change Request</option>
-          <option value="Project">Project</option>
-          <option value="Road Map">Road Map</option>
         </select>
       </label>
+    </div>
+  </div>
+  <div class="grid-x grid-padding-x">
+    <div class="cell">
+      <label>Location<select id="Location" name="Location"></select></label>
     </div>
   </div>
   <div class="grid-x grid-padding-x" id="CreatCasecategory">
@@ -405,10 +401,6 @@
       <label>
         Priority Level<span style="color:red">*</span>
         <select id="PriorityLevel" name="PriorityLevel">
-          <option value="">-- Please Select --</option>
-          <option value="Critical">Critical</option>
-          <option value="Urgent">Urgent</option>
-          <option value="Normal">Normal</option>
         </select>
       </label>
     </div>

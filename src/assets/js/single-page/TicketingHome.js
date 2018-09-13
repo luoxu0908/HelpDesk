@@ -89,6 +89,10 @@ $(function () {
 
     GetCountry();GetDropDownList('packageAddForm','ContractType','ContractType');
     GetDropDownList('packageAddForm','type','PackageType');
+    GetDropDownList('caseAddForm','category','Category');
+    GetDropDownList('caseAddForm','Location','Location');
+    GetDropDownList('caseAddForm','PriorityLevel','PriorityLevel');
+    GetDropDownList('caseAddForm','Type','Type');
     $.when(checkRoleAccess, getOrgnaisationList()).then(function (x) {
 
         if (RoleName == 'Admin' || RoleName == 'Security Admin') {
@@ -174,16 +178,16 @@ function getCasesList() {
         caseThead = caseContainerTable.find('thead'),
         caseTbody = caseContainerTable.find('tbody');
 
-    var Organization, Status, Subject, Category, DateFrom, DateTo, product, person;
+    var Organization, Status, Subject, Category, DateFrom, DateTo, person;
     Organization = $('#caseFilter #organisation').val();
     Status = $('#caseFilter #status').val();
     Subject = $('#caseFilter #subject').val();
     Category = $('#caseFilter #category').val();
     DateFrom = $('#caseFilter #dateCreatedFrom').val();
     DateTo = $('#caseFilter #dateCreatedTo').val();
-    product = $('#caseFilter #product').val();
+
     person = $('#caseFilter #person').val();
-    var data = { 'Organization': Organization, 'Status': Status, 'Subject': Subject, 'Category': Category, 'DateFrom': DateFrom, 'DateTo': DateTo, 'Product': product, 'Person': person };
+    var data = { 'Organization': Organization, 'Status': Status, 'Subject': Subject, 'Category': Category, 'DateFrom': DateFrom, 'DateTo': DateTo,  'Person': person };
     //if (RoleName=='Clients'){
     //caseThead.html('<tr><th colspan="2">Subject</th><th>Type</th><th>Created Date</th><th>Status</th></tr>');
     //}
@@ -219,14 +223,14 @@ function getCasesList() {
                         var ExpiryDate = convertDateTime(cases[i].ExpiryDate, 'date');
                         htmlString += '<td>' + cases[i].FLID + '</td>';
                         htmlString += '<td>' + cases[i].Subject + '</td>';
-
-                        htmlString += '<td>' + cases[i].Product + '</td>';
-                        htmlString += '<td>' + cases[i].Category + '</td>';
+                        htmlString += '<td>' + cases[i].NewType + '</td>';
                         htmlString += '<td>' + cases[i].PriorityLevel + '</td>';
                         htmlString += '<td>' + cases[i].DisplayName + '</td>';
                         htmlString += '<td>' + createdDate + '</td>';
                         htmlString += '<td>' + StartDate + '</td>';
                         htmlString += '<td>' + ExpiryDate + '</td>';
+                        htmlString += '<td>' + cases[i].Category + '</td>';
+                        htmlString += '<td>' + cases[i].Location + '</td>';
                         htmlString += '<td><span class="statusNew">' + cases[i].Status + '</span></td> ';
                         htmlString += '<td>' + cases[i].Involvement + '</td></tr>';
 
@@ -395,17 +399,18 @@ function getPersonUsersList() {
 };
 //Create new case
 function createNewCase() {
-    var Organization, ContactPerson, Email, Contact, Subject, Product, Category, Details, PriorityLevel;
+    var Organization, ContactPerson, Email, Contact, Subject, Product, Category,NewLocation, Details, PriorityLevel;
     Organization = $('#caseAddForm #organisation').val();
     ContactPerson = $('#caseAddForm #name').val();
     Email = $('#caseAddForm #email').val();
     Contact = $('#caseAddForm #contact').val();
     Subject = $('#caseAddForm #title').val();
-    Product = $('#caseAddForm #product').val();
+    Type = $('#caseAddForm #Type').val();
     Category = $('#caseAddForm #category').val();
+    NewLocation = $('#caseAddForm #Location').val();
     PriorityLevel = $('#caseAddForm #PriorityLevel').val();
     Details = $('#caseAddForm #description').val();
-    if (Organization.length == 0 || ContactPerson.length == 0 || Email.length == 0 || Contact.length == 0 || Subject.length == 0 || Details.length == 0 || Product.length == 0 || PriorityLevel.length == 0) {
+    if (Organization.length == 0 || ContactPerson.length == 0 || Email.length == 0 || Contact.length == 0 || Subject.length == 0 || Type.length == 0|| Details.length == 0 || PriorityLevel.length == 0) {
         alert('Please fill in all mandatory fields!');
         return false;
     }
@@ -418,7 +423,7 @@ function createNewCase() {
         return false;
     }
 
-    var data = { 'Organization': Organization, 'ContactPerson': ContactPerson, 'Email': Email, 'ContactNo': Contact, 'Subject': Subject, 'Category': Category, 'Details': Details, 'Product': Product, 'PriorityLevel': PriorityLevel };
+    var data = { 'Organization': Organization, 'ContactPerson': ContactPerson, 'Email': Email, 'ContactNo': Contact, 'Subject': Subject, 'Category': Category, 'Details': Details, 'Type': Type, 'NewLocation':NewLocation,'PriorityLevel': PriorityLevel };
     $.ajax({
         url: apiSrc + "BCMain/FL1.AddNewCase.json",
         method: "POST",
@@ -438,8 +443,9 @@ function createNewCase() {
                         $('#caseAddForm #email').val('');
                         $('#caseAddForm #contact').val('');
                         $('#caseAddForm #title').val('');
-                        $('#caseAddForm #product').val('');
+                        $('#caseAddForm #Type').val('');
                         $('#caseAddForm #category').val('');
+                        $('#caseAddForm #Location').val('');
                         $('#caseAddForm #PriorityLevel').val('');
                         $('#caseAddForm #description').val('');
                         $('#caseAddForm').foundation('close');
