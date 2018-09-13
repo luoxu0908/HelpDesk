@@ -10,49 +10,7 @@ $(function () {
             $("#newUserForm #contactPoint").hide();
         }
     });
-    $("#packageAddForm #type").change(function () {
-        var val = $("#packageAddForm #type option:selected").val();
-        var data = { 'RoleID': $('#packageAddForm #organisation').val() }
-        return $.ajax({
-            url: apiSrc + "BCMain/FL1.GetPackageExpiryDate.json",
-            method: "POST",
-            dataType: "json",
-            xhrFields: { withCredentials: true },
-            data: {
-                'data': JSON.stringify(data),
-                'WebPartKey': WebPartVal,
-                'ReqGUID': getGUID()
-            },
-            success: function (data) {
-                if ((data) && (data.d.RetVal === -1)) {
-                    if (!data.d.RetData.Tbl.Rows[0] && val == 'AssurancePlus') {
-                        alert('You must have valid product license before purchasing Assurance Plus.'); return;
-                    }
-                    else {
-                        if (val == 'AssurancePlus' && data.d.RetData.Tbl.Rows[0].ExpiryDate) {
-                            $('#packageAddForm #packageExpiryDate').val(data.d.RetData.Tbl.Rows[0].ExpiryDate);
-                            $('#packageAddForm #packageExpiryDate').attr('disabled', 'disabled');
-                        }
-                        else if (data.d.RetData.Tbl.Rows[0].ExpiryDate && val != 'AssurancePlus') {
-                            $('#packageAddForm #packageExpiryDate').val(data.d.RetData.Tbl.Rows[0].ExpiryDate);
-                            $('#packageAddForm #packageExpiryDate').removeAttr('disabled');
-                        }
-                    }
-                }
-                else {
-                    alert(data.d.RetMsg);
-                }
-            },
-            error: function (data) {
-                alert("Error: " + data.responseJSON.d.RetMsg);
-            }
-        });
-        // if ($("#newUserForm #type option:selected").val()=='AssurancePlus'){
-        //
-        // }else{
-        //
-        // }
-    });
+
     $("#newUserForm #postalCode").blur(function () {
         var postalCode = $("#newUserForm #postalCode").val();
         if (postalCode.length > 0) {
@@ -526,6 +484,7 @@ function getProductOwn() {
                     var hmtlHref = ''
                     for (var i = 0; i < products.length; i++) {
                         var expiryDate = convertDateTime(products[i].ExpiryDate, 'date');
+                        var StartDate = convertDateTime(products[i].StartDate, 'date');
                         //  if (RoleName == 'Clients' || RoleName == 'Admin' || RoleName == 'Security Admin') {
                         htmlString += '<tr id="' + products[i].Product + '">';
                         //  } else {
@@ -544,10 +503,9 @@ function getProductOwn() {
                             htmlString += "<td></td>";
                         }
                         htmlString += "<td><a href=" + hmtlHref + " target='_blank'>" + products[i].PackageDesc + "</a></td>";
-                        htmlString += '<td>' + products[i].StartDate + '</td>';
+                        htmlString += '<td>' + StartDate + '</td>';
                         htmlString += '<td>' + expiryDate + '</td>';
-                        htmlString += '<td>' + products[i].TotalHours  + '</td>';
-                        htmlString += '<td>' + products[i].ManHoursBought + '</td>';
+                        htmlString += '<td>' + products[i].TotalHours + '</td>';
                         htmlString += '<td>' + products[i].ManHoursUsed + '</td>';
                         htmlString += '<td>' + products[i].ManHoursLeft + '</td>';
                         htmlString += '</tr>';
