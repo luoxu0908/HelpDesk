@@ -93,6 +93,9 @@ $(function () {
     GetDropDownList('caseAddForm','Location','Location');
     GetDropDownList('caseAddForm','PriorityLevel','PriorityLevel');
     GetDropDownList('caseAddForm','Type','Type');
+    GetDropDownList('packageUpdateForm','EditType','PackageType');
+    GetDropDownList('packageUpdateForm','EditContractType','ContractType');
+
     $.when(checkRoleAccess, getOrgnaisationList()).then(function (x) {
 
         if (RoleName == 'Admin' || RoleName == 'Security Admin') {
@@ -520,11 +523,12 @@ function getProductOwn() {
                     }
                 }
                 productTbody.html(htmlString);
-              //  if (RoleName == 'Admin' || RoleName == 'Security Admin' || RoleName == 'Support Developer' || RoleName == 'Support Team Lead') {
-              //    $('.packageTable tr').find('th:eq(0)').hide(); $('.packageTable tr').find('td:eq(0)').hide();
-              //  } else {
-              //      $('.packageTable tr').find('th:eq(0)').show(); $('.packageTable tr').find('td:eq(0)').show();
-              //  }
+                if (RoleName == 'Admin' || RoleName == 'Security Admin' || RoleName == 'Support Developer' || RoleName == 'Support Team Lead') {
+                  $('.packageTable tr').find('th:eq(0)').show(); $('.packageTable tr').find('td:eq(0)').show();
+
+                } else {
+                  $('.packageTable tr').find('th:eq(0)').hide(); $('.packageTable tr').find('td:eq(0)').hide();
+                }
 
                 $('.packageTable tbody tr').click(function () {
                     var Product = $(this).attr('id');
@@ -1075,9 +1079,9 @@ function SaveEditPackage() {
     var RoleID, PackageType, StartDate, ExpiryDate, ContractType, Remarks;
     RoleID = $('#packageUpdateForm #EditOrganisation').val();
     PackageType = $('#packageUpdateForm #EditType').val();
+    ContractType = $('#packageUpdateForm #EditContractType').val();
     StartDate = $('#packageUpdateForm #EditPackageStartDate').val();
     ExpiryDate = $('#packageUpdateForm #EditPackageExpiryDate').val();
-    ContractType = $('#packageUpdateForm #EditContractType').val();
     Remarks = $('#packageUpdateForm #EidtRemarks').val();
 
     if (StartDate.length == 0 || ExpiryDate.length == 0||EditContractType.length==0) {
