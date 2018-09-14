@@ -497,21 +497,22 @@ function getProductOwn() {
                         //  } else {
                         //  htmlString += '<tr id="' + products[i].Product + '" data-open="caseAddForm">';
                         //}
-                        if (products[i].PackageType == 'Maintenance') {
+                        if (products[i].PackageType == 'Mantainance & Support') {
                             htmlString += "<td><a href='#' onclick=EditPackageItem(" + products[i].PackageID + ") >Edit</a></td>";
                             hmtlHref = 'https://portal.bizcube.com.sg/BizCubeSoftwareMaintenance_Support.pdf';
-                        } else if (products[i].PackageType == 'Assurance') {
+                        } else if (products[i].PackageType == 'Software Assurance') {
                             htmlString += "<td><a href='#' onclick=EditPackageItem(" + products[i].PackageID + ") >Edit</a></td>";
                             hmtlHref = 'https://portal.bizcube.com.sg/BizCubeSoftwareAssurance.pdf';
-                        } else if (products[i].PackageType == 'AssurancePlus') {
-                            htmlString += "<td></td>";
+                        } else if (products[i].PackageType == 'Assurance Plus') {
+                            htmlString += "<td><a href='#' onclick=EditPackageItem(" + products[i].PackageID + ") >Edit</a></td>";
                             hmtlHref = 'https://portal.bizcube.com.sg/BizCubeAssurancePlus.pdf';
                         } else {
                             htmlString += "<td></td>";
                         }
-                        htmlString += "<td><a href=" + hmtlHref + " target='_blank'>" + products[i].PackageDesc + "</a></td>";
+                        htmlString += "<td><a href=" + hmtlHref + " target='_blank'>" + products[i].PackageType + "</a></td>";
                         htmlString += '<td>' + StartDate + '</td>';
                         htmlString += '<td>' + expiryDate + '</td>';
+                        htmlString += '<td>' + products[i].ContractType + '</td>';
                         htmlString += '<td>' + products[i].TotalHours + '</td>';
                         htmlString += '<td>' + products[i].ManHoursUsed + '</td>';
                         htmlString += '<td>' + products[i].ManHoursLeft + '</td>';
@@ -519,11 +520,11 @@ function getProductOwn() {
                     }
                 }
                 productTbody.html(htmlString);
-                if (RoleName == 'Admin' || RoleName == 'Security Admin' || RoleName == 'Support Developer' || RoleName == 'Support Team Lead') {
-                    $('.packageTable tr').find('th:eq(0)').hide(); $('.packageTable tr').find('td:eq(0)').hide();
-                } else {
-                    $('.packageTable tr').find('th:eq(0)').show(); $('.packageTable tr').find('td:eq(0)').show();
-                }
+              //  if (RoleName == 'Admin' || RoleName == 'Security Admin' || RoleName == 'Support Developer' || RoleName == 'Support Team Lead') {
+              //    $('.packageTable tr').find('th:eq(0)').hide(); $('.packageTable tr').find('td:eq(0)').hide();
+              //  } else {
+              //      $('.packageTable tr').find('th:eq(0)').show(); $('.packageTable tr').find('td:eq(0)').show();
+              //  }
 
                 $('.packageTable tbody tr').click(function () {
                     var Product = $(this).attr('id');
@@ -1037,7 +1038,7 @@ function EditPackageItem(PackageID) {
 function GetPackageEntity(PackageID) {
     CurrentPackageID = PackageID;
     $('#packageUpdateForm #EditOrganisation').attr('disabled', 'disabled');
-    $('#packageUpdateForm #EditQuantity').attr('disabled', 'disabled');
+    $('#packageUpdateForm #EditType').attr('disabled', 'disabled');
     return $.ajax({
         url: apiSrc + "BCMain/Ctc1.GetPackageEntity.json",
         method: "POST",
@@ -1053,9 +1054,8 @@ function GetPackageEntity(PackageID) {
                 if (data.d.RetData.Tbl.Rows.length > 0) {
                     var PackageItem = data.d.RetData.Tbl.Rows[0];
                     $('#packageUpdateForm #EditOrganisation').val(PackageItem.RoleID);
-                    $('#packageUpdateForm #EditProduct').val(PackageItem.Product);
                     $('#packageUpdateForm #EditType').val(PackageItem.PackageType);
-                    $('#packageUpdateForm #EditQuantity').val(PackageItem.Quantity);
+                    $('#packageUpdateForm #EditContractType').val(PackageItem.ContractType);
                     $('#packageUpdateForm #EditPackageStartDate').val(data.d.RetData.Tbl.Rows[0].StartDate);
                     $('#packageUpdateForm #EditPackageExpiryDate').val(data.d.RetData.Tbl.Rows[0].ExpiryDate);
                     $('#packageUpdateForm #EidtRemarks').val(PackageItem.Remarks);
@@ -1072,27 +1072,20 @@ function GetPackageEntity(PackageID) {
 }
 
 function SaveEditPackage() {
-    var RoleID, PackageType, Product, StartDate, ExpiryDate, NoAssPlus, Quantity, Remarks;
+    var RoleID, PackageType, StartDate, ExpiryDate, ContractType, Remarks;
     RoleID = $('#packageUpdateForm #EditOrganisation').val();
-    Product = $('#packageUpdateForm #EditProduct').val();
     PackageType = $('#packageUpdateForm #EditType').val();
     StartDate = $('#packageUpdateForm #EditPackageStartDate').val();
     ExpiryDate = $('#packageUpdateForm #EditPackageExpiryDate').val();
-    Quantity = $('#packageUpdateForm #EditQuantity').val();
+    ContractType = $('#packageUpdateForm #EditContractType').val();
     Remarks = $('#packageUpdateForm #EidtRemarks').val();
-    Quantity = parseInt(Quantity);
 
-    if (RoleID.length == 0 || PackageType.length == 0 || Product.length == 0 || StartDate.length == 0 || ExpiryDate.length == 0) {
+    if (StartDate.length == 0 || ExpiryDate.length == 0||EditContractType.length==0) {
         alert('Please fill in all mandatory fields!');
         return false;
     }
-    if (isNaN(Quantity)) {
-        alert('Please fill in Quantity fields!');
-        return false;
-    }
 
-    NoAssPlus = Quantity * 5 * 8;
-    var data = { 'PackageID': CurrentPackageID, 'RoleID': RoleID, 'PackageType': PackageType, 'Product': Product, 'StartDate': StartDate, 'ExpiryDate': ExpiryDate, 'Remarks': Remarks, 'NoAssPlus': NoAssPlus, 'Quantity': Quantity };
+    var data = { 'PackageID': CurrentPackageID, 'RoleID': RoleID, 'PackageType': PackageType, 'StartDate': StartDate, 'ExpiryDate': ExpiryDate,'ContractType':ContractType, 'Remarks': Remarks };
     return $.ajax({
         url: apiSrc + "BCMain/Ctc1.UpdatePackage.json",
         method: "POST",
