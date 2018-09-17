@@ -75,6 +75,14 @@ $(function(){
     chargeToPackage(caseID);
   });
 
+
+$.when(getOrgnaisationList(),GetDropDownList('reviewForm','category','Category'),GetDropDownList('reviewForm','Location','OrgAddressLocation')
+,GetDropDownList('reviewForm','PriorityLevel','PriorityLevel'),GetDropDownList('reviewForm','Type','Type')).then(function(){
+$('#reviewForm #organisation').attr('disabled', 'disabled');
+  GetreviewCase(caseID);
+});
+
+
 });
 
 
@@ -90,21 +98,78 @@ function DoPrint() {
 function AddNewAttactment(){
   window.open('../BCMain/tabs.htm?Prefix=FL&Type=CaseAttach&title='+caseID+'&TabParam='+FileID);
 }
-function reviewCase(caseID){
-  var status, category, dateFrom, dateTo, manHours, actualHour,PriorityLevel;
-  status = $('#reviewForm #status').val();
-  category = $('#reviewForm #category').val();
-  dateFrom = $('#reviewForm #scheduleDateFrom').val();
-  dateTo = $('#reviewForm #scheduleDateTo').val();
-  manHours = $('#reviewForm #manHours').val();
-  PriorityLevel = $('#reviewForm #PriorityLevel').val();
-  actualHour = $('#reviewForm #actualManHours').val();
 
-  if (PriorityLevel.length==0) {
+function GetreviewCase(caseID){
+  return $.ajax({
+      url: apiSrc + "BCMain/FL1.GetReviewCase.json",
+      method: "POST",
+      dataType: "json",
+      xhrFields: { withCredentials: true },
+      data: {
+          'data': JSON.stringify({ 'FLID': caseID }),
+          'WebPartKey': WebPartVal,
+          'ReqGUID': getGUID()
+      },
+      success: function (data) {
+          if ((data) && (data.d.RetVal === -1)) {
+              if (data.d.RetData.Tbl.Rows.length > 0) {
+                  var CaseEntity = data.d.RetData.Tbl.Rows[0];
+                  $('#reviewForm #organisation').val(CaseEntity.TargetRoleID);
+                  $('#reviewForm #status').val(CaseEntity.Status);
+                  $('#reviewForm #name').val(CaseEntity.ContactPerson);
+                  $('#reviewForm #email').val(CaseEntity.Email);
+                  $('#reviewForm #contact').val(CaseEntity.ContactNo);
+                  $('#reviewForm #title').val(CaseEntity.Subject);
+                  $('#reviewForm #Type').val(CaseEntity.NewType);
+                  $('#reviewForm #category').val(CaseEntity.Category);
+                  $('#reviewForm #Location').val(CaseEntity.Location);
+                  $('#reviewForm #PriorityLevel').val(CaseEntity.PriorityLevel);
+                  $('#reviewForm #description').val(CaseEntity.Details);
+                  $('#reviewForm').foundation('close');
+
+              }
+          }
+          else {
+              alert(data.d.RetMsg);
+          }
+      },
+      error: function (data) {
+          alert("Error: " + data.responseJSON.d.RetMsg);
+      }
+  });
+
+}
+
+
+function reviewCase(caseID){
+
+  var Organization,status, ContactPerson, Email, Contact, Subject, Product, Category,NewLocation, Details, PriorityLevel;
+  Organization = $('#reviewForm #organisation').val();
+  status= $('#reviewForm #status').val();
+  ContactPerson = $('#reviewForm #name').val();
+  Email = $('#reviewForm #email').val();
+  Contact = $('#reviewForm #contact').val();
+  Subject = $('#reviewForm #title').val();
+  Type = $('#reviewForm #Type').val();
+  Category = $('#reviewForm #category').val();
+  NewLocation = $('#reviewForm #Location').val();
+  PriorityLevel = $('#reviewForm #PriorityLevel').val();
+  Details = $('#reviewForm #description').val();
+
+  if (Organization.length == 0 || status.length == 0||ContactPerson.length == 0 || Email.length == 0 || Contact.length == 0 || Subject.length == 0 || Type.length == 0|| Details.length == 0 || PriorityLevel.length == 0) {
       alert('Please fill in all mandatory fields!');
       return false;
   }
-  var data = {'FLID':caseID, 'Status':status, 'Category':category, 'ChargeHours':manHours, 'ActualHours':actualHour, 'TargetStartDate':dateFrom, 'TargetEndDate':dateTo,'PriorityLevel':PriorityLevel};
+  if (IsValidEmail(Email) == false) {
+      alert('Invalid email!');
+      return false;
+  }
+  if (IsValidContact(Contact) == false) {
+      alert('Invalid contact!');
+      return false;
+  }
+
+  var data = { 'FLID':caseID,'Organization': Organization, 'status':status,'ContactPerson': ContactPerson, 'Email': Email, 'ContactNo': Contact, 'Subject': Subject, 'Category': Category, 'Details': Details, 'Type': Type, 'NewLocation':NewLocation,'PriorityLevel': PriorityLevel };
   $.ajax({
     url: apiSrc+"BCMain/FL1.ReviewCase.json",
     method: "POST",
@@ -117,15 +182,20 @@ function reviewCase(caseID){
       if ((data) && (data.d.RetVal === -1)) {
         if (data.d.RetData.Tbl.Rows.length > 0) {
           if (data.d.RetData.Tbl.Rows[0].Success == true) {
-            $('#reviewForm #status').val('');
+            $('#reviewForm #organisation').val('');
+            $('#reviewForm #name').val('');
+            $('#reviewForm #email').val('');
+            $('#reviewForm #contact').val('');
+            $('#reviewForm #title').val('');
+            $('#reviewForm #Type').val('');
             $('#reviewForm #category').val('');
-            $('#reviewForm #scheduleDateFrom').val('');
-            $('#reviewForm #scheduleDateTo').val('');
+            $('#reviewForm #Location').val('');
             $('#reviewForm #PriorityLevel').val('');
-            $('#reviewForm #manHours').val('');
+            $('#reviewForm #description').val('');
+            $('#reviewForm').foundation('close');
+            GetreviewCase(caseID);
             GetCaseDetails(caseID);
             GetCaseHistory(caseID);
-
             $('#reviewForm').foundation('close');
           } else { alert(data.d.RetData.Tbl.Rows[0].ReturnMsg); }
         }
@@ -477,6 +547,77 @@ function getStaffList(){
   });
 }
 
+function getOrgnaisationList() {
+       $.ajax({
+           url: apiSrc + "BCMain/iCtc1.getOrgnaisationList.json",
+           method: "POST",
+           dataType: "json",
+           xhrFields: { withCredentials: true },
+           data: {
+               'data': JSON.stringify({}),
+               'WebPartKey': WebPartVal,
+               'ReqGUID': getGUID()
+           },
+           success: function (data) {
+               if ((data) && (data.d.RetVal === -1)) {
+                   $('#reviewForm #organisation').html('');
+                   if (data.d.RetData.Tbl.Rows.length == 1) {
+                       var org = data.d.RetData.Tbl.Rows[0];
+                       $('#reviewForm #organisation').append('<option value="' + org.DefaultRoleID + '" selected>' + org.DisplayName + '</option>');
+                   } else if (data.d.RetData.Tbl.Rows.length > 0) {
+                       $('#reviewForm #organisation').append('<option value="">-- Please Select --</option>');
+                       var orgList = data.d.RetData.Tbl.Rows;
+                       for (var i = 0; i < orgList.length; i++) {
+                           $('#reviewForm #organisation').append('<option value="' + orgList[i].DefaultRoleID + '">' + orgList[i].DisplayName + '</option>');
+                       }
+                   }
+               }
+               else {
+                   alert(data.d.RetMsg);
+               }
+           },
+           error: function (data) {
+               alert("Error: " + data.responseJSON.d.RetMsg);
+           }
+       });
+   }
+
+   function GetDropDownList(FatherId,Id,LookupCat) {
+         $('#' + FatherId + ' #' + Id + '').html('');
+         $('#' + FatherId + ' #' + Id + '').append('<option value="">-- Please Select --</option>');
+         var data = { 'LookupCat': LookupCat };
+         return $.ajax({
+             url: apiSrc + "BCMain/iCtc1.GetTicketLookupVal.json",
+             method: "POST",
+             dataType: "json",
+             xhrFields: { withCredentials: true },
+             data: {
+                 'data': JSON.stringify(data),
+                 'WebPartKey': WebPartVal,
+                 'ReqGUID': getGUID()
+             },
+             success: function (data) {
+                 if ((data) && (data.d.RetVal === -1)) {
+                     if (data.d.RetData.Tbl.Rows.length > 0) {
+                         var Result = data.d.RetData.Tbl.Rows;
+                         for (var i = 0; i < Result.length; i++) {
+                             if (Id=='Location') {
+                               $('#' + FatherId + ' #' + Id + '').append('<option value="' + Result[i].Description + '">' + Result[i].TagData3 + '</option>');
+                             }else{
+                               $('#' + FatherId + ' #' + Id + '').append('<option value="' + Result[i].Description + '">' + Result[i].Description + '</option>');
+                             }
+                         }
+                     }
+                 }
+                 else {
+                     alert(data.d.RetMsg);
+                 }
+             },
+             error: function (data) {
+                 alert("Error: " + data.responseJSON.d.RetMsg);
+             }
+         });
+     }
 function IsValidDate(inputDate) {
   var re = /^(([0-9])|([0-2][0-9])|([3][0-1]))( )(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)( )\d{4}$/;
   return re.test(inputDate);
@@ -502,7 +643,14 @@ function convertDateTime(inputFormat, type) {
     return [pad(d.getHours()), pad(d.getMinutes()), pad(d.getSeconds())].join(':');
   }
 };
-
+function IsValidContact(contactno) {
+    var re = /^[6389]\d{7}$/;
+    return re.test(contactno);
+}
+function IsValidEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+}
 function getGUID() {
 	var d = new Date().getTime();
 	var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {

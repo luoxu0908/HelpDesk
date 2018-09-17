@@ -90,7 +90,7 @@ $(function () {
     GetCountry();GetDropDownList('packageAddForm','ContractType','ContractType');
     GetDropDownList('packageAddForm','type','PackageType');
     GetDropDownList('caseAddForm','category','Category');
-    GetDropDownList('caseAddForm','Location','Location');
+    GetDropDownList('caseAddForm','Location','OrgAddressLocation');
     GetDropDownList('caseAddForm','PriorityLevel','PriorityLevel');
     GetDropDownList('caseAddForm','Type','Type');
     GetDropDownList('packageUpdateForm','EditType','PackageType');
@@ -876,7 +876,11 @@ function GetDropDownList(FatherId,Id,LookupCat) {
                   if (data.d.RetData.Tbl.Rows.length > 0) {
                       var Result = data.d.RetData.Tbl.Rows;
                       for (var i = 0; i < Result.length; i++) {
-                          $('#' + FatherId + ' #' + Id + '').append('<option value="' + Result[i].Description + '">' + Result[i].Description + '</option>');
+                          if (Id=='Location') {
+                            $('#' + FatherId + ' #' + Id + '').append('<option value="' + Result[i].Description + '">' + Result[i].TagData3 + '</option>');
+                          }else{
+                            $('#' + FatherId + ' #' + Id + '').append('<option value="' + Result[i].Description + '">' + Result[i].Description + '</option>');
+                          }
                       }
                   }
               }

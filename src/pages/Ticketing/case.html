@@ -257,88 +257,103 @@
       </button>
     </header>
     <div class="grid-x grid-padding-x">
-      <div class="cell small-12 medium-6">
-        <div class="cell">
-          <label>
-          Status
-          <select id="status" name="status">
-            <option value="">-- Please Select --</option>
-            <option value="New - Open">New - Open</option>
-            <option value="Reviewed & Processing - Open">Reviewed & Processing - Open</option>
-            <option value="Reviewed & Pending Approval - Open">Reviewed & Pending Approval - Open</option>
-            <option value="Processing - Open">Processing - Open</option>
-            <option value="Rejected - Closed">Rejected - Closed</option>
-            <option value="Completed - Closed">Completed - Closed</option>
-          </select>
-          </label>
-        </div>
+      <div class="cell">
+        <label>
+        Organisation <span style="color:red">*</span>
+        <select id="organisation" name="organisation">
+        </select>
+        </label>
       </div>
-      <div class="cell small-12 medium-6">
-        <div class="cell">
-          <label>
-          Category
-          <select id="category" name="category">
-            <option value="">-- Please Select --</option>
-            <option value="Support Request">Support Request</option>
-            <option value="Bugs">Bugs</option>
-            <option value="CR">Change Request</option>
-            <option value="Project">Project</option>
-            <option value="Road Map">Road Map</option>
-          </select>
-          </label>
-        </div>
+    </div>
+
+    <div class="grid-x grid-padding-x">
+      <div class="cell">
+        <label>
+               Status
+               <select id="status" name="status">
+                 <option value="">-- Please Select --</option>
+                 <option value="New - Open">New - Open</option>
+                 <option value="Reviewed & Processing - Open">Reviewed & Processing - Open</option>
+                 <option value="Reviewed & Pending Approval - Open">Reviewed & Pending Approval - Open</option>
+                 <option value="Processing - Open">Processing - Open</option>
+                 <option value="Rejected - Closed">Rejected - Closed</option>
+                 <option value="Completed - Closed">Completed - Closed</option>
+               </select>
+               </label>
+      </div>
+    </div>
+
+    <div class="grid-x grid-padding-x">
+      <div class="cell">
+        <label>
+        Contact Person <span style="color:red">*</span>
+        <input type="text" id="name" name="name"/>
+        </label>
       </div>
     </div>
     <div class="grid-x grid-padding-x">
       <div class="cell small-12 medium-6">
-        <div class="cell">
-          <label>
-          Date From
-          <input type="date" id="scheduleDateFrom" name="scheduleDateFrom" />
-          </label>
-        </div>
+        <label>
+        Email <span style="color:red">*</span>
+        <input type="text" id="email" name="email"/>
+        </label>
       </div>
       <div class="cell small-12 medium-6">
-        <div class="cell">
-          <label>
-          Date To
-          <input type="date" id="scheduleDateTo" name="scheduleDateTo" />
-          </label>
-        </div>
+        <label>
+        Contact No. <span style="color:red">*</span>
+        <input type="text" id="contact" name="contact"/>
+        </label>
       </div>
     </div>
-      <div class="grid-x grid-padding-x">
-          <div class="cell small-12 medium-6">
-              <div class="cell">
-                  <label>
-                      Priority Level<span style="color:red">*</span>
-                      <select id="PriorityLevel" name="PriorityLevel">
-                          <option value="">-- Please Select --</option>
-                          <option value="Critical">Critical</option>
-                          <option value="Urgent">Urgent</option>
-                          <option value="Normal">Normal</option>
-                      </select>
-                  </label>
-              </div>
-
-          </div>
-          <div class="cell small-12 medium-6">
-              <div class="cell">
-                  <label>
-                      Chargeable Man-hour(s)
-                      <input type="text" id="manHours" name="manHours" />
-                  </label>
-              </div>
-          </div>
-          <div class="cell small-12 medium-6" style="display:none">
-              <div class="cell">
-                  <label>
-                      Actual Man-hour(s)
-                      <input type="text" id="actualManHours" name="actualManHours" />
-                  </label>
-              </div>
-          </div>
+    <div class="grid-x grid-padding-x">
+      <div class="cell">
+        <label>
+        Subject <span style="color:red">*</span>
+        <input type="text" id="title" name="title"/>
+        </label>
       </div>
+    </div>
+    <div class="grid-x grid-padding-x">
+      <div class="cell">
+        <label>
+        Type<span style="color:red">*</span>
+        <select id="Type" name="Type">
+        </select>
+        </label>
+      </div>
+    </div>
+
+    <div class="grid-x grid-padding-x" >
+      <div class="cell">
+        <label>
+          Category
+          <select id="category" name="category">
+          </select>
+        </label>
+      </div>
+    </div>
+    <div class="grid-x grid-padding-x">
+      <div class="cell">
+        <label>Location<select id="Location" name="Location"></select></label>
+      </div>
+    </div>
+    <div class="grid-x grid-padding-x">
+      <div class="cell">
+        <label>
+          Priority Level<span style="color:red">*</span>
+          <select id="PriorityLevel" name="PriorityLevel">
+          </select>
+        </label>
+      </div>
+    </div>
+    <div class="grid-x grid-padding-x">
+      <div class="cell">
+        <label>
+        Description <span style="color:red">*</span>
+        <textarea id="description" name="description"></textarea>
+        </label>
+      </div>
+    </div>
     <footer class="grid-x grid-margin-x">
       <button type="button" id="submit" class="btn cell small-12 medium-4 medium-offset-4">Submit</button>
     </footer>
