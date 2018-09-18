@@ -589,14 +589,23 @@
     <div class="grid-x grid-padding-x">
       <div class="cell small-6 medium-6">
         <label>
-        Billing Hours<span style="color:red">*</span>
-        <input type="text" id="ServiceBillingHours" name="ServiceBillingHours" disabled="disabled"/>
+        Actual Hours<span style="color:red">*</span>
+        <input type="text" id="ServiceActualHours" name="ServiceActualHours" disabled="disabled"/>
         </label>
       </div>
       <div class="cell small-6 medium-6">
         <label>
-        Actual Hours<span style="color:red">*</span>
-        <input type="text" id="ServiceActualHours" name="ServiceActualHours" disabled="disabled"/>
+        Billing Hours<span style="color:red">*</span>
+        <input type="text" id="ServiceBillingHours" name="ServiceBillingHours" disabled="disabled"/>
+        </label>
+      </div>
+    </div>
+
+    <div class="grid-x grid-padding-x">
+      <div class="cell">
+        <label>
+        Diagnosis / Action taken / Services Rendered
+        <textarea  id="ServiceDiagnosis" name="ServiceDiagnosis" style="height:30%"></textarea>
         </label>
       </div>
     </div>
@@ -605,14 +614,6 @@
         <label>
         Follow-up / Remarks
         <textarea  id="ServiceBigRemarks" name="ServiceBigRemarks" style="height:30%"></textarea>
-        </label>
-      </div>
-    </div>
-    <div class="grid-x grid-padding-x">
-      <div class="cell">
-        <label>
-        Diagnosis / Action taken / Services Rendered
-        <textarea  id="ServiceDiagnosis" name="ServiceDiagnosis" style="height:30%"></textarea>
         </label>
       </div>
     </div>
