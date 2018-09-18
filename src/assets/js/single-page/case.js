@@ -1,7 +1,7 @@
-var RoleName = '',PrintFlag='',FileID='',caseID='',TargetRoleID='',CostTime=0.0,TotalCostTime=0.0;
+var RoleName = '',PrintFlag='',FileID='',caseID='',TargetRoleID='';
+var startDate='',endDate='',standDate='',execCount=0,actualHour=0,billingHours=0;
 
 $(function(){
-
   //get caseID from URL
   var urlParams = new URLSearchParams(window.location.search),
       caseID = urlParams.get('caseID');
@@ -116,6 +116,20 @@ $("#ServiceForm #ServicePHWeekend").click(function(){
 });
 $('#ServiceForm #ActualTimeFrom').change(function(){
 
+    $.when(execDays()).then(function(){
+      actualHour=0,billingHours=0;
+      if(execCount==0){
+        standDate=$('#ServiceForm #ServiceActualDateFrom').val();
+        $.when(execHours(startDate,endDate,standDate)).then(function(){
+          $('#ServiceForm #ServiceActualHours').val(actualHour);
+          $('#ServiceForm #ServiceBillingHours').val(billingHours);
+        });
+      }else{
+
+
+      }
+    });
+
 });
 
 $('#ServiceForm #ActualTimeTo').change(function(){
@@ -132,8 +146,103 @@ $('#ServiceForm #ServiceActualDateTo').change(function(){
 
 });
 
-function execHours(startDate,endDate,Flag){
+function execDays(){
+  var ServiceActualDateFrom,ActualTimeFrom,ServiceActualDateTo,ActualTimeTo;
+   ServiceActualDateFrom = $('#ServiceForm #ServiceActualDateFrom').val();ActualTimeFrom=$('#ServiceForm #ActualTimeFrom').val();
+   ServiceActualDateTo = $('#ServiceForm #ServiceActualDateTo').val();ActualTimeTo=$('#ServiceForm #ActualTimeTo').val();
+  if (ServiceActualDateFrom.length>0&&ActualTimeFrom.length>0&&ServiceActualDateTo.length>0&&ActualTimeTo.length>0) {
+    startDate=new Date(ServiceActualDateFrom+' '+ActualTimeFrom);
+    endDate=new Date(ServiceActualDateTo+' '+ActualTimeTo);
+    execCount=moment(endDate).diff(startDate,'days');
+  }
+}
 
+function execHours(startDate,endDate,standDate){
+  var startDate=new Date(startDate);
+  var endDate=new Date(endDate);
+  var MorningDate=new Date(standDate+' '+'09:00:00');
+  var AfterNoonDate=new Date(standDate+' '+'18:00:00');
+  var NightDate=new Date(standDate+' '+'22:00:00');
+  var LastDate=new Date(standDate+' '+'24:00:00');
+
+
+
+ if(moment(MorningDate).diff(startDate,'minutes')>=0){
+alert(moment(endDate).diff(MorningDate,'minutes')>0);
+alert(moment(AfterNoonDate).diff(endDate,'minutes')>=0);
+	 if(moment(MorningDate).diff(endDate,'minutes')>=0){
+		actualHour=moment(endDate).diff(startDate,'minutes')/60.00;
+		billingHours=actualHour*2;
+  }else if(moment(endDate).diff(MorningDate,'minutes')>0&&moment(AfterNoonDate).diff(endDate,'minutes')>=0){
+		actualHour=moment(MorningDate).diff(startDate,'minutes')/60.00;
+		billingHours=actualHour*2;
+
+		actualHour=actualHour+moment(endDate).diff(MorningDate,'minutes')/60.00;
+		billingHours=billingHours+moment(endDate).diff(MorningDate,'minutes')/60.00;
+
+  }else if(endDate>AfterNoonDate&&endDate<=NightDate){
+
+		actualHour=moment(MorningDate).diff(startDate,'minutes')/60.00;
+		billingHours=actualHour*2;
+
+		actualHour=actualHour+moment(AfterNoonDate).diff(MorningDate,'minutes')/60.00;
+		billingHours=billingHours+moment(AfterNoonDate).diff(MorningDate,'minutes')/60.00;
+
+		actualHour=actualHour+moment(endDate).diff(AfterNoonDate,'minutes')/60.00;
+		billingHours=billingHours+(moment(endDate).diff(AfterNoonDate,'minutes')/60.00)*1.5;
+
+	  }else if(endDate>NightDate&&NightDate<=LastDate){
+		actualHour=moment(MorningDate).diff(startDate,'minutes')/60.00;
+		billingHours=actualHour*2;
+
+		actualHour=actualHour+moment(AfterNoonDate).diff(MorningDate,'minutes')/60.00;
+		billingHours=billingHours+moment(AfterNoonDate).diff(MorningDate,'minutes')/60.00;
+
+		actualHour=actualHour+moment(NightDate).diff(AfterNoonDate,'minutes')/60.00;
+		billingHours=billingHours+(moment(NightDate).diff(AfterNoonDate,'minutes')/60.00)*1.5;
+
+		actualHour=actualHour+moment(LastDate).diff(NightDate,'minutes')/60.00;
+		billingHours=billingHours+(moment(LastDate).diff(NightDate,'minutes')/60.00)*2;
+	  }
+
+ }else if (startDate>=MorningDate&&startDate<AfterNoonDate) {
+	  if(endDate<=AfterNoonDate){
+		actualHour=moment(endDate).diff(startDate,'minutes')/60.00;
+		billingHours=actualHour;
+	  }else if (endDate>AfterNoonDate&&endDate<=NightDate) {
+		  actualHour=moment(AfterNoonDate).diff(MorningDate,'minutes')/60.00;
+		  billingHours=actualHour;
+
+		  actualHour=actualHour+moment(endDate).diff(AfterNoonDate,'minutes')/60.00;
+		  billingHours=actualHour+(moment(endDate).diff(AfterNoonDate,'minutes')/60.00)*1.5;
+	  }else if (endDate>NightDate&&endDate<=LastDate) {
+		actualHour=moment(AfterNoonDate).diff(startDate,'minutes')/60.00;
+		billingHours=actualHour;
+
+		actualHour=actualHour+moment(NightDate).diff(AfterNoonDate,'minutes')/60.00;
+		billingHours=actualHour+actualHour*1.5;
+
+		actualHour=actualHour+moment(endDate).diff(NightDate,'minutes')/60.00;
+		billingHours=actualHour+actualHour*2;
+	  }
+
+ }else if(startDate>=AfterNoonDate&&startDate<NightDate){
+
+    if(endDate<=NightDate){
+      actualHour=moment(endDate).diff(AfterNoonDate,'minutes')/60.00;
+      billingHours=actualHour+actualHour*1.5;
+    }else if (endDate>NightDate&&NightDate<=LastDate) {
+      actualHour=moment(NightDate).diff(AfterNoonDate,'minutes')/60.00;
+      billingHours=actualHour+actualHour*1.5;
+
+      actualHour=actualHour+moment(endDate).diff(NightDate,'minutes')/60.00;
+      billingHours=actualHour+actualHour*2;
+
+    }
+ }else if(startDate>=NightDate&&endDate<LastDate){
+   actualHour=actualHour+moment(endDate).diff(NightDate,'minutes')/60.00;
+   billingHours=actualHour+actualHour*2;
+ }
 
 }
 
