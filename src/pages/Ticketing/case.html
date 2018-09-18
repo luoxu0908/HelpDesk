@@ -501,8 +501,6 @@
                   <option value="22:30">22:30</option>
                   <option value="23:00">23:00</option>
                   <option value="23:30">23:30</option>
-                  <option value="24:00">24:00</option>
-                  <option value="24:30">24:30</option>
                 </select>
             </label>
         </div>
@@ -565,8 +563,6 @@
                   <option value="22:30">22:30</option>
                   <option value="23:00">23:00</option>
                   <option value="23:30">23:30</option>
-                  <option value="24:00">24:00</option>
-                  <option value="24:30">24:30</option>
                 </select>
             </label>
         </div>
@@ -584,29 +580,7 @@
         <input type="checkbox" id="ServiceUrgent" name="ServiceUrgent" value="Urgent"/>
         </label>
       </div>
-      <div class="cell small-6 medium-6">
-        <label>
-        OffSet Hours<span style="color:red">*</span>
-        <input type="text" id="ServiceOffSetHours" name="ServiceOffSetHours" />
-        </label>
-      </div>
     </div>
-    <div class="grid-x grid-padding-x">
-      <div class="cell">
-        <label>
-        Reason
-        <textarea id="ServiceReason" name="ServiceReason" style="height:30%"></textarea>
-        </label>
-      </div>
-      </div>
-    <div class="grid-x grid-padding-x">
-      <div class="cell">
-        <label>
-        Hours Calculation Breakdown<span style="color:red">*</span>
-        <textarea id="ServiceHoursCalculation" name="ServiceHoursCalculation" style="height:30%"></textarea>
-        </label>
-      </div>
-      </div>
 
     <div class="grid-x grid-padding-x">
       <div class="cell small-6 medium-6">
@@ -617,11 +591,45 @@
       </div>
       <div class="cell small-6 medium-6">
         <label>
+        OffSet Hours<span style="color:red">*</span>
+        <input type="text" id="ServiceOffSetHours" name="ServiceOffSetHours" />
+        </label>
+      </div>
+    </div>
+
+    <div class="grid-x grid-padding-x">
+      <div class="cell">
+        <label>
+        OffSet Reason
+        <textarea id="ServiceReason" name="ServiceReason" style="height:30%"></textarea>
+        </label>
+      </div>
+    </div>
+    <div class="grid-x grid-padding-x">
+      <div class="cell small-6 medium-6">
+        <label>
         Billing Hours<span style="color:red">*</span>
         <input type="text" id="ServiceBillingHours" name="ServiceBillingHours" disabled="disabled"/>
         </label>
       </div>
+
+      <div class="cell small-6 medium-6">
+        <label>
+        Charge To Package<span style="color:red">*</span>
+        <select id="ServiceChargeToPackage" name="ServiceChargeToPackage"></select>
+        </label>
+      </div>
     </div>
+    <div class="grid-x grid-padding-x">
+      <div class="cell">
+        <label>
+        Hours Calculation Breakdown<span style="color:red">*</span>
+        <textarea id="ServiceHoursCalculation" name="ServiceHoursCalculation" style="height:30%"></textarea>
+        </label>
+      </div>
+      </div>
+
+
     <div class="grid-x grid-padding-x">
       <div class="cell">
         <label>

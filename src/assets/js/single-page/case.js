@@ -99,7 +99,7 @@ $(function(){
 
 
 $.when(getOrgnaisationList(),GetDropDownList('reviewForm','category','Category'),GetDropDownList('reviewForm','Location','OrgAddressLocation')
-,GetDropDownList('reviewForm','PriorityLevel','PriorityLevel'),GetDropDownList('reviewForm','Type','Type')).then(function(){
+,GetDropDownList('reviewForm','PriorityLevel','PriorityLevel'),GetDropDownList('reviewForm','Type','Type'),GetDropDownList('ServiceForm','ServiceChargeToPackage','PackageType')).then(function(){
 $('#reviewForm #organisation').attr('disabled', 'disabled');
   GetreviewCase(caseID);
 });
@@ -157,6 +157,8 @@ function execDays(){
   }
 }
 
+
+
 function execHours(startDate,endDate,standDate){
   var startDate=new Date(startDate);
   var endDate=new Date(endDate);
@@ -167,9 +169,8 @@ function execHours(startDate,endDate,standDate){
 
 
 
+
  if(moment(MorningDate).diff(startDate,'minutes')>=0){
-alert(moment(endDate).diff(MorningDate,'minutes')>0);
-alert(moment(AfterNoonDate).diff(endDate,'minutes')>=0);
 	 if(moment(MorningDate).diff(endDate,'minutes')>=0){
 		actualHour=moment(endDate).diff(startDate,'minutes')/60.00;
 		billingHours=actualHour*2;
