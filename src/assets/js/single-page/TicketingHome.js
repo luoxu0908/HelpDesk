@@ -89,12 +89,14 @@ $(function () {
 
     GetCountry();GetDropDownList('packageAddForm','ContractType','ContractType');
     GetDropDownList('packageAddForm','type','PackageType');
+    GetDropDownList('packageAddForm','Interval','Interval');
     GetDropDownList('caseAddForm','category','Category');
     GetDropDownList('caseAddForm','Location','OrgAddressLocation');
     GetDropDownList('caseAddForm','PriorityLevel','PriorityLevel');
     GetDropDownList('caseAddForm','Type','Type');
     GetDropDownList('packageUpdateForm','EditType','PackageType');
     GetDropDownList('packageUpdateForm','EditContractType','ContractType');
+    GetDropDownList('packageUpdateForm','EditInterval','Interval');
 
     $.when(checkRoleAccess, getOrgnaisationList()).then(function (x) {
 
@@ -495,23 +497,8 @@ function getProductOwn() {
                     for (var i = 0; i < products.length; i++) {
                         var expiryDate = convertDateTime(products[i].ExpiryDate, 'date');
                         var StartDate = convertDateTime(products[i].StartDate, 'date');
-                        //  if (RoleName == 'Clients' || RoleName == 'Admin' || RoleName == 'Security Admin') {
                         htmlString += '<tr id="' + products[i].Product + '">';
-                        //  } else {
-                        //  htmlString += '<tr id="' + products[i].Product + '" data-open="caseAddForm">';
-                        //}
-                        if (products[i].PackageType == 'Mantainance & Support') {
-                            htmlString += "<td><a href='#' onclick=EditPackageItem(" + products[i].PackageID + ") >Edit</a></td>";
-                            hmtlHref = 'https://portal.bizcube.com.sg/BizCubeSoftwareMaintenance_Support.pdf';
-                        } else if (products[i].PackageType == 'Software Assurance') {
-                            htmlString += "<td><a href='#' onclick=EditPackageItem(" + products[i].PackageID + ") >Edit</a></td>";
-                            hmtlHref = 'https://portal.bizcube.com.sg/BizCubeSoftwareAssurance.pdf';
-                        } else if (products[i].PackageType == 'Assurance Plus') {
-                            htmlString += "<td><a href='#' onclick=EditPackageItem(" + products[i].PackageID + ") >Edit</a></td>";
-                            hmtlHref = 'https://portal.bizcube.com.sg/BizCubeAssurancePlus.pdf';
-                        } else {
-                            htmlString += "<td></td>";
-                        }
+                        htmlString += "<td><a href='#' onclick=EditPackageItem(" + products[i].PackageID + ") >Edit</a></td>";
                         htmlString += "<td><a href=" + hmtlHref + " target='_blank'>" + products[i].PackageType + "</a></td>";
                         htmlString += '<td>' + StartDate + '</td>';
                         htmlString += '<td>' + expiryDate + '</td>';
@@ -584,10 +571,11 @@ function getOrgProductList(Organization) {
 
 
 function addNewPackage() {
-    var RoleID, PackageType, ContractType, StartDate, ExpiryDate, Remarks;
+    var RoleID, PackageType, ContractType, Interval,StartDate, ExpiryDate, Remarks;
     RoleID = $('#packageAddForm #organisation').val();
     PackageType = $('#packageAddForm #type').val();
     ContractType = $('#packageAddForm #ContractType').val();
+    Interval = $('#packageAddForm #Interval').val();
     StartDate = $('#packageAddForm #packageStartDate').val();
     ExpiryDate = $('#packageAddForm #packageExpiryDate').val();
 
@@ -596,7 +584,7 @@ function addNewPackage() {
         alert('Please fill in all mandatory fields!');
         return false;
     }
-    var data = { 'RoleID': RoleID, 'PackageType': PackageType, 'ContractType': ContractType, 'StartDate': StartDate, 'ExpiryDate': ExpiryDate, 'Remarks': Remarks };
+    var data = { 'RoleID': RoleID, 'PackageType': PackageType, 'ContractType': ContractType, 'Interval':Interval,'StartDate': StartDate, 'ExpiryDate': ExpiryDate, 'Remarks': Remarks };
     $.ajax({
         url: apiSrc + "BCMain/Ctc1.AddNewPackage.json",
         method: "POST",
@@ -788,6 +776,7 @@ function convertDateTime(inputFormat, type) {
 function clearPackageForm() {
     RoleID = $('#packageAddForm #organisation').val('');
     ContractType = $('#packageAddForm #ContractType').val('');
+    Interval = $('#packageAddForm #Interval').val('');
     PackageType = $('#packageAddForm #type').val('');
     StartDate = $('#packageAddForm #packageStartDate').val('');
     ExpiryDate = $('#packageAddForm #packageExpiryDate').val('');
@@ -1067,6 +1056,7 @@ function GetPackageEntity(PackageID) {
                     $('#packageUpdateForm #EditPackageStartDate').val(data.d.RetData.Tbl.Rows[0].StartDate);
                     $('#packageUpdateForm #EditPackageExpiryDate').val(data.d.RetData.Tbl.Rows[0].ExpiryDate);
                     $('#packageUpdateForm #EidtRemarks').val(PackageItem.Remarks);
+                    $('#packageUpdateForm #EditInterval').val(PackageItem.Interval);
                 }
             }
             else {
@@ -1080,20 +1070,21 @@ function GetPackageEntity(PackageID) {
 }
 
 function SaveEditPackage() {
-    var RoleID, PackageType, StartDate, ExpiryDate, ContractType, Remarks;
+    var RoleID, PackageType, StartDate, ExpiryDate, ContractType,Interval, Remarks;
     RoleID = $('#packageUpdateForm #EditOrganisation').val();
     PackageType = $('#packageUpdateForm #EditType').val();
     ContractType = $('#packageUpdateForm #EditContractType').val();
+    Interval = $('#packageUpdateForm #EditInterval').val();
     StartDate = $('#packageUpdateForm #EditPackageStartDate').val();
     ExpiryDate = $('#packageUpdateForm #EditPackageExpiryDate').val();
     Remarks = $('#packageUpdateForm #EidtRemarks').val();
 
-    if (StartDate.length == 0 || ExpiryDate.length == 0||EditContractType.length==0) {
+    if (StartDate.length == 0 || ExpiryDate.length == 0||EditContractType.length==0||Interval.length==0) {
         alert('Please fill in all mandatory fields!');
         return false;
     }
 
-    var data = { 'PackageID': CurrentPackageID, 'RoleID': RoleID, 'PackageType': PackageType, 'StartDate': StartDate, 'ExpiryDate': ExpiryDate,'ContractType':ContractType, 'Remarks': Remarks };
+    var data = { 'PackageID': CurrentPackageID, 'RoleID': RoleID, 'PackageType': PackageType,'Interval':Interval, 'StartDate': StartDate, 'ExpiryDate': ExpiryDate,'ContractType':ContractType, 'Remarks': Remarks };
     return $.ajax({
         url: apiSrc + "BCMain/Ctc1.UpdatePackage.json",
         method: "POST",
@@ -1130,6 +1121,7 @@ function clearEditPackageForm() {
     $('#packageUpdateForm #EditOrganisation').val('');
     $('#packageUpdateForm #EditProduct').val('');
     $('#packageUpdateForm #EditType').val('');
+    $('#packageUpdateForm #EditInterval').val('');
     $('#packageUpdateForm #EditPackageStartDate').val('');
     $('#packageUpdateForm #EditPackageExpiryDate').val('');
     $('#packageUpdateForm #EidtRemarks').val('');
