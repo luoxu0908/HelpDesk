@@ -78,6 +78,24 @@ $(function(){
     //alert($('#ServiceForm #ServiceActualDateFrom').val());
     SaveServiceForm(caseID);
   });
+  $('#ServiceForm #ServiceCustomerAck').click(function(){
+    if ($(this).is(':checked')) {
+        $('#ServiceForm #ServiceNameDiv').show();
+        $('#ServiceForm #ServiceEmailDiv').show();
+        $('#ServiceForm #ServiceContactNoDiv').show();
+        $('#ServiceForm #NameLb').html('Name<span style="color:red">*</span>');
+        $('#ServiceForm #EmailLb').html('Email<span style="color:red">*</span>');
+        $('#ServiceForm #ContactNoLb').html('ContactNo<span style="color:red">*</span>');
+
+    }else {
+      $('#ServiceForm #ServiceNameDiv').hide();
+      $('#ServiceForm #ServiceEmailDiv').hide();
+      $('#ServiceForm #ServiceContactNoDiv').hide();
+      $('#ServiceForm #NameLb').html('Name');
+      $('#ServiceForm #EmailLb').html('Email');
+      $('#ServiceForm #ContactNoLb').html('ContactNo');
+    }
+  });
 
 
 $.when(getOrgnaisationList(),GetDropDownList('reviewForm','category','Category'),GetDropDownList('reviewForm','Location','OrgAddressLocation')
@@ -616,35 +634,26 @@ function getOrgnaisationList() {
 
 
    function SaveServiceForm(caseID){
-     var ServiceActualDateTimeFrom,ServiceActualDateTimeTo, ServicePHWeekend, Urgent, BigRemarks;
+     var ServiceActualDateTimeFrom,ServiceActualDateTimeTo, ServicePHWeekend, Urgent,ServiceBillingHours, BigRemarks;
      ServiceActualDateTimeFrom = $('#ServiceForm #ServiceActualDateFrom').val()+' '+$('#ServiceForm #ActualTimeFrom').val();
      ServiceActualDateTimeFrom = $('#ServiceForm #ServiceActualDateTo').val()+' '+$('#ServiceForm #ActualTimeTo').val();
-     BigRemarks = $('#ServiceForm #BigRemarks').val();
-     BigRemarks = $('#ServiceForm #BigRemarks').val();
+     ServiceBillingHours = $('#ServiceForm #ServiceBillingHours').val();
      if ($("#ServiceForm #ServicePHWeekend").is(':checked')) {
          ServicePHWeekend=$("#ServiceForm #ServicePHWeekend").val();
      }
      if ($("#ServiceForm #ServiceUrgent").is(':checked')) {
          Urgent=$("#ServiceForm #ServiceUrgent").val();
      }
+     BigRemarks = $('#ServiceForm #BigRemarks').val();
 
-
-     if (Organization.length == 0 || status.length == 0||ContactPerson.length == 0 || Email.length == 0 || Contact.length == 0 || Subject.length == 0 || Type.length == 0|| Details.length == 0 || PriorityLevel.length == 0) {
+     if (ServiceActualDateTimeFrom.length == 0 || ServiceActualDateTimeTo.length == 0||ServiceBillingHours.length == 0) {
          alert('Please fill in all mandatory fields!');
          return false;
      }
-     if (IsValidEmail(Email) == false) {
-         alert('Invalid email!');
-         return false;
-     }
-     if (IsValidContact(Contact) == false) {
-         alert('Invalid contact!');
-         return false;
-     }
 
-     var data = { 'FLID':caseID,'Organization': Organization, 'status':status,'ContactPerson': ContactPerson, 'Email': Email, 'ContactNo': Contact, 'Subject': Subject, 'Category': Category, 'Details': Details, 'Type': Type, 'NewLocation':NewLocation,'PriorityLevel': PriorityLevel };
+     var data = { 'FLID':caseID,'ServiceActualDateTimeFrom': ServiceActualDateTimeTo, 'ServicePHWeekend':ServicePHWeekend,'Urgent': Urgent, 'ServiceBillingHours': ServiceBillingHours, 'BigRemarks': BigRemarks };
      $.ajax({
-       url: apiSrc+"BCMain/FL1.ReviewCase.json",
+       url: apiSrc+"BCMain/FL1.SaveServiceForm.json",
        method: "POST",
        dataType: "json",
        xhrFields: {withCredentials: true},
@@ -655,21 +664,16 @@ function getOrgnaisationList() {
          if ((data) && (data.d.RetVal === -1)) {
            if (data.d.RetData.Tbl.Rows.length > 0) {
              if (data.d.RetData.Tbl.Rows[0].Success == true) {
-               $('#reviewForm #organisation').val('');
-               $('#reviewForm #name').val('');
-               $('#reviewForm #email').val('');
-               $('#reviewForm #contact').val('');
-               $('#reviewForm #title').val('');
-               $('#reviewForm #Type').val('');
-               $('#reviewForm #category').val('');
-               $('#reviewForm #Location').val('');
-               $('#reviewForm #PriorityLevel').val('');
-               $('#reviewForm #description').val('');
-               $('#reviewForm').foundation('close');
-               GetreviewCase(caseID);
-               GetCaseDetails(caseID);
-               GetCaseHistory(caseID);
-               $('#reviewForm').foundation('close');
+               $('#ServiceForm #ServiceActualDateFrom').val('');
+               $('#ServiceForm #ActualTimeFrom').val('');
+               $('#ServiceForm #ServiceActualDateTo').val('');
+               $('#ServiceForm #ActualTimeTo').val('');
+               $('#ServiceForm #title').val('');
+               $('#ServiceForm #ServiceBillingHours').val('');
+               $('#ServiceForm #BigRemarks').val('');
+               $('#ServiceForm #ServicePHWeekend').removeAttr("checked")
+
+               $('#ServiceForm').foundation('close');
              } else { alert(data.d.RetData.Tbl.Rows[0].ReturnMsg); }
            }
          }
