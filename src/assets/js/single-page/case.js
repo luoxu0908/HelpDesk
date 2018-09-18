@@ -132,7 +132,7 @@ $('#ServiceForm #ServiceActualDateTo').change(function(){
 
 });
 
-function execHours(var startDate,var endDate,var bool){
+function execHours(startDate,endDate,Flag){
 
 
 }
