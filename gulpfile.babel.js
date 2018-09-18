@@ -78,6 +78,12 @@ function styleGuide(done) {
 // Compile Sass into CSS
 // In production, the CSS is compressed
 function sass() {
+  gulp.src('src/baseCss/*.css')
+  .pipe($.if(PRODUCTION, $.uglify()
+    .on('error', e => { console.log(e); })
+  ))
+  .pipe(gulp.dest(PATHS.dist + '/assets/baseCss/'));
+
   return gulp.src('src/assets/scss/app.scss')
     .pipe($.sourcemaps.init())
     .pipe($.sass({
@@ -92,7 +98,8 @@ function sass() {
     .pipe($.if(PRODUCTION, $.cleanCss({ compatibility: 'ie9' })))
     .pipe($.if(!PRODUCTION, $.sourcemaps.write()))
     .pipe(gulp.dest(PATHS.dist + '/assets/css'))
-    .pipe(browser.reload({ stream: true }));
+    .pipe(browser.reload({ stream: true }))
+    ;
 }
 
 let webpackConfig = {
