@@ -114,12 +114,28 @@ $("#ServiceForm #ServicePHWeekend").click(function(){
     //  CostTime=
     }
 });
+$('#ServiceForm #ActualTimeFrom').change(function(){
 
+});
 
+$('#ServiceForm #ActualTimeTo').change(function(){
+
+});
+$('#ServiceForm #ServiceActualDateFrom').change(function(){
+
+});
+
+$('#ServiceForm #ServiceActualDateTo').change(function(){
+
+});
 
 
 });
 
+function execHours(var startDate,var endDate,var bool){
+
+
+}
 
 function DoPrint() {
        $('.boxContent').hide();
