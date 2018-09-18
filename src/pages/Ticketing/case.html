@@ -405,21 +405,21 @@
         </label>
       </div>
     </div>
-
     <div class="grid-x grid-padding-x">
-      <div class="cell small-8 medium-8">
+      <div class="cell">
         <label>
         Location
         <input type="text" id="ServiceLocation" name="ServiceLocation" disabled="disabled"/>
         </label>
       </div>
-      <div class="cell small-4 medium-4s">
+    </div>
+    <div class="grid-x grid-padding-x">
+      <div class="cell">
         <label>
         Details
         <input type="text" id="ServiceDetails" name="ServiceDetails" disabled="disabled"/>
         </label>
       </div>
-
     </div>
     <div class="grid-x grid-padding-x">
       <div class="cell small-4 medium-4">
@@ -440,7 +440,6 @@
         <input type="text" id="ServiceType" name="ServiceType" disabled="disabled"/>
       </div>
       <label>
-
     </div>
     <div class="grid-x grid-padding-x">
         <div class="cell small-3 medium-3">
@@ -574,18 +573,32 @@
     </div>
     <div class="grid-x grid-padding-x">
       <div class="cell small-3 medium-3">
-        <label>
+        <label  line-height:150%>
         PH/Weekend
         <input type="checkbox" id="ServicePHWeekend" name="ServicePHWeekend" value="PHWeekend"/>
         </label>
       </div>
-      <div class="cell small-3 medium-3">
-        <label>
+      <div class="cell small-3 medium-3" >
+        <label line-height:150%>
         Urgent
         <input type="checkbox" id="ServiceUrgent" name="ServiceUrgent" value="Urgent"/>
         </label>
       </div>
+      <div class="cell small-6 medium-6">
+        <label>
+        OffSet Hours<span style="color:red">*</span>
+        <input type="text" id="ServiceOffSetHours" name="ServiceOffSetHours" />
+        </label>
+      </div>
     </div>
+    <div class="grid-x grid-padding-x">
+      <div class="cell">
+        <label>
+        Hours Calculation Breakdown<span style="color:red">*</span>
+        <input type="text" id="ServiceHoursCalculation" name="ServiceHoursCalculation" disabled="disabled"/>
+        </label>
+      </div>
+      </div>
     <div class="grid-x grid-padding-x">
       <div class="cell small-6 medium-6">
         <label>
@@ -597,20 +610,6 @@
         <label>
         Billing Hours<span style="color:red">*</span>
         <input type="text" id="ServiceBillingHours" name="ServiceBillingHours" disabled="disabled"/>
-        </label>
-      </div>
-    </div>
-    <div class="grid-x grid-padding-x">
-      <div class="cell small-6 medium-6">
-        <label>
-        OffSet Hours<span style="color:red">*</span>
-        <input type="text" id="ServiceOffSetHours" name="ServiceOffSetHours" />
-        </label>
-      </div>
-      <div class="cell small-6 medium-6">
-        <label>
-        Hours Calculation Breakdown<span style="color:red">*</span>
-        <input type="text" id="ServiceHoursCalculation" name="ServiceHoursCalculation" disabled="disabled"/>
         </label>
       </div>
     </div>
