@@ -358,4 +358,254 @@
       <button type="button" id="submit" class="btn cell small-12 medium-4 medium-offset-4">Submit</button>
     </footer>
   </form>
+  <form id="ServiceForm" class="large reveal lightBg" data-reveal >
+    <header class="grid-x grid-padding-x">
+      <h3 class="cell">Service Form</h3>
+      <button class="close-button" aria-label="Dismiss alert" type="button" data-close>
+      <span aria-hidden="true">&times;</span>
+      </button>
+    </header>
+    <div class="grid-x grid-padding-x">
+      <div class="cell small-4 medium-4">
+        <label>
+        Case ID#<span style="color:red">*</span>
+        <input type="text" id="ServiceCaseID" name="ServiceCaseID" disabled="disabled"/>
+        </label>
+      </div>
+      <div class="cell small-4 medium-4">
+        <label>
+        Organisation
+        <input type="text" id="ServiceOrganisation" name="ServiceOrganisation" disabled="disabled"/>
+        </label>
+      </div>
+      <div class="cell small-4 medium-4">
+        <label>
+        Contact Person
+        <input type="text" id="ServiceContactPerson" name="ServiceContactPerson" disabled="disabled"/>
+        </label>
+      </div>
+    </div>
+    <div class="grid-x grid-padding-x">
+      <div class="cell small-4 medium-4">
+        <label>
+        Email
+        <input type="text" id="ServiceEmail" name="ServiceEmail" disabled="disabled"/>
+        </label>
+      </div>
+      <div class="cell small-4 medium-4">
+        <label>
+        Contact No
+        <input type="text" id="ServiceContactNo" name="ServiceContactNo" disabled="disabled"/>
+        </label>
+      </div>
+      <div class="cell small-4 medium-4">
+        <label>
+        Subject
+        <input type="text" id="ServiceSubject" name="ServiceSubject" disabled="disabled"/>
+        </label>
+      </div>
+    </div>
+
+    <div class="grid-x grid-padding-x">
+      <div class="cell small-8 medium-8">
+        <label>
+        Location
+        <input type="text" id="ServiceLocation" name="ServiceLocation" disabled="disabled"/>
+        </label>
+      </div>
+      <div class="cell small-4 medium-4s">
+        <label>
+        Details
+        <input type="text" id="ServiceDetails" name="ServiceDetails" disabled="disabled"/>
+        </label>
+      </div>
+
+    </div>
+    <div class="grid-x grid-padding-x">
+      <div class="cell small-4 medium-4">
+        <label>
+        Status
+        <input type="text" id="ServiceStatus" name="ServiceStatus" disabled="disabled"/>
+        </label>
+      </div>
+      <div class="cell small-4 medium-4">
+        <label>
+        Category
+        <input type="text" id="ServiceCategory" name="ServiceCategory" disabled="disabled"/>
+        </label>
+      </div>
+      <div class="cell small-4 medium-4">
+        <label>
+        Type
+        <input type="text" id="ServiceType" name="ServiceType" disabled="disabled"/>
+      </div>
+      <label>
+
+    </div>
+    <div class="grid-x grid-padding-x">
+        <div class="cell small-12 medium-6">
+            <label>
+                Actual Date From<span style="color:red">*</span>
+                <input type="date" id="ServiceActualDateFrom" name="ServiceActualDateFrom" />
+            </label>
+        </div>
+        <div class="cell small-12 medium-6">
+            <label>
+                Actual Time From<span style="color:red">*</span>
+                <select id="ActualTimeFrom" name="ActualTimeFrom">
+                  <option value="">-- Select Time --</option>
+                  <option value="00:00">00:00</option>
+                  <option value="00:30">00:30</option>
+                  <option value="01:00">01:00</option>
+                  <option value="01:30">01:30</option>
+                  <option value="02:00">02:00</option>
+                  <option value="02:30">02:30</option>
+                  <option value="03:00">03:00</option>
+                  <option value="03:30">03:30</option>
+                  <option value="04:00">04:00</option>
+                  <option value="04:30">04:30</option>
+                  <option value="05:00">05:00</option>
+                  <option value="05:30">05:30</option>
+                  <option value="06:00">06:00</option>
+                  <option value="06:30">06:30</option>
+                  <option value="07:00">07:00</option>
+                  <option value="07:30">07:30</option>
+                  <option value="08:00">08:00</option>
+                  <option value="08:30">08:30</option>
+                  <option value="09:00">09:00</option>
+                  <option value="09:30">09:30</option>
+                  <option value="10:00">10:00</option>
+                  <option value="10:30">10:30</option>
+                  <option value="11:00">11:00</option>
+                  <option value="11:30">11:30</option>
+                  <option value="12:00">12:00</option>
+                  <option value="12:30">12:30</option>
+                  <option value="13:00">13:00</option>
+                  <option value="13:30">13:30</option>
+                  <option value="14:00">14:00</option>
+                  <option value="14:30">14:30</option>
+                  <option value="15:00">15:00</option>
+                  <option value="15:30">15:30</option>
+                  <option value="16:00">16:00</option>
+                  <option value="16:30">16:30</option>
+                  <option value="17:00">17:00</option>
+                  <option value="17:30">17:30</option>
+                  <option value="18:00">18:00</option>
+                  <option value="18:30">18:30</option>
+                  <option value="19:00">19:00</option>
+                  <option value="19:30">19:30</option>
+                  <option value="20:00">20:00</option>
+                  <option value="20:30">20:30</option>
+                  <option value="21:00">21:00</option>
+                  <option value="21:30">21:30</option>
+                  <option value="22:00">22:00</option>
+                  <option value="22:30">22:30</option>
+                  <option value="23:00">23:00</option>
+                  <option value="23:30">23:30</option>
+                  <option value="24:00">24:00</option>
+                  <option value="24:30">24:30</option>
+                </select>
+            </label>
+        </div>
+    </div>
+    <div class="grid-x grid-padding-x">
+        <div class="cell small-12 medium-6">
+            <label>
+                Actual Date To<span style="color:red">*</span>
+                <input type="date" id="ServiceActualDateTo" name="ServiceActualDateTo" />
+            </label>
+        </div>
+        <div class="cell small-12 medium-6">
+            <label>
+                Actual Date To<span style="color:red">*</span>
+                <select id="ActualTimeTo" name="ActualTimeTo">
+                  <option value="">-- Select Time --</option>
+                  <option value="00:00">00:00</option>
+                  <option value="00:30">00:30</option>
+                  <option value="01:00">01:00</option>
+                  <option value="01:30">01:30</option>
+                  <option value="02:00">02:00</option>
+                  <option value="02:30">02:30</option>
+                  <option value="03:00">03:00</option>
+                  <option value="03:30">03:30</option>
+                  <option value="04:00">04:00</option>
+                  <option value="04:30">04:30</option>
+                  <option value="05:00">05:00</option>
+                  <option value="05:30">05:30</option>
+                  <option value="06:00">06:00</option>
+                  <option value="06:30">06:30</option>
+                  <option value="07:00">07:00</option>
+                  <option value="07:30">07:30</option>
+                  <option value="08:00">08:00</option>
+                  <option value="08:30">08:30</option>
+                  <option value="09:00">09:00</option>
+                  <option value="09:30">09:30</option>
+                  <option value="10:00">10:00</option>
+                  <option value="10:30">10:30</option>
+                  <option value="11:00">11:00</option>
+                  <option value="11:30">11:30</option>
+                  <option value="12:00">12:00</option>
+                  <option value="12:30">12:30</option>
+                  <option value="13:00">13:00</option>
+                  <option value="13:30">13:30</option>
+                  <option value="14:00">14:00</option>
+                  <option value="14:30">14:30</option>
+                  <option value="15:00">15:00</option>
+                  <option value="15:30">15:30</option>
+                  <option value="16:00">16:00</option>
+                  <option value="16:30">16:30</option>
+                  <option value="17:00">17:00</option>
+                  <option value="17:30">17:30</option>
+                  <option value="18:00">18:00</option>
+                  <option value="18:30">18:30</option>
+                  <option value="19:00">19:00</option>
+                  <option value="19:30">19:30</option>
+                  <option value="20:00">20:00</option>
+                  <option value="20:30">20:30</option>
+                  <option value="21:00">21:00</option>
+                  <option value="21:30">21:30</option>
+                  <option value="22:00">22:00</option>
+                  <option value="22:30">22:30</option>
+                  <option value="23:00">23:00</option>
+                  <option value="23:30">23:30</option>
+                  <option value="24:00">24:00</option>
+                  <option value="24:30">24:30</option>
+                </select>
+            </label>
+        </div>
+    </div>
+    <div class="grid-x grid-padding-x">
+      <div class="cell small-4 medium-4">
+        <label>
+        PH/Weekend
+        <input type="checkbox" id="ServicePHWeekend" name="ServicePHWeekend" value="PHWeekend"/>
+        </label>
+      </div>
+      <div class="cell small-4 medium-4">
+        <label>
+        Urgent
+        <input type="checkbox" id="ServiceUrgent" name="ServiceUrgent" value="Urgent"/>
+        </label>
+      </div>
+    </div>
+    <div class="grid-x grid-padding-x">
+      <div class="cell">
+        <label>
+        Billing Hours
+        <input type="text" id="ServiceBillingHours" name="ServiceBillingHours" disabled="disabled"/>
+        </label>
+      </div>
+    </div>
+    <div class="grid-x grid-padding-x">
+      <div class="cell">
+        <label>
+        Big Remarks
+        <textarea cols="2" id="ServiceBigRemarks" name="ServiceBigRemarks"></textarea>
+        </label>
+      </div>
+    </div>
+    <footer class="grid-x grid-margin-x">
+      <button type="button" id="submit"  class="btn cell small-12 medium-4 medium-offset-4">Submit</button>
+    </footer>
+  </form>
 </div>

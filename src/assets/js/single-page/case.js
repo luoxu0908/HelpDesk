@@ -1,4 +1,4 @@
-var RoleName = '',PrintFlag='',FileID='',caseID='',TargetRoleID='';
+var RoleName = '',PrintFlag='',FileID='',caseID='',TargetRoleID='',CostTime=0.0,TotalCostTime=0.0;
 
 $(function(){
 
@@ -74,6 +74,10 @@ $(function(){
   $('#chargeForm #submit').click(function(){
     chargeToPackage(caseID);
   });
+  $('#ServiceForm #submit').click(function(){
+    //alert($('#ServiceForm #ServiceActualDateFrom').val());
+    SaveServiceForm(caseID);
+  });
 
 
 $.when(getOrgnaisationList(),GetDropDownList('reviewForm','category','Category'),GetDropDownList('reviewForm','Location','OrgAddressLocation')
@@ -81,6 +85,19 @@ $.when(getOrgnaisationList(),GetDropDownList('reviewForm','category','Category')
 $('#reviewForm #organisation').attr('disabled', 'disabled');
   GetreviewCase(caseID);
 });
+$("#ServiceForm #ServicePHWeekend").click(function(){
+    if ($(this).is(':checked')) {
+    //  CostTime=
+    }
+});
+
+$("#ServiceForm #ServicePHWeekend").click(function(){
+    if ($(this).is(':checked')) {
+    //  CostTime=
+    }
+});
+
+
 
 
 });
@@ -350,6 +367,7 @@ function GetCaseDetails(caseId){
           $('#summary .contact').html(caseDetails.ContactNo);
           $('#summary .subject').html(caseDetails.Subject);
           $('#summary .details').html(caseDetails.Details);
+          $('#summary .location').html(caseDetails.TagData3);
           $('#summary .createdDate').html(createdDate);
           $('#summary .updatedDate').html(updatedDate);
           $('#reviewInfo .status').html(caseDetails.Status);
@@ -365,7 +383,21 @@ function GetCaseDetails(caseId){
           $('#reviewForm #scheduleDateFrom').val(caseDetails.DateFrom);
           $('#reviewForm #scheduleDateTo').val(caseDetails.DateTo);
           $('#chargeForm #actualManHours').val(caseDetails.ChargeHours);
+
         // $('#reviewForm #actualManHours').val(caseDetails.ActualHours);
+          $('#ServiceForm #ServiceCaseID').val(caseDetails.FLID);
+          $('#ServiceForm #ServiceOrganisation').val(caseDetails.Organisation);
+          $('#ServiceForm #ServiceContactPerson').val(caseDetails.ContactPerson);
+          $('#ServiceForm #ServiceEmail').val(caseDetails.Email);
+          $('#ServiceForm #ServiceContactNo').val(caseDetails.ContactNo);
+
+          $('#ServiceForm #ServiceSubject').val(caseDetails.Subject);
+          $('#ServiceForm #ServiceLocation').val(caseDetails.TagData3);
+          $('#ServiceForm #ServiceDetails').val(caseDetails.Details);
+          $('#ServiceForm #ServiceStatus').val(caseDetails.Status);
+          $('#ServiceForm #ServiceCategory').val(caseDetails.Category);
+          $('#ServiceForm #ServiceType').val(caseDetails.NewType);
+          ServiceType
         }
       }
       else {
@@ -580,6 +612,75 @@ function getOrgnaisationList() {
                alert("Error: " + data.responseJSON.d.RetMsg);
            }
        });
+   }
+
+
+   function SaveServiceForm(caseID){
+     var ServiceActualDateTimeFrom,ServiceActualDateTimeTo, ServicePHWeekend, Urgent, BigRemarks;
+     ServiceActualDateTimeFrom = $('#ServiceForm #ServiceActualDateFrom').val()+' '+$('#ServiceForm #ActualTimeFrom').val();
+     ServiceActualDateTimeFrom = $('#ServiceForm #ServiceActualDateTo').val()+' '+$('#ServiceForm #ActualTimeTo').val();
+     BigRemarks = $('#ServiceForm #BigRemarks').val();
+     BigRemarks = $('#ServiceForm #BigRemarks').val();
+     if ($("#ServiceForm #ServicePHWeekend").is(':checked')) {
+         ServicePHWeekend=$("#ServiceForm #ServicePHWeekend").val();
+     }
+     if ($("#ServiceForm #ServiceUrgent").is(':checked')) {
+         Urgent=$("#ServiceForm #ServiceUrgent").val();
+     }
+
+
+     if (Organization.length == 0 || status.length == 0||ContactPerson.length == 0 || Email.length == 0 || Contact.length == 0 || Subject.length == 0 || Type.length == 0|| Details.length == 0 || PriorityLevel.length == 0) {
+         alert('Please fill in all mandatory fields!');
+         return false;
+     }
+     if (IsValidEmail(Email) == false) {
+         alert('Invalid email!');
+         return false;
+     }
+     if (IsValidContact(Contact) == false) {
+         alert('Invalid contact!');
+         return false;
+     }
+
+     var data = { 'FLID':caseID,'Organization': Organization, 'status':status,'ContactPerson': ContactPerson, 'Email': Email, 'ContactNo': Contact, 'Subject': Subject, 'Category': Category, 'Details': Details, 'Type': Type, 'NewLocation':NewLocation,'PriorityLevel': PriorityLevel };
+     $.ajax({
+       url: apiSrc+"BCMain/FL1.ReviewCase.json",
+       method: "POST",
+       dataType: "json",
+       xhrFields: {withCredentials: true},
+       data: { 'data':JSON.stringify(data),
+               'WebPartKey':WebPartVal,
+               'ReqGUID': getGUID() },
+       success: function(data){
+         if ((data) && (data.d.RetVal === -1)) {
+           if (data.d.RetData.Tbl.Rows.length > 0) {
+             if (data.d.RetData.Tbl.Rows[0].Success == true) {
+               $('#reviewForm #organisation').val('');
+               $('#reviewForm #name').val('');
+               $('#reviewForm #email').val('');
+               $('#reviewForm #contact').val('');
+               $('#reviewForm #title').val('');
+               $('#reviewForm #Type').val('');
+               $('#reviewForm #category').val('');
+               $('#reviewForm #Location').val('');
+               $('#reviewForm #PriorityLevel').val('');
+               $('#reviewForm #description').val('');
+               $('#reviewForm').foundation('close');
+               GetreviewCase(caseID);
+               GetCaseDetails(caseID);
+               GetCaseHistory(caseID);
+               $('#reviewForm').foundation('close');
+             } else { alert(data.d.RetData.Tbl.Rows[0].ReturnMsg); }
+           }
+         }
+         else {
+           alert(data.d.RetMsg);
+         }
+       },
+       error: function(data){
+         alert("Error: " + data.responseJSON.d.RetMsg);
+       }
+     });
    }
 
    function GetDropDownList(FatherId,Id,LookupCat) {
