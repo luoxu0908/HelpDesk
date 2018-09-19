@@ -345,10 +345,10 @@ function execHours(startDate, endDate, standDate) {
         hourDeatils += 'from : ' + moment(startDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(endDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(endDate).diff(startDate, 'minutes') / 60.00 + ' Billing Hours : ' + actualHour * 2 + '\r\n'
     }
 }
-function DoPrintServiceForm(){
-  var printData = document.getElementById("PrintServiceForm").innerHTML;
-  window.document.body.innerHTML = printData
-  window.print()
+function DoPrintServiceForm() {
+    var printData = document.getElementById("PrintServiceForm").innerHTML;
+    window.document.body.innerHTML = printData
+    window.print()
 }
 function DoPrint() {
     $('.boxContent').hide();
@@ -701,6 +701,59 @@ function GetCaseDetails(caseId) {
                       $('#ServiceForm #ServiceEmailDiv').hide();
                       $('#ServiceForm #ServiceContactNoDiv').hide();
                     }
+
+
+                    $('#PrintServiceForm .PrintCaseID').html(caseDetails.FLID);
+                    $('#PrintServiceForm .PrintOrganisation').html(caseDetails.Organisation);
+                    $('#PrintServiceForm .PrintContactPerson').html(caseDetails.ContactPerson);
+                    $('#PrintServiceForm .PrintEmail').html(caseDetails.Email);
+                    $('#PrintServiceForm .PrintContactNo').html(caseDetails.ContactNo);
+
+                    $('#PrintServiceForm .PrintSubject').html(caseDetails.Subject);
+                    $('#PrintServiceForm .PrintLocation').html(caseDetails.TagData3);
+                    $('#PrintServiceForm .PrintDetails').html(caseDetails.Details);
+                    $('#PrintServiceForm .PrintStatus').html(caseDetails.Status);
+                    $('#PrintServiceForm .PrintCategory').html(caseDetails.Category);
+                    $('#PrintServiceForm .PrintType').html(caseDetails.NewType);
+                    $('#PrintServiceForm .PrintActualDateFrom').html(moment(caseDetails.DateFrom).format('YYYY-MM-DD'));
+                    $('#PrintServiceForm .PrintActualTimeFrom').html(moment(caseDetails.DateFrom).format('HH:mm'));
+                    $('#PrintServiceForm .PrintActualDateTo').html(moment(caseDetails.DateTo).format('YYYY-MM-DD'));
+                    $('#PrintServiceForm .PrintActualTimeTo').html(moment(caseDetails.DateTo).format('HH:mm'));
+
+                    if (caseDetails.PHWeekend == '1') {
+                        $('#PrintServiceForm .PrintPHWeekend').html('Yes');
+                    } else {
+                        $('#PrintServiceForm .PrintPHWeekend').html('No');
+                    }
+
+                    if (caseDetails.Urgent == '1') {
+                        $('#PrintServiceForm .PrintUrgent').html('Yes');
+                    } else {
+                        $('#PrintServiceForm .PrintUrgent').html('No');
+                    }
+                    $('#PrintServiceForm .PrintActualHours').html(caseDetails.ActualHours);
+                    $('#PrintServiceForm .PrintOffSetHours').html(caseDetails.OffSetHours);
+                    $('#PrintServiceForm .PrintOffSetReason').html(caseDetails.OffSetReason);
+                    $('#PrintServiceForm .PrintBillingHours').html(caseDetails.BillingHours);
+                    $('#PrintServiceForm .PrintHoursCalculatio').html(caseDetails.HoursCalculation);
+                    $('#PrintServiceForm .PrintDiagnosis').html(caseDetails.Diagnosis);
+                    $('#PrintServiceForm .PrintFollowRemarks').html(caseDetails.FollowupRemarks);
+
+                    if (caseDetails.CustomerAck == '1') {
+                        $('#PrintServiceForm .PrintCustomerAck').html('Yes');
+                    } else {
+                        $('#PrintServiceForm .PrintCustomerAck').html('No');
+                    }
+
+                    $.when(GetServiceChargeToPackage('ServiceForm', 'ServiceChargeToPackage', '')).then(function () {
+                        $('#PrintServiceForm .PrintChargeToPackage').html(caseDetails.PackageTypeNew);
+                        //PrintChargeToPackage
+                    });
+                    $('#PrintServiceForm .PrintEmail').html(caseDetails.ServiceName);
+                    $('#PrintServiceForm .PrintContactNo').html(caseDetails.ServiceName);
+
+
+
 
                 }
             }

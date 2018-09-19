@@ -1,851 +1,849 @@
 <div id="caseContainer" class="contentContainer">
-  <div class="boxContent">
-    <a class="button buttonType2 left buttonType2Back" href="./TicketingHome.html">Back to Case Listing</a>
-  </div>
-  <header class="titleMain">
-    <h1 class="caseTitle">
-    </h1>
-  </header>
-  <section class="toggleBox" id="summary">
-    <header class="toggleTitle show-for-small-only">
-      <h2>Summary</h2>
+    <div class="boxContent">
+        <a class="button buttonType2 left buttonType2Back" href="./TicketingHome.html">Back to Case Listing</a>
+    </div>
+    <header class="titleMain">
+        <h1 class="caseTitle"></h1>
     </header>
-    <div class="grid-container toggleContent fluid">
-      <div class="grid-x grid-margin-x">
-    <div class="cell  small-6 medium-6 ">
-        <b>Case ID#</b>
-        <span class="CaseID"></span>
-      <button id="Print">Print</button>
-    </div>
-    <!-- <div class="cell  small-6 medium-6 ">
-        <button id="Print">Print</button>
-    </div> -->
-    </div>
-      <div class="grid-x grid-margin-x">
-        <div class="cell  small-12 medium-6 ">
-          <b>Organisation</b>
-          <span class="organisation">
-          </span>
+    <section class="toggleBox" id="summary">
+        <header class="toggleTitle show-for-small-only">
+            <h2>Summary</h2>
+        </header>
+        <div class="grid-container toggleContent fluid">
+            <div class="grid-x grid-margin-x">
+                <div class="cell  small-6 medium-6 ">
+                    <b>Case ID#</b>
+                    <span class="CaseID"></span>
+                    <button id="Print">Print</button>
+                </div>
+                <!-- <div class="cell  small-6 medium-6 ">
+                    <button id="Print">Print</button>
+                </div> -->
+            </div>
+            <div class="grid-x grid-margin-x">
+                <div class="cell  small-12 medium-6 ">
+                    <b>Organisation</b>
+                    <span class="organisation">
+                    </span>
+                </div>
+            </div>
+            <div class="grid-x grid-margin-x">
+                <div class="cell  small-12 medium-6 ">
+                    <b>Contact Person</b>
+                    <span class="name">
+                    </span>
+                </div>
+            </div>
+            <div class="grid-x grid-margin-x">
+                <div class="cell  small-12 medium-6 ">
+                    <b>Email</b>
+                    <span class="email">
+                    </span>
+                </div>
+                <div class="cell  small-12 medium-6 ">
+                    <b>Contact No</b>
+                    <span class="contact">
+                    </span>
+                </div>
+            </div>
+            <div class="grid-x grid-margin-x">
+                <div class="cell small-12 medium-6 ">
+                    <b>Subject</b>
+                    <span class="subject">
+                    </span>
+                </div>
+                <div class="cell small-12 medium-6 ">
+                    <b>Location</b>
+                    <span class="location">
+                    </span>
+                </div>
+            </div>
+            <div class="grid-x grid-margin-x">
+                <div class="cell small-12 medium-6 ">
+                    <b>Details</b>
+                    <span class="details">
+                    </span>
+                </div>
+            </div>
+            <div class="grid-x grid-margin-x">
+                <div class="cell  small-12 medium-6 ">
+                    <b>Created Date &amp; Time</b>
+                    <span class="createdDate">
+                    </span>
+                </div>
+                <div class="cell  small-12 medium-6 ">
+                    <b>Last Update Date &amp; Time</b>
+                    <span class="updatedDate">
+                    </span>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="grid-x grid-margin-x">
-        <div class="cell  small-12 medium-6 ">
-          <b>Contact Person</b>
-          <span class="name">
-          </span>
+    </section>
+    <section class="toggleBox" id="reviewInfo">
+        <header class="grid-x">
+            <h2 class="cell auto">Staff Review</h2>
+            <!--<button type="button" style="display:none" class="buttonType2 buttonChargeAdd cell medium-2 text-right teamLeadControl"  data-open="chargeForm">Charge</button>-->
+            <button type="button" style="display:none" class="buttonType2 buttonReviewAdd cell medium-2 text-right teamLeadControl" data-open="reviewForm">Review</button>
+        </header>
+        <div class="grid-container toggleContent fluid">
+            <div class="grid-x grid-margin-x">
+                <div class="cell  small-12 medium-6 ">
+                    <b>Status</b>
+                    <span class="status">
+                    </span>
+                </div>
+                <div class="cell  small-12 medium-6 ">
+                    <b>Category</b>
+                    <span class="category">
+                    </span>
+                </div>
+            </div>
+            <div class="grid-x grid-margin-x">
+                <div class="cell  small-12 medium-6 ">
+                    <b>Type</b>
+                    <span class="type">
+                    </span>
+                </div>
+            </div>
+            <div class="grid-x grid-margin-x">
+                <div class="cell  small-12 medium-6 ">
+                    <b>Actual Hour(s)</b>
+                    <span class="manHours">
+                    </span>
+                </div>
+                <div class="cell  small-12 medium-6 ">
+                    <b>Billing Hours</b>
+                    <span class="actualHour">
+                    </span>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="grid-x grid-margin-x">
-        <div class="cell  small-12 medium-6 ">
-          <b>Email</b>
-          <span class="email">
-          </span>
+    </section>
+    <section id="involvement">
+        <header class="grid-x">
+            <h2 class="cell auto">Assigned Engineer(s)</h2>
+            <button type="button" style="display:none" class="buttonType2 buttonType2Add cell medium-3 text-right teamLeadControl" data-open="involvementForm">Add Involvement</button>
+        </header>
+        <div class="threadContainer" id="taskThread">
+            <div class="scrollContainer threadTask">
+                <!--Task thread insert here-->
+                <!--
+                <div class="thread">
+                  <div class="top">
+                    <span class="datetime">1 Jan 2018 <i> 12:00 </i> </span>
+                  </div>
+                  <div class="text">asd</div>
+                </div>
+                -->
+            </div>
         </div>
-        <div class="cell  small-12 medium-6 ">
-          <b>Contact No</b>
-          <span class="contact">
-          </span>
+    </section>
+    <section id="activityLog">
+        <header class="grid-x">
+            <h2 class="cell auto">Case History</h2>
+            <button id="AddNewService" type="button" class="buttonType2 buttonType2Add cell medium-3 text-right" data-open="ServiceForm">Service Form</button>
+            <button id="AddNewAttachment" type="button" class="buttonType2 buttonType2Add cell medium-3 text-right" onclick="AddNewAttactment();return false;">Add Case Attachments</button>
+            <button id="AddNewActivity" type="button" class="buttonType2 buttonType2Add cell medium-3 text-right" data-open="activityForm">Add Case Remarks</button>
+        </header>
+        <div class="threadContainer" id="logThread">
+            <div class="scrollContainer threadLog">
+                <!--Log thread insert here-->
+                <div class="thread">
+                    <div class="top"><span class="datetime">1 jan 2018<i> 13:00</i> by Security Admin</span> <span class="tag">Internal</span></div>
+                    <div class="text">details</div>
+                </div>
+                <div class="thread">
+                    <div class="top"><span class="datetime">1 jan 2018<i> 13:00</i> by Security Admin</span></div>
+                    <div class="text">details</div>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="grid-x grid-margin-x">
-        <div class="cell small-12 medium-6 ">
-          <b>Subject</b>
-          <span class="subject">
-          </span>
+    </section>
+    <form id="involvementForm" class="reveal lightBg" data-reveal>
+        <header class="grid-x grid-padding-x">
+            <h3 class="cell">New Involvement</h3>
+            <button class="close-button" aria-label="Dismiss alert" type="button" data-close>
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </header>
+        <div class="grid-x grid-padding-x">
+            <div class="cell">
+                <label>
+                    Staff <span style="color:red">*</span>
+                    <select id="person" name="person">
+                        <option value="">-- Select Staff --</option>
+                        <option value="1">Admin</option>
+                        <option value="6">Li Feng</option>
+                    </select>
+                </label>
+            </div>
         </div>
-        <div class="cell small-12 medium-6 ">
-          <b>Location</b>
-          <span class="location">
-          </span>
+        <div class="grid-x grid-padding-x" style="display:none">
+            <div class="cell">
+                <label>
+                    Task <span style="color:red">*</span>
+                    <textarea id="task" name="task" placeholder="Task"></textarea>
+                </label>
+            </div>
         </div>
-      </div>
-      <div class="grid-x grid-margin-x">
-        <div class="cell small-12 medium-6 ">
-          <b>Details</b>
-          <span class="details">
-          </span>
+        <footer class="grid-x grid-margin-x">
+            <button type="button" id="submit" class="btn cell small-12 medium-4 medium-offset-4">Submit</button>
+        </footer>
+    </form>
+    <form id="activityForm" class="reveal lightBg" data-reveal>
+        <header class="grid-x grid-padding-x">
+            <h3 class="cell">Case Remarks</h3>
+            <button class="close-button" aria-label="Dismiss alert" type="button" data-close>
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </header>
+        <div class="grid-x grid-padding-x">
+            <div class="cell">
+                <label style="display:none">
+                    Description <span style="color:red">*</span>
+                </label>
+                <textarea id="description" name="description"></textarea>
+            </div>
         </div>
-      </div>
-      <div class="grid-x grid-margin-x">
-        <div class="cell  small-12 medium-6 ">
-          <b>Created Date &amp; Time</b>
-          <span class="createdDate">
-          </span>
+        <div style="display:none" class="grid-x grid-padding-x internalCheckBox supportControl">
+            <div class="cell">
+                <label class="callout calloutInline calloutNeutral">
+                    <input type="radio" id="internal" name="internal" value="1" />
+                    Internal
+                </label>
+                <label class="callout calloutInline calloutNeutral">
+                    <input type="radio" id="internalAll" name="internal" value="0" />
+                    All
+                </label>
+            </div>
         </div>
-        <div class="cell  small-12 medium-6 ">
-          <b>Last Update Date &amp; Time</b>
-          <span class="updatedDate">
-          </span>
+        <footer class="grid-x grid-margin-x">
+            <button type="button" id="submit" class="btn cell small-12 medium-4 medium-offset-4">Submit</button>
+        </footer>
+    </form>
+    <form id="chargeForm" class="reveal lightBg" data-reveal>
+        <header class="grid-x grid-padding-x">
+            <h3 class="cell">Charge to Package</h3>
+            <button class="close-button" aria-label="Dismiss alert" type="button" data-close>
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </header>
+        <div class="grid-x grid-padding-x">
+            <div class="cell">
+                <label>
+                    Package<span style="color:red">*</span>
+                    <select id="packageID" name="packageID">
+                        <option value="">-- Please Select --</option>
+                    </select>
+                </label>
+            </div>
         </div>
-      </div>
-    </div>
-  </section>
-  <section class="toggleBox" id="reviewInfo">
-    <header class="grid-x">
-      <h2 class="cell auto">Staff Review</h2>
-    <!--<button type="button" style="display:none" class="buttonType2 buttonChargeAdd cell medium-2 text-right teamLeadControl"  data-open="chargeForm">Charge</button>-->
-      <button type="button" style="display:none" class="buttonType2 buttonReviewAdd cell medium-2 text-right teamLeadControl"  data-open="reviewForm">Review</button>
-    </header>
-    <div class="grid-container toggleContent fluid">
-      <div class="grid-x grid-margin-x">
-        <div class="cell  small-12 medium-6 ">
-          <b>Status</b>
-          <span class="status">
-          </span>
+        <div class="grid-x grid-padding-x">
+            <div class="cell">
+                <label>
+                    Charge Hour(s) <span style="color:red">*</span>
+                    <input type="text" id="actualManHours" name="actualManHours" />
+                </label>
+            </div>
         </div>
-        <div class="cell  small-12 medium-6 ">
-          <b>Category</b>
-          <span class="category">
-          </span>
+        <footer class="grid-x grid-margin-x">
+            <button type="button" id="submit" class="btn cell small-12 medium-4 medium-offset-4">Submit</button>
+        </footer>
+    </form>
+    <form id="reviewForm" class="reveal lightBg" data-reveal>
+        <header class="grid-x grid-padding-x">
+            <h3 class="cell">Case Review</h3>
+            <button class="close-button" aria-label="Dismiss alert" type="button" data-close>
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </header>
+        <div class="grid-x grid-padding-x">
+            <div class="cell">
+                <label>
+                    Organisation <span style="color:red">*</span>
+                    <select id="organisation" name="organisation"></select>
+                </label>
+            </div>
         </div>
-      </div>
-      <div class="grid-x grid-margin-x">
-        <div class="cell  small-12 medium-6 ">
-          <b>Type</b>
-          <span class="type">
-          </span>
-        </div>
-      </div>
-      <div class="grid-x grid-margin-x">
-        <div class="cell  small-12 medium-6 ">
-          <b>Actual Hour(s)</b>
-          <span class="manHours">
-          </span>
-        </div>
-        <div class="cell  small-12 medium-6 " >
-          <b>Billing Hours</b>
-          <span class="actualHour">
-          </span>
-        </div>
-      </div>
-    </div>
-  </section>
-  <section id="involvement">
-    <header class="grid-x">
-      <h2 class="cell auto">Assigned Engineer(s)</h2>
-      <button type="button" style="display:none" class="buttonType2 buttonType2Add cell medium-3 text-right teamLeadControl"  data-open="involvementForm">Add Involvement</button>
-    </header>
-    <div class="threadContainer" id="taskThread">
-      <div class="scrollContainer threadTask">
-        <!--Task thread insert here-->
-        <!--
-        <div class="thread">
-          <div class="top">
-            <span class="datetime">1 Jan 2018 <i> 12:00 </i> </span>
-          </div>
-          <div class="text">asd</div>
-        </div>
-        -->
-      </div>
-    </div>
-  </section>
-  <section id="activityLog">
-    <header class="grid-x">
-      <h2 class="cell auto">Case History</h2>
-      <button id="AddNewService" type="button" class="buttonType2 buttonType2Add cell medium-3 text-right"  data-open="ServiceForm">Service Form</button>
-      <button id="AddNewAttachment" type="button" class="buttonType2 buttonType2Add cell medium-3 text-right" onclick="AddNewAttactment();return false;">Add Case Attachments</button>
-      <button id="AddNewActivity" type="button" class="buttonType2 buttonType2Add cell medium-3 text-right"  data-open="activityForm">Add Case Remarks</button>
-    </header>
-    <div class="threadContainer" id="logThread">
-      <div class="scrollContainer threadLog" >
-        <!--Log thread insert here-->
-        <div class="thread">
-          <div class="top"><span class="datetime">1 jan 2018<i> 13:00</i> by Security Admin</span> <span class="tag">Internal</span></div>
-          <div class="text">details</div>
-        </div>
-        <div class="thread">
-          <div class="top"><span class="datetime">1 jan 2018<i> 13:00</i> by Security Admin</span></div>
-          <div class="text">details</div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <form id="involvementForm" class="reveal lightBg" data-reveal>
-    <header class="grid-x grid-padding-x">
-      <h3 class="cell">New Involvement</h3>
-      <button class="close-button" aria-label="Dismiss alert" type="button" data-close>
-      <span aria-hidden="true">&times;</span>
-      </button>
-    </header>
-    <div class="grid-x grid-padding-x">
-      <div class="cell">
-        <label>
-          Staff <span style="color:red">*</span>
-          <select id="person" name="person">
-            <option value="">-- Select Staff --</option>
-            <option value="1">Admin</option>
-            <option value="6">Li Feng</option>
-          </select>
-        </label>
-      </div>
-    </div>
-    <div class="grid-x grid-padding-x" style="display:none">
-      <div class="cell">
-        <label>
-        Task <span style="color:red">*</span>
-        <textarea id="task" name="task" placeholder="Task"></textarea>
-        </label>
-      </div>
-    </div>
-    <footer class="grid-x grid-margin-x">
-      <button type="button" id="submit" class="btn cell small-12 medium-4 medium-offset-4">Submit</button>
-    </footer>
-  </form>
-  <form id="activityForm" class="reveal lightBg" data-reveal>
-    <header class="grid-x grid-padding-x">
-      <h3 class="cell">Case Remarks</h3>
-      <button class="close-button" aria-label="Dismiss alert" type="button" data-close>
-      <span aria-hidden="true">&times;</span>
-      </button>
-    </header>
-    <div class="grid-x grid-padding-x">
-      <div class="cell">
-        <label style="display:none">
-        Description <span style="color:red">*</span>
-        </label>
-        <textarea id="description" name="description"></textarea>
-      </div>
-    </div>
-    <div style="display:none" class="grid-x grid-padding-x internalCheckBox supportControl">
-      <div class="cell">
-        <label class="callout calloutInline calloutNeutral">
-        <input type="radio" id="internal" name="internal"  value="1"/>
-        Internal</label>
-        <label class="callout calloutInline calloutNeutral">
-        <input type="radio" id="internalAll" name="internal" value="0"/>
-        All</label>
-      </div>
-    </div>
-    <footer class="grid-x grid-margin-x">
-      <button type="button" id="submit"  class="btn cell small-12 medium-4 medium-offset-4">Submit</button>
-    </footer>
-  </form>
-  <form id="chargeForm" class="reveal lightBg" data-reveal>
-    <header class="grid-x grid-padding-x">
-      <h3 class="cell">Charge to Package</h3>
-      <button class="close-button" aria-label="Dismiss alert" type="button" data-close>
-      <span aria-hidden="true">&times;</span>
-      </button>
-    </header>
-    <div class="grid-x grid-padding-x">
-      <div class="cell">
-        <label>
-        Package<span style="color:red">*</span>
-        <select id="packageID" name="packageID">
-          <option value="">-- Please Select --</option>
-        </select>
-        </label>
-      </div>
-    </div>
-    <div class="grid-x grid-padding-x">
-             <div class="cell">
-                 <label>
-                     Charge Hour(s) <span style="color:red">*</span>
-                     <input type="text" id="actualManHours" name="actualManHours" />
-                 </label>
-             </div>
-    </div>
-    <footer class="grid-x grid-margin-x">
-      <button type="button" id="submit"  class="btn cell small-12 medium-4 medium-offset-4">Submit</button>
-    </footer>
-  </form>
-  <form id="reviewForm" class="reveal lightBg" data-reveal>
-    <header class="grid-x grid-padding-x">
-      <h3 class="cell">Case Review</h3>
-      <button class="close-button" aria-label="Dismiss alert" type="button" data-close>
-      <span aria-hidden="true">&times;</span>
-      </button>
-    </header>
-    <div class="grid-x grid-padding-x">
-      <div class="cell">
-        <label>
-        Organisation <span style="color:red">*</span>
-        <select id="organisation" name="organisation">
-        </select>
-        </label>
-      </div>
-    </div>
 
-    <div class="grid-x grid-padding-x">
-      <div class="cell">
-        <label>
-               Status
-               <select id="status" name="status">
-                 <option value="">-- Please Select --</option>
-                 <option value="New - Open">New - Open</option>
-                 <option value="Reviewed & Processing - Open">Reviewed & Processing - Open</option>
-                 <option value="Reviewed & Pending Approval - Open">Reviewed & Pending Approval - Open</option>
-                 <option value="Processing - Open">Processing - Open</option>
-                 <option value="Rejected - Closed">Rejected - Closed</option>
-                 <option value="Completed - Closed">Completed - Closed</option>
-               </select>
-               </label>
-      </div>
-    </div>
-
-    <div class="grid-x grid-padding-x">
-      <div class="cell">
-        <label>
-        Contact Person <span style="color:red">*</span>
-        <input type="text" id="name" name="name"/>
-        </label>
-      </div>
-    </div>
-    <div class="grid-x grid-padding-x">
-      <div class="cell small-12 medium-6">
-        <label>
-        Email <span style="color:red">*</span>
-        <input type="text" id="email" name="email"/>
-        </label>
-      </div>
-      <div class="cell small-12 medium-6">
-        <label>
-        Contact No. <span style="color:red">*</span>
-        <input type="text" id="contact" name="contact"/>
-        </label>
-      </div>
-    </div>
-    <div class="grid-x grid-padding-x">
-      <div class="cell">
-        <label>
-        Subject <span style="color:red">*</span>
-        <input type="text" id="title" name="title"/>
-        </label>
-      </div>
-    </div>
-    <div class="grid-x grid-padding-x">
-      <div class="cell">
-        <label>
-        Type<span style="color:red">*</span>
-        <select id="Type" name="Type">
-        </select>
-        </label>
-      </div>
-    </div>
-
-    <div class="grid-x grid-padding-x" >
-      <div class="cell">
-        <label>
-          Category
-          <select id="category" name="category">
-          </select>
-        </label>
-      </div>
-    </div>
-    <div class="grid-x grid-padding-x">
-      <div class="cell">
-        <label>Location<select id="Location" name="Location"></select></label>
-      </div>
-    </div>
-    <div class="grid-x grid-padding-x">
-      <div class="cell">
-        <label>
-          Priority Level<span style="color:red">*</span>
-          <select id="PriorityLevel" name="PriorityLevel">
-          </select>
-        </label>
-      </div>
-    </div>
-    <div class="grid-x grid-padding-x">
-      <div class="cell">
-        <label>
-        Description <span style="color:red">*</span>
-        <textarea id="description" name="description"></textarea>
-        </label>
-      </div>
-    </div>
-    <footer class="grid-x grid-margin-x">
-      <button type="button" id="submit" class="btn cell small-12 medium-4 medium-offset-4">Submit</button>
-    </footer>
-  </form>
-  <form id="ServiceForm" class="small reveal lightBg" data-reveal >
-    <header class="grid-x grid-padding-x">
-      <h3 class="cell">Service Form</h3>
-      <button class="close-button" aria-label="Dismiss alert" type="button" data-close>
-      <span aria-hidden="true">&times;</span>
-      </button>
-    </header>
-    <div class="grid-x grid-padding-x">
-      <div class="cell small-4 medium-4">
-        <label>
-        Case ID#<span style="color:red">*</span>
-        <input type="text" id="ServiceCaseID" name="ServiceCaseID" disabled="disabled"/>
-        </label>
-      </div>
-      <div class="cell small-4 medium-4">
-        <label>
-        Organisation
-        <input type="text" id="ServiceOrganisation" name="ServiceOrganisation" disabled="disabled"/>
-        </label>
-      </div>
-      <div class="cell small-4 medium-4">
-        <label>
-        Contact Person
-        <input type="text" id="ServiceContactPerson" name="ServiceContactPerson" disabled="disabled"/>
-        </label>
-      </div>
-    </div>
-    <div class="grid-x grid-padding-x">
-      <div class="cell small-4 medium-4">
-        <label>
-        Email
-        <input type="text" id="ServiceEmail" name="ServiceEmail" disabled="disabled"/>
-        </label>
-      </div>
-      <div class="cell small-4 medium-4">
-        <label>
-        Contact No
-        <input type="text" id="ServiceContactNo" name="ServiceContactNo" disabled="disabled"/>
-        </label>
-      </div>
-      <div class="cell small-4 medium-4">
-        <label>
-        Subject
-        <input type="text" id="ServiceSubject" name="ServiceSubject" disabled="disabled"/>
-        </label>
-      </div>
-    </div>
-    <div class="grid-x grid-padding-x">
-      <div class="cell">
-        <label>
-        Location
-        <input type="text" id="ServiceLocation" name="ServiceLocation" disabled="disabled"/>
-        </label>
-      </div>
-    </div>
-    <div class="grid-x grid-padding-x">
-      <div class="cell">
-        <label>
-        Details
-        <input type="text" id="ServiceDetails" name="ServiceDetails" disabled="disabled"/>
-        </label>
-      </div>
-    </div>
-    <div class="grid-x grid-padding-x">
-      <div class="cell small-4 medium-4">
-        <label>
-        Status
-        <input type="text" id="ServiceStatus" name="ServiceStatus" disabled="disabled"/>
-        </label>
-      </div>
-      <div class="cell small-4 medium-4">
-        <label>
-        Category
-        <input type="text" id="ServiceCategory" name="ServiceCategory" disabled="disabled"/>
-        </label>
-      </div>
-      <div class="cell small-4 medium-4">
-        <label>
-        Type
-        <input type="text" id="ServiceType" name="ServiceType" disabled="disabled"/>
-      </div>
-      <label>
-    </div>
-    <div class="grid-x grid-padding-x">
-        <div class="cell small-3 medium-3">
-            <label>
-                Actual Date From<span style="color:red">*</span>
-                <input type="date" id="ServiceActualDateFrom" name="ServiceActualDateFrom" />
-            </label>
+        <div class="grid-x grid-padding-x">
+            <div class="cell">
+                <label>
+                    Status
+                    <select id="status" name="status">
+                        <option value="">-- Please Select --</option>
+                        <option value="New - Open">New - Open</option>
+                        <option value="Reviewed & Processing - Open">Reviewed & Processing - Open</option>
+                        <option value="Reviewed & Pending Approval - Open">Reviewed & Pending Approval - Open</option>
+                        <option value="Processing - Open">Processing - Open</option>
+                        <option value="Rejected - Closed">Rejected - Closed</option>
+                        <option value="Completed - Closed">Completed - Closed</option>
+                    </select>
+                </label>
+            </div>
         </div>
-        <div class="cell small-3 medium-3">
-            <label>
-                Actual Time From<span style="color:red">*</span>
-                <select id="ActualTimeFrom" name="ActualTimeFrom">
-                  <option value="">-- Select Time --</option>
-                  <option value="00:00">00:00</option>
-                  <option value="00:30">00:30</option>
-                  <option value="01:00">01:00</option>
-                  <option value="01:30">01:30</option>
-                  <option value="02:00">02:00</option>
-                  <option value="02:30">02:30</option>
-                  <option value="03:00">03:00</option>
-                  <option value="03:30">03:30</option>
-                  <option value="04:00">04:00</option>
-                  <option value="04:30">04:30</option>
-                  <option value="05:00">05:00</option>
-                  <option value="05:30">05:30</option>
-                  <option value="06:00">06:00</option>
-                  <option value="06:30">06:30</option>
-                  <option value="07:00">07:00</option>
-                  <option value="07:30">07:30</option>
-                  <option value="08:00">08:00</option>
-                  <option value="08:30">08:30</option>
-                  <option value="09:00">09:00</option>
-                  <option value="09:30">09:30</option>
-                  <option value="10:00">10:00</option>
-                  <option value="10:30">10:30</option>
-                  <option value="11:00">11:00</option>
-                  <option value="11:30">11:30</option>
-                  <option value="12:00">12:00</option>
-                  <option value="12:30">12:30</option>
-                  <option value="13:00">13:00</option>
-                  <option value="13:30">13:30</option>
-                  <option value="14:00">14:00</option>
-                  <option value="14:30">14:30</option>
-                  <option value="15:00">15:00</option>
-                  <option value="15:30">15:30</option>
-                  <option value="16:00">16:00</option>
-                  <option value="16:30">16:30</option>
-                  <option value="17:00">17:00</option>
-                  <option value="17:30">17:30</option>
-                  <option value="18:00">18:00</option>
-                  <option value="18:30">18:30</option>
-                  <option value="19:00">19:00</option>
-                  <option value="19:30">19:30</option>
-                  <option value="20:00">20:00</option>
-                  <option value="20:30">20:30</option>
-                  <option value="21:00">21:00</option>
-                  <option value="21:30">21:30</option>
-                  <option value="22:00">22:00</option>
-                  <option value="22:30">22:30</option>
-                  <option value="23:00">23:00</option>
-                  <option value="23:30">23:30</option>
-                  <option value="24:00">24:00</option>
-                </select>
-            </label>
+
+        <div class="grid-x grid-padding-x">
+            <div class="cell">
+                <label>
+                    Contact Person <span style="color:red">*</span>
+                    <input type="text" id="name" name="name" />
+                </label>
+            </div>
         </div>
-        <div class="cell small-3 medium-3">
-            <label>
-                Actual Date To<span style="color:red">*</span>
-                <input type="date" id="ServiceActualDateTo" name="ServiceActualDateTo" />
-            </label>
+        <div class="grid-x grid-padding-x">
+            <div class="cell small-12 medium-6">
+                <label>
+                    Email <span style="color:red">*</span>
+                    <input type="text" id="email" name="email" />
+                </label>
+            </div>
+            <div class="cell small-12 medium-6">
+                <label>
+                    Contact No. <span style="color:red">*</span>
+                    <input type="text" id="contact" name="contact" />
+                </label>
+            </div>
         </div>
-        <div class="cell small-3 medium-3">
-            <label>
-                Actual Time To<span style="color:red">*</span>
-                <select id="ActualTimeTo" name="ActualTimeTo">
-                  <option value="">-- Select Time --</option>
-                  <option value="00:00">00:00</option>
-                  <option value="00:30">00:30</option>
-                  <option value="01:00">01:00</option>
-                  <option value="01:30">01:30</option>
-                  <option value="02:00">02:00</option>
-                  <option value="02:30">02:30</option>
-                  <option value="03:00">03:00</option>
-                  <option value="03:30">03:30</option>
-                  <option value="04:00">04:00</option>
-                  <option value="04:30">04:30</option>
-                  <option value="05:00">05:00</option>
-                  <option value="05:30">05:30</option>
-                  <option value="06:00">06:00</option>
-                  <option value="06:30">06:30</option>
-                  <option value="07:00">07:00</option>
-                  <option value="07:30">07:30</option>
-                  <option value="08:00">08:00</option>
-                  <option value="08:30">08:30</option>
-                  <option value="09:00">09:00</option>
-                  <option value="09:30">09:30</option>
-                  <option value="10:00">10:00</option>
-                  <option value="10:30">10:30</option>
-                  <option value="11:00">11:00</option>
-                  <option value="11:30">11:30</option>
-                  <option value="12:00">12:00</option>
-                  <option value="12:30">12:30</option>
-                  <option value="13:00">13:00</option>
-                  <option value="13:30">13:30</option>
-                  <option value="14:00">14:00</option>
-                  <option value="14:30">14:30</option>
-                  <option value="15:00">15:00</option>
-                  <option value="15:30">15:30</option>
-                  <option value="16:00">16:00</option>
-                  <option value="16:30">16:30</option>
-                  <option value="17:00">17:00</option>
-                  <option value="17:30">17:30</option>
-                  <option value="18:00">18:00</option>
-                  <option value="18:30">18:30</option>
-                  <option value="19:00">19:00</option>
-                  <option value="19:30">19:30</option>
-                  <option value="20:00">20:00</option>
-                  <option value="20:30">20:30</option>
-                  <option value="21:00">21:00</option>
-                  <option value="21:30">21:30</option>
-                  <option value="22:00">22:00</option>
-                  <option value="22:30">22:30</option>
-                  <option value="23:00">23:00</option>
-                  <option value="23:30">23:30</option>
-                  <option value="24:00">24:00</option>
-                </select>
-            </label>
+        <div class="grid-x grid-padding-x">
+            <div class="cell">
+                <label>
+                    Subject <span style="color:red">*</span>
+                    <input type="text" id="title" name="title" />
+                </label>
+            </div>
+        </div>
+        <div class="grid-x grid-padding-x">
+            <div class="cell">
+                <label>
+                    Type<span style="color:red">*</span>
+                    <select id="Type" name="Type"></select>
+                </label>
+            </div>
+        </div>
+
+        <div class="grid-x grid-padding-x">
+            <div class="cell">
+                <label>
+                    Category
+                    <select id="category" name="category"></select>
+                </label>
+            </div>
+        </div>
+        <div class="grid-x grid-padding-x">
+            <div class="cell">
+                <label>Location<select id="Location" name="Location"></select></label>
+            </div>
+        </div>
+        <div class="grid-x grid-padding-x">
+            <div class="cell">
+                <label>
+                    Priority Level<span style="color:red">*</span>
+                    <select id="PriorityLevel" name="PriorityLevel"></select>
+                </label>
+            </div>
+        </div>
+        <div class="grid-x grid-padding-x">
+            <div class="cell">
+                <label>
+                    Description <span style="color:red">*</span>
+                    <textarea id="description" name="description"></textarea>
+                </label>
+            </div>
+        </div>
+        <footer class="grid-x grid-margin-x">
+            <button type="button" id="submit" class="btn cell small-12 medium-4 medium-offset-4">Submit</button>
+        </footer>
+    </form>
+    <form id="ServiceForm" class="small reveal lightBg" data-reveal>
+        <header class="grid-x grid-padding-x">
+            <h3 class="cell">Service Form</h3>
+            <button class="close-button" aria-label="Dismiss alert" type="button" data-close>
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </header>
+        <div class="grid-x grid-padding-x">
+            <div class="cell small-4 medium-4">
+                <label>
+                    Case ID#<span style="color:red">*</span>
+                    <input type="text" id="ServiceCaseID" name="ServiceCaseID" disabled="disabled" />
+                </label>
+            </div>
+            <div class="cell small-4 medium-4">
+                <label>
+                    Organisation
+                    <input type="text" id="ServiceOrganisation" name="ServiceOrganisation" disabled="disabled" />
+                </label>
+            </div>
+            <div class="cell small-4 medium-4">
+                <label>
+                    Contact Person
+                    <input type="text" id="ServiceContactPerson" name="ServiceContactPerson" disabled="disabled" />
+                </label>
+            </div>
+        </div>
+        <div class="grid-x grid-padding-x">
+            <div class="cell small-4 medium-4">
+                <label>
+                    Email
+                    <input type="text" id="ServiceEmail" name="ServiceEmail" disabled="disabled" />
+                </label>
+            </div>
+            <div class="cell small-4 medium-4">
+                <label>
+                    Contact No
+                    <input type="text" id="ServiceContactNo" name="ServiceContactNo" disabled="disabled" />
+                </label>
+            </div>
+            <div class="cell small-4 medium-4">
+                <label>
+                    Subject
+                    <input type="text" id="ServiceSubject" name="ServiceSubject" disabled="disabled" />
+                </label>
+            </div>
+        </div>
+        <div class="grid-x grid-padding-x">
+            <div class="cell">
+                <label>
+                    Location
+                    <input type="text" id="ServiceLocation" name="ServiceLocation" disabled="disabled" />
+                </label>
+            </div>
+        </div>
+        <div class="grid-x grid-padding-x">
+            <div class="cell">
+                <label>
+                    Details
+                    <input type="text" id="ServiceDetails" name="ServiceDetails" disabled="disabled" />
+                </label>
+            </div>
+        </div>
+        <div class="grid-x grid-padding-x">
+            <div class="cell small-4 medium-4">
+                <label>
+                    Status
+                    <input type="text" id="ServiceStatus" name="ServiceStatus" disabled="disabled" />
+                </label>
+            </div>
+            <div class="cell small-4 medium-4">
+                <label>
+                    Category
+                    <input type="text" id="ServiceCategory" name="ServiceCategory" disabled="disabled" />
+                </label>
+            </div>
+            <div class="cell small-4 medium-4">
+                <label>
+                    Type
+                    <input type="text" id="ServiceType" name="ServiceType" disabled="disabled" />
+                    </label>
+            </div>
+
+        </div>
+        <div class="grid-x grid-padding-x">
+            <div class="cell small-3 medium-3">
+                <label>
+                    Actual Date From<span style="color:red">*</span>
+                    <input type="date" id="ServiceActualDateFrom" name="ServiceActualDateFrom" />
+                </label>
+            </div>
+            <div class="cell small-3 medium-3">
+                <label>
+                    Actual Time From<span style="color:red">*</span>
+                    <select id="ActualTimeFrom" name="ActualTimeFrom">
+                        <option value="">-- Select Time --</option>
+                        <option value="00:00">00:00</option>
+                        <option value="00:30">00:30</option>
+                        <option value="01:00">01:00</option>
+                        <option value="01:30">01:30</option>
+                        <option value="02:00">02:00</option>
+                        <option value="02:30">02:30</option>
+                        <option value="03:00">03:00</option>
+                        <option value="03:30">03:30</option>
+                        <option value="04:00">04:00</option>
+                        <option value="04:30">04:30</option>
+                        <option value="05:00">05:00</option>
+                        <option value="05:30">05:30</option>
+                        <option value="06:00">06:00</option>
+                        <option value="06:30">06:30</option>
+                        <option value="07:00">07:00</option>
+                        <option value="07:30">07:30</option>
+                        <option value="08:00">08:00</option>
+                        <option value="08:30">08:30</option>
+                        <option value="09:00">09:00</option>
+                        <option value="09:30">09:30</option>
+                        <option value="10:00">10:00</option>
+                        <option value="10:30">10:30</option>
+                        <option value="11:00">11:00</option>
+                        <option value="11:30">11:30</option>
+                        <option value="12:00">12:00</option>
+                        <option value="12:30">12:30</option>
+                        <option value="13:00">13:00</option>
+                        <option value="13:30">13:30</option>
+                        <option value="14:00">14:00</option>
+                        <option value="14:30">14:30</option>
+                        <option value="15:00">15:00</option>
+                        <option value="15:30">15:30</option>
+                        <option value="16:00">16:00</option>
+                        <option value="16:30">16:30</option>
+                        <option value="17:00">17:00</option>
+                        <option value="17:30">17:30</option>
+                        <option value="18:00">18:00</option>
+                        <option value="18:30">18:30</option>
+                        <option value="19:00">19:00</option>
+                        <option value="19:30">19:30</option>
+                        <option value="20:00">20:00</option>
+                        <option value="20:30">20:30</option>
+                        <option value="21:00">21:00</option>
+                        <option value="21:30">21:30</option>
+                        <option value="22:00">22:00</option>
+                        <option value="22:30">22:30</option>
+                        <option value="23:00">23:00</option>
+                        <option value="23:30">23:30</option>
+                        <option value="24:00">24:00</option>
+                    </select>
+                </label>
+            </div>
+            <div class="cell small-3 medium-3">
+                <label>
+                    Actual Date To<span style="color:red">*</span>
+                    <input type="date" id="ServiceActualDateTo" name="ServiceActualDateTo" />
+                </label>
+            </div>
+            <div class="cell small-3 medium-3">
+                <label>
+                    Actual Time To<span style="color:red">*</span>
+                    <select id="ActualTimeTo" name="ActualTimeTo">
+                        <option value="">-- Select Time --</option>
+                        <option value="00:00">00:00</option>
+                        <option value="00:30">00:30</option>
+                        <option value="01:00">01:00</option>
+                        <option value="01:30">01:30</option>
+                        <option value="02:00">02:00</option>
+                        <option value="02:30">02:30</option>
+                        <option value="03:00">03:00</option>
+                        <option value="03:30">03:30</option>
+                        <option value="04:00">04:00</option>
+                        <option value="04:30">04:30</option>
+                        <option value="05:00">05:00</option>
+                        <option value="05:30">05:30</option>
+                        <option value="06:00">06:00</option>
+                        <option value="06:30">06:30</option>
+                        <option value="07:00">07:00</option>
+                        <option value="07:30">07:30</option>
+                        <option value="08:00">08:00</option>
+                        <option value="08:30">08:30</option>
+                        <option value="09:00">09:00</option>
+                        <option value="09:30">09:30</option>
+                        <option value="10:00">10:00</option>
+                        <option value="10:30">10:30</option>
+                        <option value="11:00">11:00</option>
+                        <option value="11:30">11:30</option>
+                        <option value="12:00">12:00</option>
+                        <option value="12:30">12:30</option>
+                        <option value="13:00">13:00</option>
+                        <option value="13:30">13:30</option>
+                        <option value="14:00">14:00</option>
+                        <option value="14:30">14:30</option>
+                        <option value="15:00">15:00</option>
+                        <option value="15:30">15:30</option>
+                        <option value="16:00">16:00</option>
+                        <option value="16:30">16:30</option>
+                        <option value="17:00">17:00</option>
+                        <option value="17:30">17:30</option>
+                        <option value="18:00">18:00</option>
+                        <option value="18:30">18:30</option>
+                        <option value="19:00">19:00</option>
+                        <option value="19:30">19:30</option>
+                        <option value="20:00">20:00</option>
+                        <option value="20:30">20:30</option>
+                        <option value="21:00">21:00</option>
+                        <option value="21:30">21:30</option>
+                        <option value="22:00">22:00</option>
+                        <option value="22:30">22:30</option>
+                        <option value="23:00">23:00</option>
+                        <option value="23:30">23:30</option>
+                        <option value="24:00">24:00</option>
+                    </select>
+                </label>
+            </div>
+        </div>
+        <div class="grid-x grid-padding-x">
+            <div class="cell small-3 medium-3">
+                <label line-height:150%>
+                    PH/Weekend
+                    <input type="checkbox" id="ServicePHWeekend" name="ServicePHWeekend" value="1" />
+                </label>
+            </div>
+            <div class="cell small-3 medium-3">
+                <label line-height:150%>
+                    Urgent
+                    <input type="checkbox" id="ServiceUrgent" name="ServiceUrgent" value="1" />
+                </label>
+            </div>
+        </div>
+
+        <div class="grid-x grid-padding-x">
+            <div class="cell small-6 medium-6">
+                <label>
+                    Actual Hours<span style="color:red">*</span>
+                    <input type="text" id="ServiceActualHours" name="ServiceActualHours" disabled="disabled" />
+                </label>
+            </div>
+            <div class="cell small-6 medium-6">
+                <label>
+                    OffSet Hours
+                    <input type="text" id="ServiceOffSetHours" name="ServiceOffSetHours" />
+                </label>
+            </div>
+        </div>
+
+        <div class="grid-x grid-padding-x">
+            <div class="cell">
+                <label>
+                    OffSet Reason
+                    <textarea id="ServiceReason" name="ServiceReason" style="height:30%"></textarea>
+                </label>
+            </div>
+        </div>
+        <div class="grid-x grid-padding-x">
+            <div class="cell small-6 medium-6">
+                <label>
+                    Billing Hours<span style="color:red">*</span>
+                    <input type="text" id="ServiceBillingHours" name="ServiceBillingHours" disabled="disabled" />
+                </label>
+            </div>
+
+            <div class="cell small-6 medium-6">
+                <label>
+                    Charge To Package<span style="color:red">*</span>
+                    <select id="ServiceChargeToPackage" name="ServiceChargeToPackage"></select>
+                </label>
+            </div>
+        </div>
+        <div class="grid-x grid-padding-x">
+            <div class="cell">
+                <label>
+                    Hours Calculation Breakdown
+                    <textarea id="ServiceHoursCalculation" name="ServiceHoursCalculation" style="height:30%" disabled="disabled"></textarea>
+                </label>
+            </div>
+        </div>
+        <div class="grid-x grid-padding-x">
+            <div class="cell">
+                <label>
+                    Diagnosis / Action taken / Services Rendered
+                    <textarea id="ServiceDiagnosis" name="ServiceDiagnosis" style="height:30%"></textarea>
+                </label>
+            </div>
+        </div>
+        <div class="grid-x grid-padding-x">
+            <div class="cell">
+                <label>
+                    Follow-up / Remarks
+                    <textarea id="ServiceBigRemarks" name="ServiceBigRemarks" style="height:30%"></textarea>
+                </label>
+            </div>
+        </div>
+        <div class="grid-x grid-padding-x">
+            <div class="cell small-3 medium-3">
+                <label>
+                    Customer Acknowledgement
+                    <input type="checkbox" id="ServiceCustomerAck" name="ServiceCustomerAck" value="1" />
+                </label>
+            </div>
+        </div>
+        <div class="grid-x grid-padding-x">
+            <div class="cell small-4 medium-4" id="ServiceNameDiv" style="display:none">
+                <label id="NameLb">
+                    Name
+                </label>
+                <input type="text" id="ServiceName1" name="ServiceName1" />
+            </div>
+            <div class="cell small-4 medium-4" id="ServiceEmailDiv" style="display:none">
+                <label id="EmailLb">
+                    Email
+                </label>
+                <input type="text" id="ServiceEmail1" name="ServiceEmail1" />
+            </div>
+            <div class="cell small-4 medium-4" id="ServiceContactNoDiv" style="display:none">
+                <label id="ContactNoLb">
+                    ContactNo
+                </label>
+                <input type="text" id="ServiceContactNo1" name="ServiceContactNo1" />
+            </div>
+        </div>
+        <footer class="grid-x grid-margin-x">
+            <button type="button" id="submit" class="btn cell small-12 medium-4 medium-offset-4">Submit</button>
+            <button type="button" id="PrintService" class="btn cell small-12 medium-4 medium-offset-4">Print</button>
+        </footer>
+    </form>
+
+    <div id="PrintServiceForm" style="display:none">
+        <div id="maincontent">
+            <section class="toggleBox" id="reviewInfo">
+                <header class="grid-x">
+                    <h2 class="cell auto">Service Form</h2>
+                </header>
+                <div class="grid-container toggleContent fluid">
+                    <div class="grid-x grid-margin-x">
+                        <div class="cell  small-12 medium-6 ">
+                            <b>Case ID#</b>
+                            <span class="PrintCaseID">
+                            </span>
+                        </div>
+                        <div class="cell  small-12 medium-6 ">
+                            <b>Organisation</b>
+                            <span class="PrintOrganisation">
+                            </span>
+                        </div>
+                    </div>
+                    <div class="grid-x grid-margin-x">
+                        <div class="cell  small-12 medium-6 ">
+                            <b>Contact Person</b>
+                            <span class="PrintContactPerson"></span>
+                        </div>
+                    </div>
+                    <div class="grid-x grid-margin-x">
+                        <div class="cell  small-12 medium-6 ">
+                            <b>Email</b>
+                            <span class="PrintEmail"></span>
+                        </div>
+                        <div class="cell  small-12 medium-6 ">
+                            <b>Contact No</b>
+                            <span class="PrintContactNo"></span>
+                        </div>
+                    </div>
+                    <div class="grid-x grid-margin-x">
+                        <div class="cell  small-12 medium-6 ">
+                            <b>Subject</b>
+                            <span class="PrintSubject"></span>
+                        </div>
+                        <div class="cell  small-12 medium-6 ">
+                            <b>Location</b>
+                            <span class="PrintLocation"></span>
+                        </div>
+                    </div>
+                    <div class="grid-x grid-margin-x">
+                        <div class="cell  small-12 medium-6 ">
+                            <b>Details</b>
+                            <span class="PrintDetails"></span>
+                        </div>
+                        <div class="cell  small-12 medium-6 ">
+                            <b>Status</b>
+                            <span class="PrintStatus"></span>
+                        </div>
+                    </div>
+                    <div class="grid-x grid-margin-x">
+                        <div class="cell  small-12 medium-6 ">
+                            <b>Category</b>
+                            <span class="PrintCategory"></span>
+                        </div>
+                        <div class="cell  small-12 medium-6 ">
+                            <b>Type</b>
+                            <span class="PrintType"></span>
+                        </div>
+                    </div>
+
+
+
+                    <div class="grid-x grid-margin-x">
+                        <div class="cell small-3 medium-3">
+                            <b>Actual Date From</b>
+                            <span class="PrintActualDateFrom"></span>
+                        </div>
+                        <div class="cell small-3 medium-3">
+                            <b>Actual Time From</b>
+                            <span class="PrintActualTimeFrom"></span>
+                        </div>
+                        <div class="cell small-3 medium-3">
+                            <b>Actual Date To</b>
+                            <span class="PrintActualDateTo"></span>
+                        </div>
+                        <div class="cell small-3 medium-3">
+                            <b>Actual Time To</b>
+                            <span class="PrintActualTimeTo"></span>
+                        </div>
+                    </div>
+                    <div class="grid-x grid-margin-x">
+                        <div class="cell small-3 medium-3">
+                            <b>PH/Weekend</b>
+                            <span class="PrintPHWeekend"></span>
+                        </div>
+                        <div class="cell small-3 medium-3">
+                            <b>Urgent</b>
+                            <span class="PrintUrgent"></span>
+                        </div>
+                    </div>
+
+                    <div class="grid-x grid-margin-x">
+                        <div class="cell small-6 medium-6">
+                            <b>Actual Hours</b>
+                            <span class="PrintActualHours"></span>
+                        </div>
+                        <div class="cell small-6 medium-6">
+                            <b>OffSet Hours</b>
+                            <span class="PrintOffSetHours"></span>
+                        </div>
+                    </div>
+
+                    <div class="grid-x grid-margin-x">
+                        <div class="cell">
+                            <b>OffSet Reason</b>
+                            <span class="PrintOffSetReason"></span>
+                        </div>
+                    </div>
+                    <div class="grid-x grid-margin-x">
+                        <div class="cell small-6 medium-6">
+                            <b>Billing Hours</b>
+                            <span class="PrintBillingHours"></span>
+                        </div>
+
+                        <div class="cell small-6 medium-6">
+                            <b>Charge To Package</b>
+                            <span class="PrintChargeToPackage"></span>
+                        </div>
+                    </div>
+                    <div class="grid-x grid-margin-x">
+                        <div class="cell">
+                            <b>Hours Calculation Breakdown</b>
+                            <span class="PrintHoursCalculatio"></span>
+                        </div>
+                    </div>
+                    <div class="grid-x grid-margin-x">
+                        <div class="cell">
+                            <b>Diagnosis / Action taken / Services Rendered</b>
+                            <span class="PrintDiagnosis"></span>
+                        </div>
+                    </div>
+                    <div class="grid-x grid-margin-x">
+                        <div class="cell">
+                            <b>Follow-up / Remarks</b>
+                            <span class="PrintFollowRemarks"></span>
+                        </div>
+                    </div>
+                    <div class="grid-x grid-margin-x">
+                        <div class="cell small-3 medium-3">
+                            <b>Customer Acknowledgement</b>
+                            <span class="PrintCustomerAck"></span>
+                        </div>
+                    </div>
+                    <div class="grid-x grid-margin-x">
+                        <div class="cell small-4 medium-4" id="ServiceNameDiv">
+                            <b>Name</b>
+                            <span class="PrintName"></span>
+                        </div>
+                        <div class="cell small-4 medium-4" id="ServiceEmailDiv">
+                            <b>Email</b>
+                            <span class="PrintEmail"></span>
+
+                        </div>
+                        <div class="cell small-4 medium-4" id="ServiceContactNoDiv">
+                            <b>ContactNo</b>
+                            <span class="PrintContactNo"></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
     </div>
-    <div class="grid-x grid-padding-x">
-      <div class="cell small-3 medium-3">
-        <label  line-height:150%>
-        PH/Weekend
-        <input type="checkbox" id="ServicePHWeekend" name="ServicePHWeekend" value="1"/>
-        </label>
-      </div>
-      <div class="cell small-3 medium-3" >
-        <label line-height:150%>
-        Urgent
-        <input type="checkbox" id="ServiceUrgent" name="ServiceUrgent" value="1"/>
-        </label>
-      </div>
-    </div>
-
-    <div class="grid-x grid-padding-x">
-      <div class="cell small-6 medium-6">
-        <label>
-        Actual Hours<span style="color:red">*</span>
-        <input type="text" id="ServiceActualHours" name="ServiceActualHours" disabled="disabled"/>
-        </label>
-      </div>
-      <div class="cell small-6 medium-6">
-        <label>
-        OffSet Hours
-        <input type="text" id="ServiceOffSetHours" name="ServiceOffSetHours" />
-        </label>
-      </div>
-    </div>
-
-    <div class="grid-x grid-padding-x">
-      <div class="cell">
-        <label>
-        OffSet Reason
-        <textarea id="ServiceReason" name="ServiceReason" style="height:30%"></textarea>
-        </label>
-      </div>
-    </div>
-    <div class="grid-x grid-padding-x">
-      <div class="cell small-6 medium-6">
-        <label>
-        Billing Hours<span style="color:red">*</span>
-        <input type="text" id="ServiceBillingHours" name="ServiceBillingHours" disabled="disabled"/>
-        </label>
-      </div>
-
-      <div class="cell small-6 medium-6">
-        <label>
-        Charge To Package<span style="color:red">*</span>
-        <select id="ServiceChargeToPackage" name="ServiceChargeToPackage"></select>
-        </label>
-      </div>
-    </div>
-    <div class="grid-x grid-padding-x">
-      <div class="cell">
-        <label>
-        Hours Calculation Breakdown
-        <textarea id="ServiceHoursCalculation" name="ServiceHoursCalculation" style="height:30%" disabled="disabled"></textarea>
-        </label>
-      </div>
-      </div>
-    <div class="grid-x grid-padding-x">
-      <div class="cell">
-        <label>
-        Diagnosis / Action taken / Services Rendered
-        <textarea  id="ServiceDiagnosis" name="ServiceDiagnosis" style="height:30%" ></textarea>
-        </label>
-      </div>
-    </div>
-    <div class="grid-x grid-padding-x">
-      <div class="cell">
-        <label>
-        Follow-up / Remarks
-        <textarea  id="ServiceBigRemarks" name="ServiceBigRemarks" style="height:30%"></textarea>
-        </label>
-      </div>
-    </div>
-    <div class="grid-x grid-padding-x">
-      <div class="cell small-3 medium-3">
-        <label >
-          Customer Acknowledgement
-        <input type="checkbox" id="ServiceCustomerAck" name="ServiceCustomerAck" value="1"/>
-        </label>
-      </div>
-    </div>
-    <div class="grid-x grid-padding-x">
-      <div class="cell small-4 medium-4"  id="ServiceNameDiv" style="display:none">
-        <label id="NameLb">
-          Name
-        </label>
-        <input type="text" id="ServiceName1"  name="ServiceName1" />
-      </div>
-      <div class="cell small-4 medium-4"  id="ServiceEmailDiv"  style="display:none">
-        <label id="EmailLb">
-          Email
-        </label>
-        <input type="text" id="ServiceEmail1" name="ServiceEmail1" />
-      </div>
-      <div class="cell small-4 medium-4" id="ServiceContactNoDiv" style="display:none">
-        <label id="ContactNoLb">
-          ContactNo
-        </label>
-        <input type="text" id="ServiceContactNo1" name="ServiceContactNo1" />
-      </div>
-    </div>
-    <footer class="grid-x grid-margin-x">
-      <button type="button" id="submit"  class="btn cell small-12 medium-4 medium-offset-4">Submit</button>
-      <button type="button" id="PrintService"  class="btn cell small-12 medium-4 medium-offset-4">Print</button>
-    </footer>
-  </form>
-
-<div id="PrintServiceForm" style="display:none">
-  <div id="maincontent" >
-      <section class="toggleBox" id="reviewInfo">
-          <header class="grid-x">
-              <h2 class="cell auto">Service Form</h2>
-          </header>
-          <div class="grid-container toggleContent fluid">
-              <div class="grid-x grid-margin-x">
-                  <div class="cell  small-12 medium-6 ">
-                      <b>Case ID#</b>
-                      <span class="PrintCaseID">
-                      </span>
-                  </div>
-                  <div class="cell  small-12 medium-6 ">
-                      <b>Organisation</b>
-                      <span class="PrintOrganisation">
-                      </span>
-                  </div>
-              </div>
-              <div class="grid-x grid-margin-x">
-                  <div class="cell  small-12 medium-6 ">
-                      <b>Contact Person</b>
-                      <span class="PrintContactPerson"></span>
-                  </div>
-              </div>
-              <div class="grid-x grid-margin-x">
-                  <div class="cell  small-12 medium-6 ">
-                      <b>Email</b>
-                      <span class="PrintEmail"></span>
-                  </div>
-                  <div class="cell  small-12 medium-6 ">
-                      <b>Contact No</b>
-                      <span class="PrintContactNo"></span>
-                  </div>
-              </div>
-              <div class="grid-x grid-margin-x">
-                  <div class="cell  small-12 medium-6 ">
-                      <b>Subject</b>
-                      <span class="PrintSubject"></span>
-                  </div>
-                  <div class="cell  small-12 medium-6 ">
-                      <b>Location</b>
-                      <span class="PrintLocation"></span>
-                  </div>
-              </div>
-              <div class="grid-x grid-margin-x">
-                  <div class="cell  small-12 medium-6 ">
-                      <b>Details</b>
-                      <span class="PrintDetails"></span>
-                  </div>
-                  <div class="cell  small-12 medium-6 ">
-                      <b>Status</b>
-                      <span class="PrintStatus"></span>
-                  </div>
-              </div>
-              <div class="grid-x grid-margin-x">
-                  <div class="cell  small-12 medium-6 ">
-                      <b>Category</b>
-                      <span class="PrintCategory"></span>
-                  </div>
-                  <div class="cell  small-12 medium-6 ">
-                      <b>Type</b>
-                      <span class="PrintType"></span>
-                  </div>
-              </div>
-
-
-
-              <div class="grid-x grid-margin-x">
-                  <div class="cell small-3 medium-3">
-                      <b>Actual Date From</b>
-                      <span class="PrintActualDateFrom"></span>
-                  </div>
-                  <div class="cell small-3 medium-3">
-                      <b>Actual Time From</b>
-                      <span class="PrintActualTimeFrom"></span>
-                  </div>
-                  <div class="cell small-3 medium-3">
-                      <b>Actual Date To</b>
-                      <span class="PrintActualDateTo"></span>
-                  </div>
-                  <div class="cell small-3 medium-3">
-                      <b>Actual Time To</b>
-                      <span class="PrintActualTimeTo"></span>
-                  </div>
-              </div>
-              <div class="grid-x grid-margin-x">
-                  <div class="cell small-3 medium-3">
-                      <b>PH/Weekend</b>
-                      <span class="PrintPHWeekend"></span>
-                  </div>
-                  <div class="cell small-3 medium-3">
-                      <b>Urgent</b>
-                      <span class="PrintUrgent"></span>
-                  </div>
-              </div>
-
-              <div class="grid-x grid-margin-x">
-                  <div class="cell small-6 medium-6">
-                      <b>Actual Hours</b>
-                      <span class="PrintActualHours"></span>
-                  </div>
-                  <div class="cell small-6 medium-6">
-                      <b>OffSet Hours</b>
-                      <span class="PrintOffSetHours"></span>
-                  </div>
-              </div>
-
-              <div class="grid-x grid-margin-x">
-                  <div class="cell">
-                      <b>OffSet Reason</b>
-                      <span class="PrintOffSetReason"></span>
-                  </div>
-              </div>
-              <div class="grid-x grid-margin-x">
-                  <div class="cell small-6 medium-6">
-                      <b>Billing Hours</b>
-                      <span class="PrintBillingHours"></span>
-                  </div>
-
-                  <div class="cell small-6 medium-6">
-                      <b>Charge To Package</b>
-                      <span class="PrintChargeToPackage"></span>
-                  </div>
-              </div>
-              <div class="grid-x grid-margin-x">
-                  <div class="cell">
-                      <b>Hours Calculation Breakdown</b>
-                      <span class="PrintHoursCalculatio"></span>
-                  </div>
-              </div>
-              <div class="grid-x grid-margin-x">
-                  <div class="cell">
-                      <b>Diagnosis / Action taken / Services Rendered</b>
-                      <span class="PrintDiagnosis"></span>
-                  </div>
-              </div>
-              <div class="grid-x grid-margin-x">
-                  <div class="cell">
-                      <b>Follow-up / Remarks</b>
-                      <span class="PrintFollowRemarks"></span>
-                  </div>
-              </div>
-              <div class="grid-x grid-margin-x">
-                  <div class="cell small-3 medium-3">
-                      <b>Customer Acknowledgement</b>
-                      <span class="PrintCustomerAck"></span>
-                  </div>
-              </div>
-              <div class="grid-x grid-margin-x">
-                  <div class="cell small-4 medium-4" id="ServiceNameDiv">
-                      <b>Name</b>
-                      <span class="PrintName"></span>
-                  </div>
-                  <div class="cell small-4 medium-4" id="ServiceEmailDiv">
-                      <b>Email</b>
-                      <span class="PrintEmail"></span>
-
-                  </div>
-                  <div class="cell small-4 medium-4" id="ServiceContactNoDiv">
-                      <b>ContactNo</b>
-                      <span class="PrintContactNo"></span>
-                  </div>
-              </div>
-          </div>
-      </section>
-  </div>
-  </div>
 </div>
