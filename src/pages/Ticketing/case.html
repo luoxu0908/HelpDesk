@@ -676,6 +676,176 @@
     </div>
     <footer class="grid-x grid-margin-x">
       <button type="button" id="submit"  class="btn cell small-12 medium-4 medium-offset-4">Submit</button>
+      <button type="button" id="PrintService"  class="btn cell small-12 medium-4 medium-offset-4">Print</button>
     </footer>
   </form>
+
+<div id="PrintServiceForm" style="display:none">
+  <div id="maincontent" >
+      <section class="toggleBox" id="reviewInfo">
+          <header class="grid-x">
+              <h2 class="cell auto">Service Form</h2>
+          </header>
+          <div class="grid-container toggleContent fluid">
+              <div class="grid-x grid-margin-x">
+                  <div class="cell  small-12 medium-6 ">
+                      <b>Case ID#</b>
+                      <span class="PrintCaseID">
+                      </span>
+                  </div>
+                  <div class="cell  small-12 medium-6 ">
+                      <b>Organisation</b>
+                      <span class="PrintOrganisation">
+                      </span>
+                  </div>
+              </div>
+              <div class="grid-x grid-margin-x">
+                  <div class="cell  small-12 medium-6 ">
+                      <b>Contact Person</b>
+                      <span class="PrintContactPerson"></span>
+                  </div>
+              </div>
+              <div class="grid-x grid-margin-x">
+                  <div class="cell  small-12 medium-6 ">
+                      <b>Email</b>
+                      <span class="PrintEmail"></span>
+                  </div>
+                  <div class="cell  small-12 medium-6 ">
+                      <b>Contact No</b>
+                      <span class="PrintContactNo"></span>
+                  </div>
+              </div>
+              <div class="grid-x grid-margin-x">
+                  <div class="cell  small-12 medium-6 ">
+                      <b>Subject</b>
+                      <span class="PrintSubject"></span>
+                  </div>
+                  <div class="cell  small-12 medium-6 ">
+                      <b>Location</b>
+                      <span class="PrintLocation"></span>
+                  </div>
+              </div>
+              <div class="grid-x grid-margin-x">
+                  <div class="cell  small-12 medium-6 ">
+                      <b>Details</b>
+                      <span class="PrintDetails"></span>
+                  </div>
+                  <div class="cell  small-12 medium-6 ">
+                      <b>Status</b>
+                      <span class="PrintStatus"></span>
+                  </div>
+              </div>
+              <div class="grid-x grid-margin-x">
+                  <div class="cell  small-12 medium-6 ">
+                      <b>Category</b>
+                      <span class="PrintCategory"></span>
+                  </div>
+                  <div class="cell  small-12 medium-6 ">
+                      <b>Type</b>
+                      <span class="PrintType"></span>
+                  </div>
+              </div>
+
+
+
+              <div class="grid-x grid-margin-x">
+                  <div class="cell small-3 medium-3">
+                      <b>Actual Date From</b>
+                      <span class="PrintActualDateFrom"></span>
+                  </div>
+                  <div class="cell small-3 medium-3">
+                      <b>Actual Time From</b>
+                      <span class="PrintActualTimeFrom"></span>
+                  </div>
+                  <div class="cell small-3 medium-3">
+                      <b>Actual Date To</b>
+                      <span class="PrintActualDateTo"></span>
+                  </div>
+                  <div class="cell small-3 medium-3">
+                      <b>Actual Time To</b>
+                      <span class="PrintActualTimeTo"></span>
+                  </div>
+              </div>
+              <div class="grid-x grid-margin-x">
+                  <div class="cell small-3 medium-3">
+                      <b>PH/Weekend</b>
+                      <span class="PrintPHWeekend"></span>
+                  </div>
+                  <div class="cell small-3 medium-3">
+                      <b>Urgent</b>
+                      <span class="PrintUrgent"></span>
+                  </div>
+              </div>
+
+              <div class="grid-x grid-margin-x">
+                  <div class="cell small-6 medium-6">
+                      <b>Actual Hours</b>
+                      <span class="PrintActualHours"></span>
+                  </div>
+                  <div class="cell small-6 medium-6">
+                      <b>OffSet Hours</b>
+                      <span class="PrintOffSetHours"></span>
+                  </div>
+              </div>
+
+              <div class="grid-x grid-margin-x">
+                  <div class="cell">
+                      <b>OffSet Reason</b>
+                      <span class="PrintOffSetReason"></span>
+                  </div>
+              </div>
+              <div class="grid-x grid-margin-x">
+                  <div class="cell small-6 medium-6">
+                      <b>Billing Hours</b>
+                      <span class="PrintBillingHours"></span>
+                  </div>
+
+                  <div class="cell small-6 medium-6">
+                      <b>Charge To Package</b>
+                      <span class="PrintChargeToPackage"></span>
+                  </div>
+              </div>
+              <div class="grid-x grid-margin-x">
+                  <div class="cell">
+                      <b>Hours Calculation Breakdown</b>
+                      <span class="PrintHoursCalculatio"></span>
+                  </div>
+              </div>
+              <div class="grid-x grid-margin-x">
+                  <div class="cell">
+                      <b>Diagnosis / Action taken / Services Rendered</b>
+                      <span class="PrintDiagnosis"></span>
+                  </div>
+              </div>
+              <div class="grid-x grid-margin-x">
+                  <div class="cell">
+                      <b>Follow-up / Remarks</b>
+                      <span class="PrintFollowRemarks"></span>
+                  </div>
+              </div>
+              <div class="grid-x grid-margin-x">
+                  <div class="cell small-3 medium-3">
+                      <b>Customer Acknowledgement</b>
+                      <span class="PrintCustomerAck"></span>
+                  </div>
+              </div>
+              <div class="grid-x grid-margin-x">
+                  <div class="cell small-4 medium-4" id="ServiceNameDiv">
+                      <b>Name</b>
+                      <span class="PrintName"></span>
+                  </div>
+                  <div class="cell small-4 medium-4" id="ServiceEmailDiv">
+                      <b>Email</b>
+                      <span class="PrintEmail"></span>
+
+                  </div>
+                  <div class="cell small-4 medium-4" id="ServiceContactNoDiv">
+                      <b>ContactNo</b>
+                      <span class="PrintContactNo"></span>
+                  </div>
+              </div>
+          </div>
+      </section>
+  </div>
+  </div>
 </div>
