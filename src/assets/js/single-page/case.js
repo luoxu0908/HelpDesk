@@ -49,7 +49,9 @@ $(function () {
       });
 
     $.when(checkRoleAccess).then(function (x) {
-        GetCaseDetails(caseID);
+        $.when(GetCaseDetails(caseID)).then(function(){
+          GetOrgAddressLocation('OrgAddressLocation',TargetRoleID);
+        });
         GetCaseHistory(caseID);
         GetCaseInvolvement(caseID);
         if (RoleName == 'Admin') {
@@ -602,7 +604,7 @@ function GetAvailablePackage(caseId) {
 
 //Get Case Details
 function GetCaseDetails(caseId) {
-    $.ajax({
+  return    $.ajax({
         url: apiSrc + "BCMain/FL1.GetCasesDetails.json",
         method: "POST",
         dataType: "json",
@@ -1194,3 +1196,34 @@ function getGUID() {
     });
     return uuid;
 };
+function GetOrgAddressLocation(LookupCat,organization) {
+    var data = { 'LookupCat': LookupCat,'Organization' :organization};
+    return $.ajax({
+        url: apiSrc + "BCMain/FL1.OrgAddressLocation.json",
+        method: "POST",
+        dataType: "json",
+        xhrFields: { withCredentials: true },
+        data: {
+            'data': JSON.stringify(data),
+            'WebPartKey': WebPartVal,
+            'ReqGUID': getGUID()
+        },
+        success: function (data) {
+            if ((data) && (data.d.RetVal === -1)) {
+
+                if (data.d.RetData.Tbl.Rows.length > 0) {
+                    var list = data.d.RetData.Tbl.Rows;
+                    for (var i = 0; i < list.length; i++) {
+                        $('#reviewForm #Location').append('<option value="' + list[i].LookupKey + '">' + list[i].TagData3 + '</option>');
+                    }
+                }
+            }
+            else {
+                alert(data.d.RetMsg);
+            }
+        },
+        error: function (data) {
+            alert("Error: " + data.responseJSON.d.RetMsg);
+        }
+    });
+}
