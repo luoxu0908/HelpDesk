@@ -510,7 +510,7 @@ function getProductOwn() {
                     }
                 }
                 productTbody.html(htmlString);
-                if (RoleName == 'Admin' || RoleName == 'Security Admin' || RoleName == 'Support Developer' || RoleName == 'Support Team Lead') {
+                if (RoleName == 'Admin' || RoleName == 'Security Admin') {
                   $('.packageTable tr').find('th:eq(0)').show(); $('.packageTable tr').find('td:eq(0)').show();
 
                 } else {
