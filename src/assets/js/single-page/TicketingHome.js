@@ -25,7 +25,9 @@ $(function () {
             $("#packageAddForm #assurancePlusNo").hide();
         }
     });
-
+    $("#caseAddForm #organisation").change(function () {
+      GetOrgAddressLocation('OrgAddressLocation',$('#caseAddForm #organisation').val());
+    });
     getOrgnaisationList();
     getStaffList();
 
@@ -91,7 +93,8 @@ $(function () {
     GetDropDownList('packageAddForm','type','PackageType');
     GetDropDownList('packageAddForm','Interval','Interval');
     GetDropDownList('caseAddForm','category','Category');
-    GetDropDownList('caseAddForm','Location','OrgAddressLocation');
+    //GetDropDownList('caseAddForm','Location','OrgAddressLocation');
+
     GetDropDownList('caseAddForm','PriorityLevel','PriorityLevel');
     GetDropDownList('caseAddForm','Type','Type');
     GetDropDownList('packageUpdateForm','EditType','PackageType');
@@ -127,6 +130,7 @@ $(function () {
             $('.clientView, .teamLeadView, .developerView, .salesView, .adminView').show();
         }
         getOrgProductList($('#caseAddForm #organisation').val());
+
     });
 
     $("#caseAddForm #organisation").change(function () {
@@ -907,6 +911,38 @@ function GetCountry() {
                     if (productList.length > 0) {
                         $('#newUserForm #country').val('Singapore');
 
+                    }
+                }
+            }
+            else {
+                alert(data.d.RetMsg);
+            }
+        },
+        error: function (data) {
+            alert("Error: " + data.responseJSON.d.RetMsg);
+        }
+    });
+}
+
+function GetOrgAddressLocation(LookupCat,organization) {
+    var data = { 'LookupCat': LookupCat,'Organization' :organization};
+    return $.ajax({
+        url: apiSrc + "BCMain/FL1.OrgAddressLocation.json",
+        method: "POST",
+        dataType: "json",
+        xhrFields: { withCredentials: true },
+        data: {
+            'data': JSON.stringify(data),
+            'WebPartKey': WebPartVal,
+            'ReqGUID': getGUID()
+        },
+        success: function (data) {
+            if ((data) && (data.d.RetVal === -1)) {
+
+                if (data.d.RetData.Tbl.Rows.length > 0) {
+                    var list = data.d.RetData.Tbl.Rows;
+                    for (var i = 0; i < list.length; i++) {
+                        $('#caseAddForm #Location').append('<option value="' + list[i].LookupKey + '">' + list[i].TagData3 + '</option>');
                     }
                 }
             }
