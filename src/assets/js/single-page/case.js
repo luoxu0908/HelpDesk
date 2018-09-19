@@ -612,9 +612,9 @@ function GetCaseDetails(caseId) {
                     $('#ServiceForm #ServiceType').val(caseDetails.NewType);
 
                     $('#ServiceForm #ServiceActualDateFrom').val(moment(caseDetails.DateFrom).format('YYYY-MM-DD'));
-                    $('#ServiceForm #ActualTimeFrom').val(moment(caseDetails.DateFrom).format('HH:SS'));
+                    $('#ServiceForm #ActualTimeFrom').val(moment(caseDetails.DateFrom).format('HH:mm'));
                     $('#ServiceForm #ServiceActualDateTo').val(moment(caseDetails.DateTo).format('YYYY-MM-DD'));
-                    $('#ServiceForm #ActualTimeTo').val(moment(caseDetails.DateTo).format('hh:SS'));
+                    $('#ServiceForm #ActualTimeTo').val(moment(caseDetails.DateTo).format('HH:mm'));
                 }
             }
             else {
