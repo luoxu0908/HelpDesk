@@ -599,7 +599,7 @@ function GetCaseDetails(caseId) {
                     $('#reviewForm #scheduleDateTo').val(caseDetails.DateTo);
                     $('#chargeForm #actualManHours').val(caseDetails.ChargeHours);
 
-                    GetServiceChargeToPackage('ServiceForm', 'ServiceChargeToPackage', '');
+
                     // $('#reviewForm #actualManHours').val(caseDetails.ActualHours);
                     $('#ServiceForm #ServiceCaseID').val(caseDetails.FLID);
                     $('#ServiceForm #ServiceOrganisation').val(caseDetails.Organisation);
@@ -634,6 +634,11 @@ function GetCaseDetails(caseId) {
                     $('#ServiceForm #ServiceDiagnosis').val(caseDetails.Diagnosis);
                     $('#ServiceForm #ServiceBigRemarks').val(caseDetails.FollowupRemarks);
                     $('#ServiceForm #ServiceCustomerAck').prop('checked',caseDetails.CustomerAck||'')
+
+                    $.when(GetServiceChargeToPackage('ServiceForm', 'ServiceChargeToPackage', '')).then(function(){
+                      $('#ServiceForm #ServiceChargeToPackage').val(caseDetails.PackageTypeNew);
+                    });
+
                     if ($('#ServiceForm #ServiceCustomerAck').is(':checked')) {
                       $('#ServiceForm #ServiceNameDiv').show();
                       $('#ServiceForm #ServiceEmailDiv').show();
