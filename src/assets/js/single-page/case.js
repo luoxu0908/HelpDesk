@@ -106,63 +106,88 @@ $(function () {
         GetreviewCase(caseID);
     });
     $("#ServiceForm #ServicePHWeekend").click(function () {
+      actualHour=  $('#ServiceForm #ServiceActualHours').val();
+      billingHours=  $('#ServiceForm #ServiceBillingHours').val();
+      actualHour=parseFloat(actualHour);
+      billingHours=parseFloat(billingHours);
         if ($(this).is(':checked')) {
-            //  CostTime=
-        }
-    });
-
-    $("#ServiceForm #ServicePHWeekend").click(function () {
-        if ($(this).is(':checked')) {
-            //  CostTime=
-        }
-    });
-    $('#ServiceForm #ActualTimeFrom').change(function () {
-
-    });
-
-    $('#ServiceForm #ActualTimeTo').change(function () {
-
-    });
-    $('#ServiceForm #ServiceActualDateFrom').change(function () {
-
-    });
-
-    $('#ServiceForm #ServiceActualDateTo').change(function () {
-
-    });
-    $('#ServiceForm #ServiceOffSetHours').change(function () {
-        execDays();
-        actualHour = 0, billingHours = 0,hourDeatils='';
-        if (execCount ==0) {
-            standDate = new Date($('#ServiceForm #ServiceActualDateFrom').val());
-            standDate=moment(standDate).format("MMM D YYYY");
-            execHours(startDate, endDate, standDate,false,false);
-        } else {
-
-            for (var i = 0; i <= execCount; i++) {
-              alert(i);  alert('AAA'+execCount);
-                standDate = moment($('#ServiceForm #ServiceActualDateFrom').val()).add(i, 'days');
-                if (i == 0) {
-                    standDate= moment(standDate).format("MMM D YYYY");
-                    execHours(startDate, standDate, standDate,true,false);
-                } else if (i = execCount) {
-                    execHours(standDate, endDate, standDate,false,true);
-
-                } else {
-                    execHours(startDate, endDate, standDate);
-                }
-            }
-        }
-        offSetHour=  $('#ServiceForm #ServiceOffSetHours').val()||0;
-        billingHours=parseFloat(billingHours)-parseFloat(offSetHour);
-        if(parseFloat(offSetHour)>0){
-          hourDeatils+='Off Set Hours : '+offSetHour;
+          actualHour=actualHour*2;
+          billingHours=billingHours*2;
+        }else{
+          actualHour=actualHour/2;
+          billingHours=billingHours/2;
         }
         $('#ServiceForm #ServiceActualHours').val(actualHour);
         $('#ServiceForm #ServiceBillingHours').val(billingHours);
-        $('#ServiceForm #ServiceHoursCalculation').val(hourDeatils);
+    });
+
+    $("#ServiceForm #ServiceUrgent").click(function () {
+      actualHour=  $('#ServiceForm #ServiceActualHours').val();
+      billingHours=  $('#ServiceForm #ServiceBillingHours').val();
+      actualHour=parseFloat(actualHour);
+      billingHours=parseFloat(billingHours);
+        if ($(this).is(':checked')) {
+          actualHour=actualHour*2;
+          billingHours=billingHours*2;
+        }else{
+          actualHour=actualHour/2;
+          billingHours=billingHours/2;
+        }
+        $('#ServiceForm #ServiceActualHours').val(actualHour);
+        $('#ServiceForm #ServiceBillingHours').val(billingHours);
+    });
+    $('#ServiceForm #ActualTimeFrom').change(function () {
+        ecexHourSetting();
+    });
+
+    $('#ServiceForm #ActualTimeTo').change(function () {
+      ecexHourSetting();
+    });
+    $('#ServiceForm #ServiceActualDateFrom').change(function () {
+      ecexHourSetting();
+    });
+
+    $('#ServiceForm #ServiceActualDateTo').change(function () {
+      ecexHourSetting();
+    });
+    $('#ServiceForm #ServiceOffSetHours').change(function () {
+        ecexHourSetting();
     });
 });
+
+function ecexHourSetting(){
+    execDays();
+    actualHour = 0, billingHours = 0,hourDeatils='';
+    if (execCount ==0) {
+        standDate = new Date($('#ServiceForm #ServiceActualDateFrom').val());
+        standDate=moment(standDate).format("MMM D YYYY");
+        execHours(startDate, endDate, standDate,false,false);
+    } else {
+        for (var i = 0; i <= execCount; i++) {
+            standDate = moment($('#ServiceForm #ServiceActualDateFrom').val()).add(i, 'days');
+            standDate= moment(standDate).format("MMM D YYYY");
+            if (i == 0) {
+                var firstEndDate=standDate+' '+'24:00:00';
+                execHours(startDate, firstEndDate, standDate);
+            } else if (i = execCount) {
+                var firstStartDate=standDate+' '+'00:00:00';
+                execHours(standDate, endDate, standDate);
+            } else {
+              var tempStartDate=standDate+' '+'00:00:00';
+              var tempEndDate=standDate+' '+'24:00:00';
+              execHours(tempStartDate, tempEndDate, standDate);
+            }
+        }
+    }
+    offSetHour=  $('#ServiceForm #ServiceOffSetHours').val()||0;
+    billingHours=parseFloat(billingHours)-parseFloat(offSetHour);
+    if(parseFloat(offSetHour)>0){
+      hourDeatils+='Off Set Hours : '+offSetHour;
+    }
+    $('#ServiceForm #ServiceActualHours').val(actualHour);
+    $('#ServiceForm #ServiceBillingHours').val(billingHours);
+    $('#ServiceForm #ServiceHoursCalculation').val(hourDeatils);
+}
 
 function execDays() {
     var ServiceActualDateFrom, ActualTimeFrom, ServiceActualDateTo, ActualTimeTo;
@@ -177,26 +202,16 @@ function execDays() {
     }
 }
 
-function execHours(startDate, endDate, standDate,flagOne,flagTwo) {
-    if(flagTwo){
-      var startDate = new Date(standDate + ' ' + '00:00:00');
-    }else{
-      var startDate = new Date(startDate);
-    }
+function execHours(startDate, endDate, standDate) {
 
-    //var endDate = new Date(endDate);
-  if(flagOne){
-    var endDate =new Date(standDate + ' ' + '24:00:00');
-    }else{
+    var startDate = new Date(startDate);
     var endDate = new Date(endDate);
-  }
     var MorningDate = new Date(standDate + ' ' + '09:00:00');
     var AfterNoonDate = new Date(standDate + ' ' + '18:00:00');
     var NightDate = new Date(standDate + ' ' + '22:00:00');
     var LastDate = new Date(standDate + ' ' + '24:00:00');
 
     if (startDate < MorningDate) {
-
         if (endDate <= MorningDate) {
             actualHour = moment(endDate).diff(startDate, 'minutes') / 60.00;
             billingHours = actualHour * 2;
