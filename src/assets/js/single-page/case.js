@@ -1,10 +1,10 @@
-var RoleName = '', PrintFlag = '', FileID = '', caseID = '', TargetRoleID = '',TimeTypeArray=new Array();
+var RoleName = '', PrintFlag = '', FileID = '', caseID = '', TargetRoleID = '',TimeTypeMap={};
 var startDate = '', endDate = '', standDate = '', execCount = 0.0, actualHour = 0.0, billingHours = 0.0, hourDeatils = '',offSetHour=0.0;
 
 $(function () {
     //get caseID from URL
     var urlParams = new URLSearchParams(window.location.search),
-        caseID = urlParams.get('caseID');
+    caseID = urlParams.get('caseID');
     FileID = urlParams.get('FileID');
 
     $('#Print').click(function () {
@@ -119,12 +119,13 @@ $(function () {
       billingHours=  $('#ServiceForm #ServiceBillingHours').val();
       actualHour=parseFloat(actualHour);
       billingHours=parseFloat(billingHours);
+      PHWeekend=praseFloat(TimeTypeMap['PHWeekend'])||2;
         if ($(this).is(':checked')) {
-          actualHour=actualHour*2;
-          billingHours=billingHours*2;
+          actualHour=actualHour*PHWeekend;
+          billingHours=billingHours*PHWeekend;
         }else{
-          actualHour=actualHour/2;
-          billingHours=billingHours/2;
+          actualHour=actualHour/PHWeekend;
+          billingHours=billingHours/PHWeekend;
         }
         $('#ServiceForm #ServiceActualHours').val(actualHour);
         $('#ServiceForm #ServiceBillingHours').val(billingHours);
@@ -135,12 +136,13 @@ $(function () {
       billingHours=  $('#ServiceForm #ServiceBillingHours').val();
       actualHour=parseFloat(actualHour);
       billingHours=parseFloat(billingHours);
+      UrgentTime=praseFloat(TimeTypeMap['Urgent'])||2;
         if ($(this).is(':checked')) {
-          actualHour=actualHour*2;
-          billingHours=billingHours*2;
+          actualHour=actualHour*UrgentTime;
+          billingHours=billingHours*UrgentTime;
         }else{
-          actualHour=actualHour/2;
-          billingHours=billingHours/2;
+          actualHour=actualHour/UrgentTime;
+          billingHours=billingHours/UrgentTime;
         }
         $('#ServiceForm #ServiceActualHours').val(actualHour);
         $('#ServiceForm #ServiceBillingHours').val(billingHours);
@@ -180,9 +182,8 @@ function GetTimeClockType(){
               if (data.d.RetData.Tbl.Rows.length > 0) {
                   var Result = data.d.RetData.Tbl.Rows;
                   for (var i = 0; i < Result.length; i++) {
-                      TimeTypeArray.push();
+                      TimeTypeMap[Result[i].LookupKey]=Result[i].Description;
                   }
-
               }
           }
           else {
@@ -249,15 +250,15 @@ function execHours(startDate, endDate, standDate) {
     var AfterNoonDate = new Date(standDate + ' ' + '18:00:00');
     var NightDate = new Date(standDate + ' ' + '22:00:00');
     var LastDate = new Date(standDate + ' ' + '24:00:00');
-
+    var Normal3=parseFloat(TimeTypeMap['Normal3'])||2, Normal2=parseFloat(TimeTypeMap['Normal2'])||1.5;
     if (startDate < MorningDate) {
         if (endDate <= MorningDate) {
             actualHour = moment(endDate).diff(startDate, 'minutes') / 60.00;
-            billingHours = actualHour * 2;
+            billingHours = actualHour * Normal3;
             hourDeatils += 'from : ' + moment(startDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(endDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + actualHour + ' Billing Hours : ' + billingHours + '\r\n'
         } else if (endDate > MorningDate && endDate <= AfterNoonDate) {
             actualHour = moment(MorningDate).diff(startDate, 'minutes') / 60.00;
-            billingHours = actualHour * 2;
+            billingHours = actualHour * Normal3;
             hourDeatils += 'from : ' + moment(startDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(MorningDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + actualHour + ' Billing Hours : ' + billingHours + '\r\n'
 
             actualHour = actualHour + moment(endDate).diff(MorningDate, 'minutes') / 60.00;
@@ -266,7 +267,7 @@ function execHours(startDate, endDate, standDate) {
         } else if (endDate > AfterNoonDate && endDate <= NightDate) {
 
             actualHour = moment(MorningDate).diff(startDate, 'minutes') / 60.00;
-            billingHours = actualHour * 2;
+            billingHours = actualHour * Normal3;
             hourDeatils += 'from : ' + moment(startDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(MorningDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + actualHour + ' Billing Hours : ' + billingHours + '\r\n'
 
             actualHour = actualHour + moment(AfterNoonDate).diff(MorningDate, 'minutes') / 60.00;
@@ -274,12 +275,12 @@ function execHours(startDate, endDate, standDate) {
             hourDeatils += 'from : ' + moment(MorningDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(AfterNoonDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(AfterNoonDate).diff(MorningDate, 'minutes') / 60.00 + ' Billing Hours : ' + moment(AfterNoonDate).diff(MorningDate, 'minutes') / 60.00 + '\r\n'
 
             actualHour = actualHour + moment(endDate).diff(AfterNoonDate, 'minutes') / 60.00;
-            billingHours = billingHours + (moment(endDate).diff(AfterNoonDate, 'minutes') / 60.00) * 1.5;
+            billingHours = billingHours + (moment(endDate).diff(AfterNoonDate, 'minutes') / 60.00) * Normal2;
             hourDeatils += 'from : ' + moment(AfterNoonDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(endDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(endDate).diff(AfterNoonDate, 'minutes') / 60.00 + ' Billing Hours : ' + (moment(endDate).diff(AfterNoonDate, 'minutes') / 60.00) * 1.5 + '\r\n'
 
         } else if (endDate > NightDate && NightDate <= LastDate) {
             actualHour = moment(MorningDate).diff(startDate, 'minutes') / 60.00;
-            billingHours = actualHour * 2;
+            billingHours = actualHour * Normal3;
             hourDeatils += 'from : ' + moment(startDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(MorningDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + actualHour + ' Billing Hours : ' + billingHours + '\r\n'
 
             actualHour = actualHour + moment(AfterNoonDate).diff(MorningDate, 'minutes') / 60.00;
@@ -287,11 +288,11 @@ function execHours(startDate, endDate, standDate) {
             hourDeatils += 'from : ' + moment(MorningDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(AfterNoonDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' +moment(AfterNoonDate).diff(MorningDate, 'minutes') / 60.00 + ' Billing Hours : ' + moment(AfterNoonDate).diff(MorningDate, 'minutes') / 60.00 + '\r\n'
 
             actualHour = actualHour + moment(NightDate).diff(AfterNoonDate, 'minutes') / 60.00;
-            billingHours = billingHours + (moment(NightDate).diff(AfterNoonDate, 'minutes') / 60.00) * 1.5;
+            billingHours = billingHours + (moment(NightDate).diff(AfterNoonDate, 'minutes') / 60.00) * Normal2;
             hourDeatils += 'from : ' + moment(AfterNoonDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(NightDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(NightDate).diff(AfterNoonDate, 'minutes') / 60.00 + ' Billing Hours : ' + (moment(NightDate).diff(AfterNoonDate, 'minutes') / 60.00) * 1.5+ '\r\n'
 
             actualHour = actualHour + moment(endDate).diff(NightDate, 'minutes') / 60.00;
-            billingHours = billingHours + (moment(endDate).diff(NightDate, 'minutes') / 60.00) * 2;
+            billingHours = billingHours + (moment(endDate).diff(NightDate, 'minutes') / 60.00) * Normal3;
             hourDeatils += 'from : ' + moment(NightDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(endDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(endDate).diff(NightDate, 'minutes') / 60.00 + ' Billing Hours : ' + (moment(endDate).diff(NightDate, 'minutes') / 60.00) * 2 + '\r\n'
         }
 
@@ -303,10 +304,10 @@ function execHours(startDate, endDate, standDate) {
         } else if (endDate > AfterNoonDate && endDate <= NightDate) {
             actualHour = moment(AfterNoonDate).diff(MorningDate, 'minutes') / 60.00;
             billingHours = actualHour;
-            hourDeatils += 'from : ' + moment(MorningDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(AfterNoonDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(AfterNoonDate).diff(MorningDate, 'minutes') / 60.00 + ' Billing Hours : ' + moment(AfterNoonDate).diff(MorningDate, 'minutes') / 60.00 + '\r\n'
+            hourDeatils += 'from : ' + moment(startDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(AfterNoonDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(AfterNoonDate).diff(startDate, 'minutes') / 60.00 + ' Billing Hours : ' + moment(AfterNoonDate).diff(startDate, 'minutes') / 60.00 + '\r\n'
 
             actualHour = actualHour + moment(endDate).diff(AfterNoonDate, 'minutes') / 60.00;
-            billingHours = actualHour + (moment(endDate).diff(AfterNoonDate, 'minutes') / 60.00) * 1.5;
+            billingHours = actualHour + (moment(endDate).diff(AfterNoonDate, 'minutes') / 60.00) * Normal2;
             hourDeatils += 'from : ' + moment(AfterNoonDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(endDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(endDate).diff(AfterNoonDate, 'minutes') / 60.00 + ' Billing Hours : ' + (moment(endDate).diff(AfterNoonDate, 'minutes') / 60.00) * 1.5 + '\r\n'
         } else if (endDate > NightDate && endDate <= LastDate) {
             actualHour = moment(AfterNoonDate).diff(startDate, 'minutes') / 60.00;
@@ -314,11 +315,11 @@ function execHours(startDate, endDate, standDate) {
             hourDeatils += 'from : ' + moment(startDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(AfterNoonDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(AfterNoonDate).diff(startDate, 'minutes') / 60.00 + ' Billing Hours : ' + moment(AfterNoonDate).diff(startDate, 'minutes') / 60.00 + '\r\n'
 
             actualHour = actualHour + moment(NightDate).diff(AfterNoonDate, 'minutes') / 60.00;
-            billingHours = actualHour + moment(NightDate).diff(AfterNoonDate, 'minutes') / 60.00 * 1.5;
+            billingHours = actualHour + moment(NightDate).diff(AfterNoonDate, 'minutes') / 60.00 * Normal2;
             hourDeatils += 'from : ' + moment(AfterNoonDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(NightDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(NightDate).diff(AfterNoonDate, 'minutes') / 60.00 + ' Billing Hours : ' + moment(NightDate).diff(AfterNoonDate, 'minutes') / 60.00 * 1.5 + '\r\n'
 
             actualHour = actualHour + moment(endDate).diff(NightDate, 'minutes') / 60.00;
-            billingHours = actualHour + moment(endDate).diff(NightDate, 'minutes') / 60.00 * 2;
+            billingHours = actualHour + moment(endDate).diff(NightDate, 'minutes') / 60.00 * Normal3;
             hourDeatils += 'from : ' + moment(NightDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(endDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(endDate).diff(NightDate, 'minutes') / 60.00 + ' Billing Hours : ' + moment(endDate).diff(NightDate, 'minutes') / 60.00 * 2 + '\r\n'
         }
 
@@ -326,21 +327,21 @@ function execHours(startDate, endDate, standDate) {
 
         if (endDate <= NightDate) {
             actualHour = moment(endDate).diff(startDate, 'minutes') / 60.00;
-            billingHours = moment(endDate).diff(startDate, 'minutes') / 60.00 * 1.5;
+            billingHours = moment(endDate).diff(startDate, 'minutes') / 60.00 * Normal2;
             hourDeatils += 'from : ' + moment(startDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(endDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(endDate).diff(startDate, 'minutes') / 60.00 + ' Billing Hours : ' + moment(endDate).diff(startDate, 'minutes') / 60.00 * 1.5 + '\r\n'
         } else if (endDate > NightDate && endDate <= LastDate) {
             actualHour = moment(NightDate).diff(startDate, 'minutes') / 60.00;
-            billingHours =moment(NightDate).diff(startDate, 'minutes') / 60.00 * 1.5;
+            billingHours =moment(NightDate).diff(startDate, 'minutes') / 60.00 * Normal2;
             hourDeatils += 'from : ' + moment(startDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(NightDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(NightDate).diff(startDate, 'minutes') / 60.00 + ' Billing Hours : ' +  moment(NightDate).diff(startDate, 'minutes') / 60.00 * 1.5 + '\r\n'
 
             actualHour = actualHour + moment(endDate).diff(NightDate, 'minutes') / 60.00;
-            billingHours = billingHours + moment(endDate).diff(NightDate, 'minutes') / 60.00 * 2;
+            billingHours = billingHours + moment(endDate).diff(NightDate, 'minutes') / 60.00 * Normal3
             hourDeatils += 'from : ' + moment(NightDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(endDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(endDate).diff(NightDate, 'minutes') / 60.00 + ' Billing Hours : ' + moment(endDate).diff(NightDate, 'minutes') / 60.00 * 2 + '\r\n'
 
         }
     } else if (startDate >= NightDate && endDate <= LastDate) {
         actualHour = moment(endDate).diff(startDate, 'minutes') / 60.00;
-        billingHours = actualHour * 2;
+        billingHours = actualHour * Normal3;
         hourDeatils += 'from : ' + moment(startDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(endDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(endDate).diff(startDate, 'minutes') / 60.00 + ' Billing Hours : ' + actualHour * 2 + '\r\n'
     }
 }
@@ -634,7 +635,7 @@ function GetCaseDetails(caseId) {
                     $('#reviewInfo .dateTo').html(caseDetails.DateTo);
                     $('#reviewInfo .manHours').html(caseDetails.ActualHours);
                     $('#reviewInfo .actualHour').html(caseDetails.ActualHours);
-                    $('#reviewInfo .type').html(caseDetails.NewType);
+                    $('#reviewForm .type').val(caseDetails.NewType);
                     $('#reviewForm #status').val(caseDetails.Status);
                     $('#reviewForm #category').val(caseDetails.Category);
                     $('#reviewForm #PriorityLevel').val(caseDetails.PriorityLevel);
@@ -667,18 +668,9 @@ function GetCaseDetails(caseId) {
 
 
 
+                    $('#ServiceForm #ServicePHWeekend').prop('checked',caseDetails.PHWeekend||'')
+                    $('#ServiceForm #ServiceUrgent').prop('checked',caseDetails.Urgent||'')
 
-                    if (caseDetails.PHWeekend=='1') {
-                      $('#ServiceForm #ServicePHWeekend').prop('checked','checked')
-                    }else{
-                        $('#ServiceForm #ServicePHWeekend').prop('checked','')
-                    }
-
-                    if (caseDetails.Urgent=='1') {
-                      $('#ServiceForm #ServiceUrgent').prop('checked','checked')
-                    }else{
-                        $('#ServiceForm #ServiceUrgent').prop('checked','')
-                    }
                     $('#ServiceForm #ServiceActualHours').val(caseDetails.ActualHours);
                     $('#ServiceForm #ServiceOffSetHours').val(caseDetails.OffSetHours);
                     $('#ServiceForm #ServiceReason').val(caseDetails.OffSetReason);
@@ -687,12 +679,7 @@ function GetCaseDetails(caseId) {
                     $('#ServiceForm #ServiceHoursCalculation').val(caseDetails.HoursCalculation);
                     $('#ServiceForm #ServiceDiagnosis').val(caseDetails.Diagnosis);
                     $('#ServiceForm #ServiceBigRemarks').val(caseDetails.FollowupRemarks);
-          
-                    if (caseDetails.CustomerAck=='1') {
-                      $('#ServiceForm #ServiceCustomerAck').prop('checked','checked')
-                    }else{
-                        $('#ServiceForm #ServiceCustomerAck').prop('checked','')
-                    }
+                    $('#ServiceForm #ServiceCustomerAck').prop('checked',caseDetails.CustomerAck||'')
 
                     $.when(GetServiceChargeToPackage('ServiceForm', 'ServiceChargeToPackage', '')).then(function(){
                       $('#ServiceForm #ServiceChargeToPackage').val(caseDetails.PackageTypeNew);
@@ -951,12 +938,10 @@ function SaveServiceForm(caseID) {
        if ($("#ServiceForm #ServicePHWeekend").is(':checked')) {
           ServicePHWeekend = $("#ServiceForm #ServicePHWeekend").val();
        }else {
-         ServicePHWeekend='';
+
        }
        if ($("#ServiceForm #ServiceUrgent").is(':checked')) {
             Urgent = $("#ServiceForm #ServiceUrgent").val();
-       }else{
-         Urgent='';
        }
        var ServiceActualHours = $("#ServiceForm #ServiceActualHours").val() || '';
        var ServiceOffSetHours = $("#ServiceForm #ServiceOffSetHours").val() || '';
