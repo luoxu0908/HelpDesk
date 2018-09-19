@@ -610,7 +610,11 @@ function GetCaseDetails(caseId) {
                     $('#ServiceForm #ServiceStatus').val(caseDetails.Status);
                     $('#ServiceForm #ServiceCategory').val(caseDetails.Category);
                     $('#ServiceForm #ServiceType').val(caseDetails.NewType);
-                    ServiceType
+
+                    $('#ServiceForm #ServiceActualDateFrom').val(moment(caseDetails.DateFrom).format('YYYY-MM-DD'));
+                    $('#ServiceForm #ActualTimeFrom').val(moment(caseDetails.DateFrom).format('HH:SS'));
+                    $('#ServiceForm #ServiceActualDateTo').val(moment(caseDetails.DateTo).format('YYYY-MM-DD'));
+                    $('#ServiceForm #ActualTimeTo').val(moment(caseDetails.DateTo).format('hh:SS'));
                 }
             }
             else {
