@@ -708,8 +708,8 @@ function GetCaseDetails(caseId) {
                     $('#PrintServiceForm .PrintCaseID').html(caseDetails.FLID);
                     $('#PrintServiceForm .PrintOrganisation').html(caseDetails.Organisation);
                     $('#PrintServiceForm .PrintContactPerson').html(caseDetails.ContactPerson);
-                    $('#PrintServiceForm .PrintEmail').html(caseDetails.Email);
-                    $('#PrintServiceForm .PrintContactNo').html(caseDetails.ContactNo);
+                    $('#ServiceForm #ServiceName1').val(caseDetails.ServiceName);
+                    $('#ServiceForm #ServiceEmail1').val(caseDetails.ServiceEmail);
 
                     $('#PrintServiceForm .PrintSubject').html(caseDetails.Subject);
                     $('#PrintServiceForm .PrintLocation').html(caseDetails.TagData3);
@@ -751,8 +751,9 @@ function GetCaseDetails(caseId) {
                         $('#PrintServiceForm .PrintChargeToPackage').html(caseDetails.PackageTypeNew);
                         //PrintChargeToPackage
                     });
-                    $('#PrintServiceForm .PrintEmail').html(caseDetails.ServiceName);
-                    $('#PrintServiceForm .PrintContactNo').html(caseDetails.ServiceName);
+                    $('#PrintServiceForm .PrintName2').html(caseDetails.ServiceName);
+                    $('#PrintServiceForm .PrintEmail2').html(caseDetails.ServiceEmail);
+                    $('#PrintServiceForm .PrintContactNo2').html(caseDetails.ServiceContactNo);
 
 
 
