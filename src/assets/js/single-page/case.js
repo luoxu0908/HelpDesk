@@ -634,7 +634,7 @@ function GetCaseDetails(caseId) {
                     $('#reviewInfo .dateTo').html(caseDetails.DateTo);
                     $('#reviewInfo .manHours').html(caseDetails.ActualHours);
                     $('#reviewInfo .actualHour').html(caseDetails.ActualHours);
-                    $('#reviewForm .type').val(caseDetails.NewType);
+                    $('#reviewInfo .type').html(caseDetails.NewType);
                     $('#reviewForm #status').val(caseDetails.Status);
                     $('#reviewForm #category').val(caseDetails.Category);
                     $('#reviewForm #PriorityLevel').val(caseDetails.PriorityLevel);
@@ -667,9 +667,18 @@ function GetCaseDetails(caseId) {
 
 
 
-                    $('#ServiceForm #ServicePHWeekend').prop('checked',caseDetails.PHWeekend||'')
-                    $('#ServiceForm #ServiceUrgent').prop('checked',caseDetails.Urgent||'')
 
+                    if (caseDetails.PHWeekend=='1') {
+                      $('#ServiceForm #ServicePHWeekend').prop('checked','checked')
+                    }else{
+                        $('#ServiceForm #ServicePHWeekend').prop('checked','')
+                    }
+
+                    if (caseDetails.Urgent=='1') {
+                      $('#ServiceForm #ServiceUrgent').prop('checked','checked')
+                    }else{
+                        $('#ServiceForm #ServiceUrgent').prop('checked','')
+                    }
                     $('#ServiceForm #ServiceActualHours').val(caseDetails.ActualHours);
                     $('#ServiceForm #ServiceOffSetHours').val(caseDetails.OffSetHours);
                     $('#ServiceForm #ServiceReason').val(caseDetails.OffSetReason);
@@ -678,7 +687,12 @@ function GetCaseDetails(caseId) {
                     $('#ServiceForm #ServiceHoursCalculation').val(caseDetails.HoursCalculation);
                     $('#ServiceForm #ServiceDiagnosis').val(caseDetails.Diagnosis);
                     $('#ServiceForm #ServiceBigRemarks').val(caseDetails.FollowupRemarks);
-                    $('#ServiceForm #ServiceCustomerAck').prop('checked',caseDetails.CustomerAck||'')
+          
+                    if (caseDetails.CustomerAck=='1') {
+                      $('#ServiceForm #ServiceCustomerAck').prop('checked','checked')
+                    }else{
+                        $('#ServiceForm #ServiceCustomerAck').prop('checked','')
+                    }
 
                     $.when(GetServiceChargeToPackage('ServiceForm', 'ServiceChargeToPackage', '')).then(function(){
                       $('#ServiceForm #ServiceChargeToPackage').val(caseDetails.PackageTypeNew);
