@@ -101,7 +101,7 @@ $(function () {
 
 
     $.when(getOrgnaisationList(), GetDropDownList('reviewForm', 'category', 'Category'), GetDropDownList('reviewForm', 'Location', 'OrgAddressLocation')
-    , GetDropDownList('reviewForm', 'PriorityLevel', 'PriorityLevel'), GetDropDownList('reviewForm', 'Type', 'Type'), GetDropDownList('ServiceForm', 'ServiceChargeToPackage', 'PackageType')).then(function () {
+    , GetDropDownList('reviewForm', 'PriorityLevel', 'PriorityLevel'), GetDropDownList('reviewForm', 'Type', 'Type')).then(function () {
         $('#reviewForm #organisation').attr('disabled', 'disabled');
         GetreviewCase(caseID);
     });
@@ -334,6 +334,7 @@ function GetreviewCase(caseID) {
             if ((data) && (data.d.RetVal === -1)) {
                 if (data.d.RetData.Tbl.Rows.length > 0) {
                     var CaseEntity = data.d.RetData.Tbl.Rows[0];
+
                     $('#reviewForm #organisation').val(CaseEntity.TargetRoleID);
                     $('#reviewForm #status').val(CaseEntity.Status);
                     $('#reviewForm #name').val(CaseEntity.ContactPerson);
@@ -574,6 +575,7 @@ function GetCaseDetails(caseId) {
                     var createdDate = convertDateTime(caseDetails.CreatedDate, 'datetime'),
                         updatedDate = convertDateTime(caseDetails.ModifiedDate, 'datetime');
                     $('#summary .CaseID').html(caseDetails.FLID);
+                    TargetRoleID=caseDetails.TargetRoleID;
                     $('#summary .organisation').html(caseDetails.Organisation);
                     $('#summary .name').html(caseDetails.ContactPerson);
                     $('#summary .email').html(caseDetails.Email);
@@ -597,6 +599,7 @@ function GetCaseDetails(caseId) {
                     $('#reviewForm #scheduleDateTo').val(caseDetails.DateTo);
                     $('#chargeForm #actualManHours').val(caseDetails.ChargeHours);
 
+                    GetServiceChargeToPackage('ServiceForm', 'ServiceChargeToPackage', '');
                     // $('#reviewForm #actualManHours').val(caseDetails.ActualHours);
                     $('#ServiceForm #ServiceCaseID').val(caseDetails.FLID);
                     $('#ServiceForm #ServiceOrganisation').val(caseDetails.Organisation);
@@ -614,7 +617,40 @@ function GetCaseDetails(caseId) {
                     $('#ServiceForm #ServiceActualDateFrom').val(moment(caseDetails.DateFrom).format('YYYY-MM-DD'));
                     $('#ServiceForm #ActualTimeFrom').val(moment(caseDetails.DateFrom).format('HH:mm'));
                     $('#ServiceForm #ServiceActualDateTo').val(moment(caseDetails.DateTo).format('YYYY-MM-DD'));
+
                     $('#ServiceForm #ActualTimeTo').val(moment(caseDetails.DateTo).format('HH:mm'));
+
+
+
+                    $('#ServiceForm #ServicePHWeekend').prop('checked',caseDetails.PHWeekend||'')
+                    $('#ServiceForm #ServiceUrgent').prop('checked',caseDetails.Urgent||'')
+
+                    $('#ServiceForm #ServiceActualHours').val(caseDetails.ActualHours);
+                    $('#ServiceForm #ServiceOffSetHours').val(caseDetails.OffSetHours);
+                    $('#ServiceForm #ServiceReason').val(caseDetails.OffSetReason);
+                    $('#ServiceForm #ServiceBillingHours').val(caseDetails.BillingHours);
+                    //$('#ServiceForm #ServiceChargeToPackage').val(caseDetails.Subject);
+                    $('#ServiceForm #ServiceHoursCalculation').val(caseDetails.HoursCalculation);
+                    $('#ServiceForm #ServiceDiagnosis').val(caseDetails.Diagnosis);
+                    $('#ServiceForm #ServiceBigRemarks').val(caseDetails.FollowupRemarks);
+                    $('#ServiceForm #ServiceCustomerAck').prop('checked',caseDetails.CustomerAck||'')
+                    if ($('#ServiceForm #ServiceCustomerAck').is(':checked')) {
+                      $('#ServiceForm #ServiceNameDiv').show();
+                      $('#ServiceForm #ServiceEmailDiv').show();
+                      $('#ServiceForm #ServiceContactNoDiv').show();
+                      $('#ServiceForm #NameLb').html('Name<span style="color:red">*</span>');
+                      $('#ServiceForm #EmailLb').html('Email<span style="color:red">*</span>');
+                      $('#ServiceForm #ContactNoLb').html('ContactNo<span style="color:red">*</span>');
+                      $('#ServiceForm #ServiceName1').val(caseDetails.ServiceName);
+                      $('#ServiceForm #ServiceEmail1').val(caseDetails.ServiceEmail);
+                      $('#ServiceForm #ServiceContactNo1').val(caseDetails.ServiceContactNo);
+
+                    }else{
+                      $('#ServiceForm #ServiceNameDiv').hide();
+                      $('#ServiceForm #ServiceEmailDiv').hide();
+                      $('#ServiceForm #ServiceContactNoDiv').hide();
+                    }
+
                 }
             }
             else {
@@ -841,26 +877,110 @@ function getOrgnaisationList() {
 
 
 function SaveServiceForm(caseID) {
-    var ServiceActualDateTimeFrom, ServiceActualDateTimeTo, ServicePHWeekend, Urgent, ServiceBillingHours, BigRemarks;
-    ServiceActualDateTimeFrom = $('#ServiceForm #ServiceActualDateFrom').val() + ' ' + $('#ServiceForm #ActualTimeFrom').val();
-    ServiceActualDateTimeFrom = $('#ServiceForm #ServiceActualDateTo').val() + ' ' + $('#ServiceForm #ActualTimeTo').val();
-    ServiceBillingHours = $('#ServiceForm #ServiceBillingHours').val();
-    if ($("#ServiceForm #ServicePHWeekend").is(':checked')) {
-        ServicePHWeekend = $("#ServiceForm #ServicePHWeekend").val();
-    }
-    if ($("#ServiceForm #ServiceUrgent").is(':checked')) {
-        Urgent = $("#ServiceForm #ServiceUrgent").val();
-    }
-    BigRemarks = $('#ServiceForm #BigRemarks').val();
+       var ServicePHWeekend = 0,Urgent=0,ServiceCustomerAck=0,ServiceName1='',ServiceEmail1='',ServiceContactNo1='';
+       var ServiceActualDateFrom = $('#ServiceForm #ServiceActualDateFrom').val(),
+       ServiceActualDateTo = $('#ServiceForm #ServiceActualDateTo').val(),
+       ActualTimeFrom = $('#ServiceForm #ActualTimeFrom').val(),
+       ActualTimeTo = $('#ServiceForm #ActualTimeTo').val(),
+       ServiceActualDateTimeFrom = ServiceActualDateFrom + ' ' + ActualTimeFrom,
+       ServiceActualDateTimeTo = ServiceActualDateTo + ' ' + ActualTimeTo;
+       if ($("#ServiceForm #ServicePHWeekend").is(':checked')) {
+          ServicePHWeekend = $("#ServiceForm #ServicePHWeekend").val();
+       }else {
 
-    if (ServiceActualDateTimeFrom.length == 0 || ServiceActualDateTimeTo.length == 0 || ServiceBillingHours.length == 0) {
-        alert('Please fill in all mandatory fields!');
-        return false;
-    }
+       }
+       if ($("#ServiceForm #ServiceUrgent").is(':checked')) {
+            Urgent = $("#ServiceForm #ServiceUrgent").val();
+       }
+       var ServiceActualHours = $("#ServiceForm #ServiceActualHours").val() || '';
+       var ServiceOffSetHours = $("#ServiceForm #ServiceOffSetHours").val() || '';
+       var ServiceReason = $("#ServiceForm #ServiceReason").val() || '';
+       if (ServiceOffSetHours.length > 0) {
+           if (ServiceReason.length == 0) {
+               alert('Please fill in Service Reason fields!');
+               return false;
+           }
+       }
+       var ServiceBillingHours = $("#ServiceForm #ServiceBillingHours").val() || '';
+       var ServiceChargeToPackage = $("#ServiceForm #ServiceChargeToPackage").val() || '';
+       var ServiceHoursCalculation = $("#ServiceForm #ServiceHoursCalculation").val() || '';
+       var ServiceDiagnosis = $("#ServiceForm #ServiceDiagnosis").val() || '';
+       var ServiceBigRemarks = $("#ServiceForm #ServiceBigRemarks").val() || '';
 
-    var data = { 'FLID': caseID, 'ServiceActualDateTimeFrom': ServiceActualDateTimeTo, 'ServicePHWeekend': ServicePHWeekend, 'Urgent': Urgent, 'ServiceBillingHours': ServiceBillingHours, 'BigRemarks': BigRemarks };
-    $.ajax({
-        url: apiSrc + "BCMain/FL1.SaveServiceForm.json",
+
+       if (ServiceActualDateFrom.length == 0 || ServiceActualDateTo.length == 0 || ActualTimeFrom.length == 0 || ActualTimeTo.length == 0 || ServiceChargeToPackage.length == 0) {
+           alert('Please fill in all mandatory fields!');
+           return false;
+       }
+       if ($('#ServiceForm #ServiceCustomerAck').is(':checked')) {
+            ServiceCustomerAck = $('#ServiceForm #ServiceCustomerAck').val();
+            ServiceName1 = $("#ServiceForm #ServiceName1").val() || '';
+            ServiceEmail1 = $("#ServiceForm #ServiceEmail1").val() || '';
+            ServiceContactNo1 = $("#ServiceForm #ServiceContactNo1").val() || '';
+           if (ServiceName1.length == 0) {
+               alert('Please fill in Name fields!');
+               return false;
+           }
+           if (ServiceEmail1.length == 0) {
+               alert('Please fill in Email fields!');
+               return false;
+           }
+           if (ServiceContactNo1.length == 0) {
+               alert('Please fill in Contact No fields!');
+               return false;
+           }
+       }
+
+       var data = {
+           'FLID': caseID, 'ServiceActualDateTimeFrom': ServiceActualDateTimeFrom, 'ServiceActualDateTimeTo': ServiceActualDateTimeTo,
+           'ServicePHWeekend': ServicePHWeekend, 'Urgent': Urgent, 'ServiceActualHours': ServiceActualHours, 'ServiceOffSetHours': ServiceOffSetHours, 'ServiceReason': ServiceReason,
+           'ServiceBillingHours': ServiceBillingHours, 'ServiceChargeToPackage': ServiceChargeToPackage, 'ServiceHoursCalculation': ServiceHoursCalculation,
+           'ServiceDiagnosis': ServiceDiagnosis, 'ServiceBigRemarks': ServiceBigRemarks, 'ServiceCustomerAck': ServiceCustomerAck, 'ServiceName1': ServiceName1,
+           'ServiceEmail1': ServiceEmail1, 'ServiceContactNo1': ServiceContactNo1
+       };
+       $.ajax({
+           url: apiSrc + "BCMain/FL1.SaveServiceForm.json",
+           method: "POST",
+           dataType: "json",
+           xhrFields: { withCredentials: true },
+           data: {
+               'data': JSON.stringify(data),
+               'WebPartKey': WebPartVal,
+               'ReqGUID': getGUID()
+           },
+           success: function (data) {
+               if ((data) && (data.d.RetVal === -1)) {
+                   if (data.d.RetData.Tbl.Rows.length > 0) {
+                       if (data.d.RetData.Tbl.Rows[0].Success == true) {
+                           $('#ServiceForm #ServiceActualDateFrom').val('');
+                           $('#ServiceForm #ActualTimeFrom').val('');
+                           $('#ServiceForm #ServiceActualDateTo').val('');
+                           $('#ServiceForm #ActualTimeTo').val('');
+                           $('#ServiceForm #title').val('');
+                           $('#ServiceForm #ServiceBillingHours').val('');
+                           $('#ServiceForm #BigRemarks').val('');
+                           $('#ServiceForm #ServicePHWeekend').removeAttr("checked")
+                           alert('update success')
+                           $('#ServiceForm').foundation('close');
+                       } else { alert(data.d.RetData.Tbl.Rows[0].ReturnMsg); }
+                   }
+               }
+               else {
+                   alert(data.d.RetMsg);
+               }
+           },
+           error: function (data) {
+               alert("Error: " + data.responseJSON.d.RetMsg);
+           }
+       });
+   }
+
+function GetDropDownList(FatherId, Id, LookupCat) {
+    $('#' + FatherId + ' #' + Id + '').html('');
+    $('#' + FatherId + ' #' + Id + '').append('<option value="">-- Please Select --</option>');
+    var data = { 'LookupCat': LookupCat };
+    return $.ajax({
+        url: apiSrc + "BCMain/iCtc1.GetTicketLookupVal.json",
         method: "POST",
         dataType: "json",
         xhrFields: { withCredentials: true },
@@ -872,18 +992,14 @@ function SaveServiceForm(caseID) {
         success: function (data) {
             if ((data) && (data.d.RetVal === -1)) {
                 if (data.d.RetData.Tbl.Rows.length > 0) {
-                    if (data.d.RetData.Tbl.Rows[0].Success == true) {
-                        $('#ServiceForm #ServiceActualDateFrom').val('');
-                        $('#ServiceForm #ActualTimeFrom').val('');
-                        $('#ServiceForm #ServiceActualDateTo').val('');
-                        $('#ServiceForm #ActualTimeTo').val('');
-                        $('#ServiceForm #title').val('');
-                        $('#ServiceForm #ServiceBillingHours').val('');
-                        $('#ServiceForm #BigRemarks').val('');
-                        $('#ServiceForm #ServicePHWeekend').removeAttr("checked")
-
-                        $('#ServiceForm').foundation('close');
-                    } else { alert(data.d.RetData.Tbl.Rows[0].ReturnMsg); }
+                    var Result = data.d.RetData.Tbl.Rows;
+                    for (var i = 0; i < Result.length; i++) {
+                        if (Id == 'Location') {
+                            $('#' + FatherId + ' #' + Id + '').append('<option value="' + Result[i].Description + '">' + Result[i].TagData3 + '</option>');
+                        } else {
+                            $('#' + FatherId + ' #' + Id + '').append('<option value="' + Result[i].Description + '">' + Result[i].Description + '</option>');
+                        }
+                    }
                 }
             }
             else {
@@ -896,12 +1012,12 @@ function SaveServiceForm(caseID) {
     });
 }
 
-function GetDropDownList(FatherId, Id, LookupCat) {
+function GetServiceChargeToPackage(FatherId, Id, LookupCat) {
     $('#' + FatherId + ' #' + Id + '').html('');
     $('#' + FatherId + ' #' + Id + '').append('<option value="">-- Please Select --</option>');
-    var data = { 'LookupCat': LookupCat };
+    var data = { 'LookupCat': '' , 'RoleID':TargetRoleID };
     return $.ajax({
-        url: apiSrc + "BCMain/iCtc1.GetTicketLookupVal.json",
+        url: apiSrc + "BCMain/iCtc1.GetOrgTicketPackageType.json",
         method: "POST",
         dataType: "json",
         xhrFields: { withCredentials: true },
