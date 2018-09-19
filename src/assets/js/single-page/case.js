@@ -906,10 +906,12 @@ function SaveServiceForm(caseID) {
        if ($("#ServiceForm #ServicePHWeekend").is(':checked')) {
           ServicePHWeekend = $("#ServiceForm #ServicePHWeekend").val();
        }else {
-
+         ServicePHWeekend='';
        }
        if ($("#ServiceForm #ServiceUrgent").is(':checked')) {
             Urgent = $("#ServiceForm #ServiceUrgent").val();
+       }else{
+         Urgent='';
        }
        var ServiceActualHours = $("#ServiceForm #ServiceActualHours").val() || '';
        var ServiceOffSetHours = $("#ServiceForm #ServiceOffSetHours").val() || '';
