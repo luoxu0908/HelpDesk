@@ -14,6 +14,14 @@ $(function () {
             window.location.href = './case.html?caseID=' + caseID;
         }
     });
+    $('#PrintService').click(function () {
+        DoPrintServiceForm();
+        var PrintFlag = document.execCommand("print");
+        if (PrintFlag) {
+            window.location.href = './case.html?caseID=' + caseID;
+        }
+    });
+
     var checkRoleAccess =
       $.ajax({
           url: apiSrc + "BCMain/iCtc1.CheckRoleAccess.json",
@@ -305,7 +313,11 @@ function execHours(startDate, endDate, standDate) {
         hourDeatils += 'from : ' + moment(startDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(endDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(endDate).diff(startDate, 'minutes') / 60.00 + ' Billing Hours : ' + actualHour * 2 + '\r\n'
     }
 }
-
+function DoPrintServiceForm(){
+  var printData = document.getElementById("PrintServiceForm").innerHTML;
+  window.document.body.innerHTML = printData
+  window.print()
+}
 function DoPrint() {
     $('.boxContent').hide();
     $('.titleMain').hide();
@@ -591,6 +603,7 @@ function GetCaseDetails(caseId) {
                     $('#reviewInfo .dateTo').html(caseDetails.DateTo);
                     $('#reviewInfo .manHours').html(caseDetails.ActualHours);
                     $('#reviewInfo .actualHour').html(caseDetails.ActualHours);
+                    $('#reviewForm .type').val(caseDetails.NewType);
                     $('#reviewForm #status').val(caseDetails.Status);
                     $('#reviewForm #category').val(caseDetails.Category);
                     $('#reviewForm #PriorityLevel').val(caseDetails.PriorityLevel);
@@ -598,6 +611,7 @@ function GetCaseDetails(caseId) {
                     $('#reviewForm #scheduleDateFrom').val(caseDetails.DateFrom);
                     $('#reviewForm #scheduleDateTo').val(caseDetails.DateTo);
                     $('#chargeForm #actualManHours').val(caseDetails.ChargeHours);
+
 
 
                     // $('#reviewForm #actualManHours').val(caseDetails.ActualHours);
