@@ -1,4 +1,4 @@
-var RoleName = '', PrintFlag = '', FileID = '', caseID = '', TargetRoleID = '';
+var RoleName = '', PrintFlag = '', FileID = '', caseID = '', TargetRoleID = '',TimeTypeArray=new Array();
 var startDate = '', endDate = '', standDate = '', execCount = 0.0, actualHour = 0.0, billingHours = 0.0, hourDeatils = '',offSetHour=0.0;
 
 $(function () {
@@ -113,6 +113,7 @@ $(function () {
         $('#reviewForm #organisation').attr('disabled', 'disabled');
         GetreviewCase(caseID);
     });
+    GetTimeClockType();
     $("#ServiceForm #ServicePHWeekend").click(function () {
       actualHour=  $('#ServiceForm #ServiceActualHours').val();
       billingHours=  $('#ServiceForm #ServiceBillingHours').val();
@@ -162,7 +163,37 @@ $(function () {
         ecexHourSetting();
     });
 });
+function GetTimeClockType(){
+  var data = { 'LookupCat': 'TimeClockTypes' };
+  return $.ajax({
+      url: apiSrc + "BCMain/iCtc1.GetTicketLookupVal.json",
+      method: "POST",
+      dataType: "json",
+      xhrFields: { withCredentials: true },
+      data: {
+          'data': JSON.stringify(data),
+          'WebPartKey': WebPartVal,
+          'ReqGUID': getGUID()
+      },
+      success: function (data) {
+          if ((data) && (data.d.RetVal === -1)) {
+              if (data.d.RetData.Tbl.Rows.length > 0) {
+                  var Result = data.d.RetData.Tbl.Rows;
+                  for (var i = 0; i < Result.length; i++) {
+                      TimeTypeArray.push();
+                  }
 
+              }
+          }
+          else {
+              alert(data.d.RetMsg);
+          }
+      },
+      error: function (data) {
+          alert("Error: " + data.responseJSON.d.RetMsg);
+      }
+  });
+}
 function ecexHourSetting(){
     execDays();
     actualHour = 0, billingHours = 0,hourDeatils='';
