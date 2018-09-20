@@ -129,6 +129,10 @@ $(function () {
           actualHour=actualHour/PHWeekend;
           billingHours=billingHours/PHWeekend;
         }
+        if($('#ServiceForm #ServiceType').val()=='Professional Service'){
+          billingHours=0;
+        }
+
         $('#ServiceForm #ServiceActualHours').val(actualHour);
         $('#ServiceForm #ServiceBillingHours').val(billingHours);
     });
@@ -145,6 +149,9 @@ $(function () {
         }else{
           actualHour=actualHour/UrgentTime;
           billingHours=billingHours/UrgentTime;
+        }
+        if($('#ServiceForm #ServiceType').val()=='Professional Service'){
+          billingHours=0;
         }
         $('#ServiceForm #ServiceActualHours').val(actualHour);
         $('#ServiceForm #ServiceBillingHours').val(billingHours);
@@ -225,6 +232,9 @@ function ecexHourSetting(){
     billingHours=parseFloat(billingHours)-parseFloat(offSetHour);
     if(parseFloat(offSetHour)>0){
       hourDeatils+='Off Set Hours : '+offSetHour;
+    }
+    if($('#ServiceForm #ServiceType').val()=='Professional Service'){
+      billingHours=0;
     }
     $('#ServiceForm #ServiceActualHours').val(actualHour);
     $('#ServiceForm #ServiceBillingHours').val(billingHours);
