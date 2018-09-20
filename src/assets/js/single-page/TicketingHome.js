@@ -941,6 +941,7 @@ function GetOrgAddressLocation(LookupCat,organization) {
 
                 if (data.d.RetData.Tbl.Rows.length > 0) {
                     var list = data.d.RetData.Tbl.Rows;
+                    $('#caseAddForm #Location').html('');
                     for (var i = 0; i < list.length; i++) {
                         $('#caseAddForm #Location').append('<option value="' + list[i].LookupKey + '">' + list[i].TagData3 + '</option>');
                     }

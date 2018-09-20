@@ -314,12 +314,12 @@ function execHours(startDate, endDate, standDate) {
             billingHours = actualHour;
             hourDeatils += 'from : ' + moment(startDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(endDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + actualHour + ' Billing Hours : ' + billingHours + '\r\n'
         } else if (endDate > AfterNoonDate && endDate <= NightDate) {
-            actualHour = moment(AfterNoonDate).diff(MorningDate, 'minutes') / 60.00;
+            actualHour = moment(AfterNoonDate).diff(startDate, 'minutes') / 60.00;
             billingHours = actualHour;
             hourDeatils += 'from : ' + moment(startDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(AfterNoonDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(AfterNoonDate).diff(startDate, 'minutes') / 60.00 + ' Billing Hours : ' + moment(AfterNoonDate).diff(startDate, 'minutes') / 60.00 + '\r\n'
-
             actualHour = actualHour + moment(endDate).diff(AfterNoonDate, 'minutes') / 60.00;
-            billingHours = actualHour + (moment(endDate).diff(AfterNoonDate, 'minutes') / 60.00) * Normal2;
+
+            billingHours = billingHours + (moment(endDate).diff(AfterNoonDate, 'minutes') / 60.00) * Normal2;
             hourDeatils += 'from : ' + moment(AfterNoonDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(endDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(endDate).diff(AfterNoonDate, 'minutes') / 60.00 + ' Billing Hours : ' + (moment(endDate).diff(AfterNoonDate, 'minutes') / 60.00) * 1.5 + '\r\n'
         } else if (endDate > NightDate && endDate <= LastDate) {
             actualHour = moment(AfterNoonDate).diff(startDate, 'minutes') / 60.00;
@@ -647,7 +647,7 @@ function GetCaseDetails(caseId) {
                     $('#reviewInfo .dateTo').html(caseDetails.DateTo);
                     $('#reviewInfo .manHours').html(caseDetails.ActualHours);
                     $('#reviewInfo .actualHour').html(caseDetails.ActualHours);
-                    $('#reviewForm .type').val(caseDetails.NewType);
+                    $('#reviewForm .type').html(caseDetails.NewType);
                     $('#reviewForm #status').val(caseDetails.Status);
                     $('#reviewForm #category').val(caseDetails.Category);
                     $('#reviewForm #PriorityLevel').val(caseDetails.PriorityLevel);
@@ -1221,7 +1221,7 @@ function GetOrgAddressLocation(LookupCat,organization) {
         },
         success: function (data) {
             if ((data) && (data.d.RetVal === -1)) {
-
+              $('#reviewForm #Location').html('');
                 if (data.d.RetData.Tbl.Rows.length > 0) {
                     var list = data.d.RetData.Tbl.Rows;
                     for (var i = 0; i < list.length; i++) {
