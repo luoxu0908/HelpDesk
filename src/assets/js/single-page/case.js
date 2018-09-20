@@ -649,7 +649,7 @@ function GetCaseDetails(caseId) {
                     $('#reviewInfo .dateFrom').html(caseDetails.DateFrom);
                     $('#reviewInfo .dateTo').html(caseDetails.DateTo);
                     $('#reviewInfo .manHours').html(caseDetails.ActualHours);
-                    
+
                     $('#reviewInfo .actualHour').html(caseDetails.BillingHours);
                     $('#reviewInfo .type').html(caseDetails.NewType);
 
@@ -818,13 +818,12 @@ function GetCaseHistory(caseId) {
                                 threadContainer += '<div class="thread" style="border-left:15px #e60000 solid;margin-top:3px;">'
                             }
                             if(caseLogs[i].Status){
-                                threadContainer += '<div class="top"><span class="datetime">' + date + '<i> ' + time + '</i> by ' + caseLogs[i].CreatedBy + '</span> <span class="tag">'+caseLogs[i].Status+'</span><span class="tag" style="background:#26CC35;cursor:pointer;color:white;" onclick=Void("'+caseLogs[i].FLLogID+'","'+caseLogs[i].Type+'","'+caseId+'")>Void</span></div>'
+                                threadContainer += '<div class="top"><span class="datetime">' + date + '<i> ' + time + '</i> by ' + caseLogs[i].CreatedBy + '</span> <span class="tag">'+caseLogs[i].Status+'</span><span class="tag" style="background:#60C2EC;cursor:pointer;color:white;" onclick=Void("'+caseLogs[i].FLLogID+'","'+caseLogs[i].Type+'","'+caseId+'")>Void</span><span class="tag" style="background:#60C2EC;cursor:pointer;color:white;" onclick=Void("'+caseLogs[i].FLLogID+'","'+caseLogs[i].Type+'","'+caseId+'")>View</span></div>';
                             }
                             else{
                                 threadContainer += '<div class="top"><span class="datetime">' + date + '<i> ' + time + '</i> by ' + caseLogs[i].CreatedBy + '</span> </div>'
                             }
-
-                            threadContainer += '<div class="text">' + caseLogs[i].Details + '</div> </div>';
+                            threadContainer += '<div  class="text">' + caseLogs[i].Details + '</div> </div>';
                         }
                     }
                     $('#logThread .threadLog').html(threadContainer);
