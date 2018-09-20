@@ -820,7 +820,7 @@ function GetCaseHistory(caseId) {
                                 threadContainer += '<div class="thread" style="border-left:15px #e60000 solid;margin-top:3px;">'
                             }
                             if(caseLogs[i].Status){
-                                threadContainer += '<div class="top"><span class="datetime">' + date + '<i> ' + time + '</i> by ' + caseLogs[i].CreatedBy + '</span> <span class="tag">'+caseLogs[i].Status+'</span><span class="tag" style="background:#26CC35;cursor:pointer;color:white;" onclick=Void("'+caseLogs[i].FLLogID+'","'+caseLogs[i].Type+'")>Void</span></div>'
+                                threadContainer += '<div class="top"><span class="datetime">' + date + '<i> ' + time + '</i> by ' + caseLogs[i].CreatedBy + '</span> <span class="tag">'+caseLogs[i].Status+'</span><span class="tag" style="background:#26CC35;cursor:pointer;color:white;" onclick=Void("'+caseLogs[i].FLLogID+'","'+caseLogs[i].Type+'","'+caseId+'")>Void</span></div>'
                             }
                             else{
                                 threadContainer += '<div class="top"><span class="datetime">' + date + '<i> ' + time + '</i> by ' + caseLogs[i].CreatedBy + '</span> </div>'
@@ -841,8 +841,30 @@ function GetCaseHistory(caseId) {
         }
     });
 };
-function Void(FLogID,Type){
-  alert(FLogID);
+function Void(FLLogID,Type,FLID){
+  return $.ajax({
+      url: apiSrc + "BCMain/FL1.VoidCaseHistory.json",
+      method: "POST",
+      dataType: "json",
+      xhrFields: { withCredentials: true },
+      data: {
+          'data': JSON.stringify({'FLLogID':FLLogID}),
+          'WebPartKey': WebPartVal,
+          'ReqGUID': getGUID()
+      },
+      success: function (data) {
+          if ((data) && (data.d.RetVal === -1)) {
+            alert('Successfully updated!');
+            GetCaseHistory(FLID);
+          }
+          else {
+              alert(data.d.RetMsg);
+          }
+      },
+      error: function (data) {
+          alert("Error: " + data.responseJSON.d.RetMsg);
+      }
+  });
 }
 function GetCaseInvolvement(caseId) {
     $.ajax({
