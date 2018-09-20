@@ -702,7 +702,22 @@ function GetCaseDetails(caseId) {
                     //$('#ServiceForm #ServiceCustomerAck').prop('checked',caseDetails.CustomerAck||'')
 
 
-                    
+                    if ($('#ServiceForm #ServiceCustomerAck').is(':checked')) {
+                      $('#ServiceForm #ServiceNameDiv').show();
+                      $('#ServiceForm #ServiceEmailDiv').show();
+                      $('#ServiceForm #ServiceContactNoDiv').show();
+                      $('#ServiceForm #NameLb').html('Name<span style="color:red">*</span>');
+                      $('#ServiceForm #EmailLb').html('Email<span style="color:red">*</span>');
+                      $('#ServiceForm #ContactNoLb').html('ContactNo<span style="color:red">*</span>');
+                      $('#ServiceForm #ServiceName1').val(caseDetails.ServiceName);
+                      $('#ServiceForm #ServiceEmail1').val(caseDetails.ServiceEmail);
+                      $('#ServiceForm #ServiceContactNo1').val(caseDetails.ServiceContactNo);
+
+                    }else{
+                      $('#ServiceForm #ServiceNameDiv').hide();
+                      $('#ServiceForm #ServiceEmailDiv').hide();
+                      $('#ServiceForm #ServiceContactNoDiv').hide();
+                    }
 
                     $.when(GetServiceChargeToPackage('ServiceForm', 'ServiceChargeToPackage', '')).then(function(){
                       $('#ServiceForm #ServiceChargeToPackage').val(caseDetails.PackageTypeNew);
