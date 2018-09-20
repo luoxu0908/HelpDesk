@@ -205,7 +205,12 @@ function GetTimeClockType(){
   });
 }
 function ecexHourSetting(){
+
     execDays();
+    if(moment(endDate).diff(startDate)<=0){
+      alert('Actual date to need more than actual date from.');
+      return false;
+    }
     actualHour = 0, billingHours = 0,hourDeatils='';
     if (execCount ==0) {
         standDate = new Date($('#ServiceForm #ServiceActualDateFrom').val());
@@ -327,11 +332,11 @@ function execHours(startDate, endDate, standDate) {
             hourDeatils += 'from : ' + moment(startDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(AfterNoonDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(AfterNoonDate).diff(startDate, 'minutes') / 60.00 + ' Billing Hours : ' + moment(AfterNoonDate).diff(startDate, 'minutes') / 60.00 + '\r\n'
 
             actualHour = actualHour + moment(NightDate).diff(AfterNoonDate, 'minutes') / 60.00;
-            billingHours = actualHour + moment(NightDate).diff(AfterNoonDate, 'minutes') / 60.00 * Normal2;
+            billingHours = billingHours + moment(NightDate).diff(AfterNoonDate, 'minutes') / 60.00 * Normal2;
             hourDeatils += 'from : ' + moment(AfterNoonDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(NightDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(NightDate).diff(AfterNoonDate, 'minutes') / 60.00 + ' Billing Hours : ' + moment(NightDate).diff(AfterNoonDate, 'minutes') / 60.00 * 1.5 + '\r\n'
 
             actualHour = actualHour + moment(endDate).diff(NightDate, 'minutes') / 60.00;
-            billingHours = actualHour + moment(endDate).diff(NightDate, 'minutes') / 60.00 * Normal3;
+            billingHours = billingHours + moment(endDate).diff(NightDate, 'minutes') / 60.00 * Normal3;
             hourDeatils += 'from : ' + moment(NightDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(endDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(endDate).diff(NightDate, 'minutes') / 60.00 + ' Billing Hours : ' + moment(endDate).diff(NightDate, 'minutes') / 60.00 * 2 + '\r\n'
         }
 
