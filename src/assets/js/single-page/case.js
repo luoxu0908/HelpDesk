@@ -647,7 +647,9 @@ function GetCaseDetails(caseId) {
                     $('#reviewInfo .dateTo').html(caseDetails.DateTo);
                     $('#reviewInfo .manHours').html(caseDetails.ActualHours);
                     $('#reviewInfo .actualHour').html(caseDetails.ActualHours);
-                    $('#reviewForm .type').html(caseDetails.NewType);
+                    $('#reviewInfo .type').html(caseDetails.NewType);
+
+                    $('#reviewForm #Type').val(caseDetails.NewType);
                     $('#reviewForm #status').val(caseDetails.Status);
                     $('#reviewForm #category').val(caseDetails.Category);
                     $('#reviewForm #PriorityLevel').val(caseDetails.PriorityLevel);
