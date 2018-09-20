@@ -87,7 +87,7 @@ $(function () {
     });
     $('#ServiceForm #submit').click(function () {
         //alert($('#ServiceForm #ServiceActualDateFrom').val());
-        SaveServiceForm(caseID);
+        SaveServiceForm(caseID,'');
     });
     $('#ServiceForm #ServiceCustomerAck').click(function () {
         if ($(this).is(':checked')) {
@@ -551,7 +551,9 @@ function addNewActivity(caseID) {
             return false;
         }
     }
-
+    if(len(internal)==0){
+      internal='99';
+    }
     var data = { 'FLID': caseID, 'Details': Description, 'Internal': internal };
     $.ajax({
         url: apiSrc + "BCMain/FL1.InsertActivityLog.json",
@@ -702,22 +704,22 @@ function GetCaseDetails(caseId) {
                     //$('#ServiceForm #ServiceCustomerAck').prop('checked',caseDetails.CustomerAck||'')
 
 
-                    if ($('#ServiceForm #ServiceCustomerAck').is(':checked')) {
-                      $('#ServiceForm #ServiceNameDiv').show();
-                      $('#ServiceForm #ServiceEmailDiv').show();
-                      $('#ServiceForm #ServiceContactNoDiv').show();
-                      $('#ServiceForm #NameLb').html('Name<span style="color:red">*</span>');
-                      $('#ServiceForm #EmailLb').html('Email<span style="color:red">*</span>');
-                      $('#ServiceForm #ContactNoLb').html('ContactNo<span style="color:red">*</span>');
-                      $('#ServiceForm #ServiceName1').val(caseDetails.ServiceName);
-                      $('#ServiceForm #ServiceEmail1').val(caseDetails.ServiceEmail);
-                      $('#ServiceForm #ServiceContactNo1').val(caseDetails.ServiceContactNo);
-
-                    }else{
-                      $('#ServiceForm #ServiceNameDiv').hide();
-                      $('#ServiceForm #ServiceEmailDiv').hide();
-                      $('#ServiceForm #ServiceContactNoDiv').hide();
-                    }
+                    // if ($('#ServiceForm #ServiceCustomerAck').is(':checked')) {
+                    //   $('#ServiceForm #ServiceNameDiv').show();
+                    //   $('#ServiceForm #ServiceEmailDiv').show();
+                    //   $('#ServiceForm #ServiceContactNoDiv').show();
+                    //   $('#ServiceForm #NameLb').html('Name<span style="color:red">*</span>');
+                    //   $('#ServiceForm #EmailLb').html('Email<span style="color:red">*</span>');
+                    //   $('#ServiceForm #ContactNoLb').html('ContactNo<span style="color:red">*</span>');
+                    //   $('#ServiceForm #ServiceName1').val(caseDetails.ServiceName);
+                    //   $('#ServiceForm #ServiceEmail1').val(caseDetails.ServiceEmail);
+                    //   $('#ServiceForm #ServiceContactNo1').val(caseDetails.ServiceContactNo);
+                    //
+                    // }else{
+                    //   $('#ServiceForm #ServiceNameDiv').hide();
+                    //   $('#ServiceForm #ServiceEmailDiv').hide();
+                    //   $('#ServiceForm #ServiceContactNoDiv').hide();
+                    // }
 
                     $.when(GetServiceChargeToPackage('ServiceForm', 'ServiceChargeToPackage', '')).then(function(){
                       $('#ServiceForm #ServiceChargeToPackage').val(caseDetails.PackageTypeNew);
@@ -1001,7 +1003,7 @@ function getOrgnaisationList() {
 }
 
 
-function SaveServiceForm(caseID) {
+function SaveServiceForm(caseID,ServiceFormID) {
        var ServicePHWeekend = 0,Urgent=0,ServiceCustomerAck=0,ServiceName1='',ServiceEmail1='',ServiceContactNo1='';
        var ServiceActualDateFrom = $('#ServiceForm #ServiceActualDateFrom').val(),
        ServiceActualDateTo = $('#ServiceForm #ServiceActualDateTo').val(),
@@ -1060,7 +1062,7 @@ function SaveServiceForm(caseID) {
            'ServicePHWeekend': ServicePHWeekend, 'Urgent': Urgent, 'ServiceActualHours': ServiceActualHours, 'ServiceOffSetHours': ServiceOffSetHours, 'ServiceReason': ServiceReason,
            'ServiceBillingHours': ServiceBillingHours, 'ServiceChargeToPackage': ServiceChargeToPackage, 'ServiceHoursCalculation': ServiceHoursCalculation,
            'ServiceDiagnosis': ServiceDiagnosis, 'ServiceBigRemarks': ServiceBigRemarks, 'ServiceCustomerAck': ServiceCustomerAck, 'ServiceName1': ServiceName1,
-           'ServiceEmail1': ServiceEmail1, 'ServiceContactNo1': ServiceContactNo1
+           'ServiceEmail1': ServiceEmail1, 'ServiceContactNo1': ServiceContactNo1,'ServiceFormID':ServiceFormID
        };
        $.ajax({
            url: apiSrc + "BCMain/FL1.SaveServiceForm.json",
