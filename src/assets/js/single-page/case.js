@@ -1,5 +1,6 @@
 var RoleName = '', PrintFlag = '', FileID = '', caseID = '', TargetRoleID = '',TimeTypeMap={};
-var startDate = '', endDate = '', standDate = '', execCount = 0.0, actualHour = 0.0, billingHours = 0.0, hourDeatils = '',offSetHour=0.0;
+var startDate = '', endDate = '', standDate = '', execCount = 0.0, actualHour = 0.0, billingHours = 0.0, hourDeatils = '',
+offSetHour=0.0,ServiceTimePoint9,ServiceTimePoint18,ServiceTimePoint22,ServiceTimePoint24;
 
 $(function () {
     //get caseID from URL
@@ -65,8 +66,6 @@ $(function () {
             GetAvailablePackage(caseID);
             $('.teamLeadControl, .supportControl').show();
         } else if (RoleName == 'Sales') {
-
-        } else {
 
         }
     });
@@ -156,6 +155,7 @@ $(function () {
         $('#ServiceForm #ServiceActualHours').val(actualHour);
         $('#ServiceForm #ServiceBillingHours').val(billingHours);
     });
+    GetServicePoint('ServiceTimePoint');
     $('#ServiceForm #ActualTimeFrom').change(function () {
         ecexHourSetting();
     });
@@ -205,7 +205,6 @@ function GetTimeClockType(){
   });
 }
 function ecexHourSetting(){
-
     execDays();
     if(moment(endDate).diff(startDate)<=0){
       alert('Actual date to need more than actual date from.');
@@ -263,10 +262,10 @@ function execHours(startDate, endDate, standDate) {
 
     var startDate = new Date(startDate);
     var endDate = new Date(endDate);
-    var MorningDate = new Date(standDate + ' ' + '09:00:00');
-    var AfterNoonDate = new Date(standDate + ' ' + '18:00:00');
-    var NightDate = new Date(standDate + ' ' + '22:00:00');
-    var LastDate = new Date(standDate + ' ' + '24:00:00');
+    var MorningDate = new Date(standDate + ' ' + ServiceTimePoint9);
+    var AfterNoonDate = new Date(standDate + ' ' + ServiceTimePoint18);
+    var NightDate = new Date(standDate + ' ' + ServiceTimePoint22);
+    var LastDate = new Date(standDate + ' ' + ServiceTimePoint24);
     var Normal3=parseFloat(TimeTypeMap['Normal3'])||2, Normal2=parseFloat(TimeTypeMap['Normal2'])||1.5;
     if (startDate < MorningDate) {
         if (endDate <= MorningDate) {
@@ -662,9 +661,6 @@ function GetCaseDetails(caseId) {
                     $('#reviewForm #scheduleDateFrom').val(caseDetails.DateFrom);
                     $('#reviewForm #scheduleDateTo').val(caseDetails.DateTo);
                     $('#chargeForm #actualManHours').val(caseDetails.ChargeHours);
-
-
-
                     // $('#reviewForm #actualManHours').val(caseDetails.ActualHours);
                     $('#ServiceForm #ServiceCaseID').val(caseDetails.FLID);
                     $('#ServiceForm #ServiceOrganisation').val(caseDetails.Organisation);
@@ -679,6 +675,12 @@ function GetCaseDetails(caseId) {
                     $('#ServiceForm #ServiceCategory').val(caseDetails.Category);
                     $('#ServiceForm #ServiceType').val(caseDetails.NewType);
 
+                    if (caseDetails.NewType=='Remote Support') {
+                      $('#ServiceForm #CustomerAckDiv').hide();
+                    }else if(caseDetails.NewType=='Onsite Support'){
+                      $('#ServiceForm #CustomerAckDiv').show();
+                      $('#ServiceForm #ServiceCustomerAck').prop('checked','checked')
+                    }
                     $('#ServiceForm #ServiceActualDateFrom').val(moment(caseDetails.DateFrom).format('YYYY-MM-DD'));
                     $('#ServiceForm #ActualTimeFrom').val(moment(caseDetails.DateFrom).format('HH:mm'));
                     $('#ServiceForm #ServiceActualDateTo').val(moment(caseDetails.DateTo).format('YYYY-MM-DD'));
@@ -687,40 +689,24 @@ function GetCaseDetails(caseId) {
 
 
 
-                    $('#ServiceForm #ServicePHWeekend').prop('checked',caseDetails.PHWeekend||'')
-                    $('#ServiceForm #ServiceUrgent').prop('checked',caseDetails.Urgent||'')
-
-                    $('#ServiceForm #ServiceActualHours').val(caseDetails.ActualHours);
-                    $('#ServiceForm #ServiceOffSetHours').val(caseDetails.OffSetHours);
-                    $('#ServiceForm #ServiceReason').val(caseDetails.OffSetReason);
-                    $('#ServiceForm #ServiceBillingHours').val(caseDetails.BillingHours);
+                    //$('#ServiceForm #ServicePHWeekend').prop('checked',caseDetails.PHWeekend||'')
+                    //$('#ServiceForm #ServiceUrgent').prop('checked',caseDetails.Urgent||'')
+                    //$('#ServiceForm #ServiceActualHours').val(caseDetails.ActualHours);
+                    //$('#ServiceForm #ServiceOffSetHours').val(caseDetails.OffSetHours);
+                    //$('#ServiceForm #ServiceReason').val(caseDetails.OffSetReason);
+                    //$('#ServiceForm #ServiceBillingHours').val(caseDetails.BillingHours);
                     //$('#ServiceForm #ServiceChargeToPackage').val(caseDetails.Subject);
-                    $('#ServiceForm #ServiceHoursCalculation').val(caseDetails.HoursCalculation);
-                    $('#ServiceForm #ServiceDiagnosis').val(caseDetails.Diagnosis);
-                    $('#ServiceForm #ServiceBigRemarks').val(caseDetails.FollowupRemarks);
-                    $('#ServiceForm #ServiceCustomerAck').prop('checked',caseDetails.CustomerAck||'')
+                    //$('#ServiceForm #ServiceHoursCalculation').val(caseDetails.HoursCalculation);
+                    //$('#ServiceForm #ServiceDiagnosis').val(caseDetails.Diagnosis);
+                    //$('#ServiceForm #ServiceBigRemarks').val(caseDetails.FollowupRemarks);
+                    //$('#ServiceForm #ServiceCustomerAck').prop('checked',caseDetails.CustomerAck||'')
+
+
+                    
 
                     $.when(GetServiceChargeToPackage('ServiceForm', 'ServiceChargeToPackage', '')).then(function(){
                       $('#ServiceForm #ServiceChargeToPackage').val(caseDetails.PackageTypeNew);
                     });
-
-                    if ($('#ServiceForm #ServiceCustomerAck').is(':checked')) {
-                      $('#ServiceForm #ServiceNameDiv').show();
-                      $('#ServiceForm #ServiceEmailDiv').show();
-                      $('#ServiceForm #ServiceContactNoDiv').show();
-                      $('#ServiceForm #NameLb').html('Name<span style="color:red">*</span>');
-                      $('#ServiceForm #EmailLb').html('Email<span style="color:red">*</span>');
-                      $('#ServiceForm #ContactNoLb').html('ContactNo<span style="color:red">*</span>');
-                      $('#ServiceForm #ServiceName1').val(caseDetails.ServiceName);
-                      $('#ServiceForm #ServiceEmail1').val(caseDetails.ServiceEmail);
-                      $('#ServiceForm #ServiceContactNo1').val(caseDetails.ServiceContactNo);
-
-                    }else{
-                      $('#ServiceForm #ServiceNameDiv').hide();
-                      $('#ServiceForm #ServiceEmailDiv').hide();
-                      $('#ServiceForm #ServiceContactNoDiv').hide();
-                    }
-
 
                     $('#PrintServiceForm .PrintCaseID').html(caseDetails.FLID);
                     $('#PrintServiceForm .PrintOrganisation').html(caseDetails.Organisation);
@@ -1010,9 +996,8 @@ function SaveServiceForm(caseID) {
        ServiceActualDateTimeTo = ServiceActualDateTo + ' ' + ActualTimeTo;
        if ($("#ServiceForm #ServicePHWeekend").is(':checked')) {
           ServicePHWeekend = $("#ServiceForm #ServicePHWeekend").val();
-       }else {
-
        }
+
        if ($("#ServiceForm #ServiceUrgent").is(':checked')) {
             Urgent = $("#ServiceForm #ServiceUrgent").val();
        }
@@ -1139,6 +1124,7 @@ function GetDropDownList(FatherId, Id, LookupCat) {
 function GetServiceChargeToPackage(FatherId, Id, LookupCat) {
     $('#' + FatherId + ' #' + Id + '').html('');
     $('#' + FatherId + ' #' + Id + '').append('<option value="">-- Please Select --</option>');
+    $('#' + FatherId + ' #' + Id + '').append('<option value="Quotation">Quotation</option>');
     var data = { 'LookupCat': '' , 'RoleID':TargetRoleID };
     return $.ajax({
         url: apiSrc + "BCMain/iCtc1.GetOrgTicketPackageType.json",
@@ -1155,11 +1141,7 @@ function GetServiceChargeToPackage(FatherId, Id, LookupCat) {
                 if (data.d.RetData.Tbl.Rows.length > 0) {
                     var Result = data.d.RetData.Tbl.Rows;
                     for (var i = 0; i < Result.length; i++) {
-                        if (Id == 'Location') {
-                            $('#' + FatherId + ' #' + Id + '').append('<option value="' + Result[i].Description + '">' + Result[i].TagData3 + '</option>');
-                        } else {
-                            $('#' + FatherId + ' #' + Id + '').append('<option value="' + Result[i].Description + '">' + Result[i].Description + '</option>');
-                        }
+                      $('#' + FatherId + ' #' + Id + '').append('<option value="' + Result[i].Description + '">' + Result[i].TagData3 + '</option>');
                     }
                 }
             }
@@ -1214,6 +1196,48 @@ function getGUID() {
     });
     return uuid;
 };
+
+function GetServicePoint(LookupCat) {
+        var data = { 'LookupCat': LookupCat };
+        return $.ajax({
+            url: apiSrc + "BCMain/iCtc1.GetTicketLookupVal.json",
+            method: "POST",
+            dataType: "json",
+            xhrFields: { withCredentials: true },
+            data: {
+                'data': JSON.stringify(data),
+                'WebPartKey': WebPartVal,
+                'ReqGUID': getGUID()
+            },
+            success: function (data) {
+                if ((data) && (data.d.RetVal === -1)) {
+                    if (data.d.RetData.Tbl.Rows.length > 0) {
+                        var Result = data.d.RetData.Tbl.Rows;
+                        for (var i = 0; i < Result.length; i++) {
+                            if (Result[i].Description == '09:00:00') {
+                                ServiceTimePoint9 = Result[i].Description
+                            } else if (Result[i].Description == '18:00:00') {
+                                ServiceTimePoint18 = Result[i].Description
+                            }
+                            else if (Result[i].Description == '22:00:00') {
+                                ServiceTimePoint22 = Result[i].Description
+                            }
+                            else if (Result[i].Description == '24:00:00') {
+                                ServiceTimePoint24 = Result[i].Description
+                            }
+                        }
+                    }
+                }
+                else {
+                    alert(data.d.RetMsg);
+                }
+            },
+            error: function (data) {
+                alert("Error: " + data.responseJSON.d.RetMsg);
+            }
+        });
+    }
+
 function GetOrgAddressLocation(LookupCat,organization) {
     var data = { 'LookupCat': LookupCat,'Organization' :organization};
     return $.ajax({
