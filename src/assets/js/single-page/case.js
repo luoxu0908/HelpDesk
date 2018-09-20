@@ -551,9 +551,6 @@ function addNewActivity(caseID) {
             return false;
         }
     }
-    if(len(internal)==0){
-      internal='99';
-    }
     var data = { 'FLID': caseID, 'Details': Description, 'Internal': internal };
     $.ajax({
         url: apiSrc + "BCMain/FL1.InsertActivityLog.json",
@@ -652,7 +649,8 @@ function GetCaseDetails(caseId) {
                     $('#reviewInfo .dateFrom').html(caseDetails.DateFrom);
                     $('#reviewInfo .dateTo').html(caseDetails.DateTo);
                     $('#reviewInfo .manHours').html(caseDetails.ActualHours);
-                    $('#reviewInfo .actualHour').html(caseDetails.ActualHours);
+                    
+                    $('#reviewInfo .actualHour').html(caseDetails.BillingHours);
                     $('#reviewInfo .type').html(caseDetails.NewType);
 
                     $('#reviewForm #Type').val(caseDetails.NewType);
