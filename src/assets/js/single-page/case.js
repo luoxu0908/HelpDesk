@@ -649,6 +649,7 @@ function GetCaseDetails(caseId) {
                     $('#reviewInfo .dateFrom').html(caseDetails.DateFrom);
                     $('#reviewInfo .dateTo').html(caseDetails.DateTo);
                     $('#reviewInfo .manHours').html(caseDetails.ActualHours);
+                    
                     $('#reviewInfo .actualHour').html(caseDetails.BillingHours);
                     $('#reviewInfo .type').html(caseDetails.NewType);
 
