@@ -702,7 +702,7 @@ function GetCaseDetails(caseId) {
                     //$('#ServiceForm #ServiceCustomerAck').prop('checked',caseDetails.CustomerAck||'')
 
 
-                    
+
 
                     $.when(GetServiceChargeToPackage('ServiceForm', 'ServiceChargeToPackage', '')).then(function(){
                       $('#ServiceForm #ServiceChargeToPackage').val(caseDetails.PackageTypeNew);
@@ -794,7 +794,7 @@ function GetCaseHistory(caseId) {
                         var time = convertDateTime(caseLogs[i].CreatedDate, 'time');
                         if (caseLogs[i].Internal) {
                             threadContainer += '<div class="thread">'
-                            threadContainer += '<div class="top"> <span class="datetime">' + date + '<i> ' + time + '</i> by ' + caseLogs[i].CreatedBy + '</span> <span class="tag">Internal</span></div>'
+                            threadContainer += '<div class="top"> <span class="datetime">' + date + '<i> ' + time + '</i> by ' + caseLogs[i].CreatedBy + '</span></div>'
                             threadContainer += '<div class="text">' + caseLogs[i].Details + '</div> </div>';
                         } else {
                             if (caseLogs[i].StaffOrClient == 'colorCodeActive') {
@@ -802,7 +802,12 @@ function GetCaseHistory(caseId) {
                             } else if (caseLogs[i].StaffOrClient == 'colorCodeNonActive') {
                                 threadContainer += '<div class="thread" style="border-left:15px #e60000 solid;margin-top:3px;">'
                             }
-                            threadContainer += '<div class="top"><span class="datetime">' + date + '<i> ' + time + '</i> by ' + caseLogs[i].CreatedBy + '</span> </div>'
+                            if (caseLogs[i].Status) {
+                              threadContainer += '<div class="top"><span class="datetime">' + date + '<i> ' + time + '</i> by ' + caseLogs[i].CreatedBy + '</span><span class="tag">'+caseLogs[i].Status+'</span><span class="tag Active" onclick="Void('+caseLogs[i].FLLogID+');return false;" style="background:#00CC00;color:white;cursor:pointer;">Void</span></div>'
+                            }
+                            else{
+                                threadContainer += '<div class="top"><span class="datetime">' + date + '<i> ' + time + '</i> by ' + caseLogs[i].CreatedBy + '</span></div>'
+                            }
                             threadContainer += '<div class="text">' + caseLogs[i].Details + '</div> </div>';
                         }
                     }
@@ -818,7 +823,9 @@ function GetCaseHistory(caseId) {
         }
     });
 };
-
+function Void(FLID){
+  alert(FLID);
+}
 function GetCaseInvolvement(caseId) {
     $.ajax({
         url: apiSrc + "BCMain/FL1.GetCasesInvolvement.json",
