@@ -174,9 +174,9 @@ $(function () {
         ecexHourSetting();
     });
 
-    $('#activityForm').on('closed.zf.reveal', function(){
-      $('#activityForm :input').removeAttr('disabled').val('');
-      $('#activityForm #ReasonDiv,#VoidByDiv').hide();
+    $('#activityForm').on('closed.zf.reveal', function () {
+        $('#activityForm :input').removeAttr('disabled').val('');
+        $('#activityForm #ReasonDiv,#VoidByDiv').hide();
     });
 });
 
@@ -587,10 +587,11 @@ function addNewInvolvement(caseID) {
 }
 
 function addNewActivity(caseID) {
-    var Description, internal;
+    var Description, internal, Reason,Void;
     Description = $('#activityForm #description').val();
 
     internal = $("#activityForm [name=internal]:checked").val() || '';
+    Void=false;
 
     if (Description.length == 0) {
         alert('Please fill in description!');
@@ -602,7 +603,15 @@ function addNewActivity(caseID) {
             return false;
         }
     }
-    var data = { 'FLID': caseID, 'Details': Description, 'Internal': internal };
+    if ($("#activityForm #Reason").is(':visible')) {
+        Reason = $('#activityForm #Reason').val() || '';
+        if (Reason.length<=0) {
+            alert('Please fill in Void Reason!');
+            return false;
+        }
+        Void=true;
+    }
+    var data = { 'FLID': caseID, 'Details': Description, 'Internal': internal, 'Reason': Reason || '', 'Void': Void };
     $.ajax({
         url: apiSrc + "BCMain/FL1.InsertActivityLog.json",
         method: "POST",
