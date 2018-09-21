@@ -622,7 +622,7 @@ function addNewActivity(caseID) {
         }
         Void = true;
     }
-    var data = { 'FLID': caseID, 'Details': Description, 'Internal': internal, 'Reason': Reason || '', 'Void': Void, 'FLLogID': window.FLLogID || '' };
+    var data = { 'FLID': caseID, 'Details': Description, 'Internal': internal, 'Reason': Reason || '', 'Void': Void||false, 'FLLogID': window.FLLogID || '' };
     $.ajax({
         url: apiSrc + "BCMain/FL1.InsertActivityLog.json",
         method: "POST",
@@ -931,7 +931,10 @@ function getServiceDetails(FLLogID, Type) {
                         caseDetails.Internal ? $('#activityForm #internal').prop('checked', true) : $('#activityForm #internalAll').prop('checked', true);
                         $('#activityForm #Reason').val(caseDetails.Reason || '');
                         $('#activityForm #VoidBy').val(caseDetails.VoidBy || '');
-                        $('#activityForm #VoidDate').val(moment(caseDetails.VoidDate).format('YYYY-MM-DD'));
+                        if (caseDetails.VoidDate) {
+                            $('#activityForm #VoidDate').val(moment(caseDetails.VoidDate).format('YYYY-MM-DD'));
+                        }
+
                     } else if (caseDetails.Type && caseDetails.Type == 'SF') {
 
                         $("#ServiceForm #ServiceVoid").show();
