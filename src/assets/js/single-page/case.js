@@ -173,6 +173,11 @@ $(function () {
     $('#ServiceForm #ServiceOffSetHours').change(function () {
         ecexHourSetting();
     });
+
+    $('#activityForm').on('closed.zf.reveal', function(){
+      $('#activityForm :input').removeAttr('disabled');
+      $('#activityForm #ReasonDiv,#VoidByDiv').hide();
+    });
 });
 
 function AddNewServiceForm() {
@@ -859,7 +864,6 @@ function Void(FLLogID, Type, FLID) {
         });
     } else if (Type == 'R') {
         $.when(getServiceDetails(FLLogID, Type)).then(function () {
-            $('#activityForm #description,[name=internal],#Reason,#VoidBy,#VoidDate').removeAttr('disabled', 'disabled');
             $('#activityForm #ReasonDiv,#VoidByDiv,#submit').show();
             $('#activityForm #description,[name=internal]').attr('disabled', 'disabled');
             $("#activityForm").foundation('open');
