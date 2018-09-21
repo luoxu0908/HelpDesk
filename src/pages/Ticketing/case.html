@@ -193,7 +193,7 @@
     <form id="activityForm" class="reveal lightBg" data-reveal>
         <header class="grid-x grid-padding-x">
             <h3 class="cell">Case Remarks</h3>
-            <button class="close-button" aria-label="Dismiss alert" type="button" data-close>
+            <button class="close-button" aria-label="Dismiss alert" type="button" data-close="activityForm" onclick="$('#activityForm').foundation('close');return false;">
                 <span aria-hidden="true">&times;</span>
             </button>
         </header>
@@ -217,7 +217,7 @@
                 </label>
             </div>
         </div>
-        <div class="grid-x grid-padding-x" style="display:none;">
+        <div class="grid-x grid-padding-x" style="display:none;" id="ReasonDiv">
             <div class="cell">
                 <label >
                     Reason <span style="color:red">*</span>
@@ -225,6 +225,20 @@
                 <textarea id="Reason" name="Reason"></textarea>
             </div>
         </div>
+        <div class="grid-x grid-padding-x"  id="VoidByDiv">
+           <div class="cell small-6 medium-6">
+               <label id="VoidBy">
+                   Void By
+               </label>
+               <input type="text" id="VoidBy" name="VoidBy" />
+           </div>
+           <div class="cell small-6 medium-6">
+               <label id="VoidDate">
+                   Void Date
+               </label>
+               <input type="text" id="VoidDate" name="VoidDate" />
+           </div>
+       </div>
         <footer class="grid-x grid-margin-x">
             <button type="button" id="submit" class="btn cell small-12 medium-4 medium-offset-4">Submit</button>
         </footer>

@@ -120,7 +120,7 @@ $(function () {
         billingHours = $('#ServiceForm #ServiceBillingHours').val();
         actualHour = parseFloat(actualHour);
         billingHours = parseFloat(billingHours);
-        PHWeekend = praseFloat(TimeTypeMap['PHWeekend']) || 2;
+        PHWeekend = parseFloat(TimeTypeMap['PHWeekend']) || 2;
         if ($(this).is(':checked')) {
             actualHour = actualHour * PHWeekend;
             billingHours = billingHours * PHWeekend;
@@ -141,7 +141,7 @@ $(function () {
         billingHours = $('#ServiceForm #ServiceBillingHours').val();
         actualHour = parseFloat(actualHour);
         billingHours = parseFloat(billingHours);
-        UrgentTime = praseFloat(TimeTypeMap['Urgent']) || 2;
+        UrgentTime = parseFloat(TimeTypeMap['Urgent']) || 2;
         if ($(this).is(':checked')) {
             actualHour = actualHour * UrgentTime;
             billingHours = billingHours * UrgentTime;
@@ -216,7 +216,7 @@ function AddNewServiceForm() {
     $('#ServiceForm #ServiceContactNo1').val('');
 
     $.when(GetCaseDetails(caseID)).then(function () {
-       $("#ServiceForm").foundation('open');
+        $("#ServiceForm").foundation('open');
     });
 
 }
@@ -858,17 +858,27 @@ function Void(FLLogID, Type, FLID) {
             $("#ServiceForm").foundation('open');
         });
     } else if (Type == 'R') {
-
+        $.when(getServiceDetails(FLLogID, Type)).then(function () {
+            $('#activityForm #description,[name=internal],#Reason,#VoidBy,#VoidDate').removeAttr('disabled', 'disabled');
+            $('#activityForm #ReasonDiv,#VoidByDiv,#submit').show();
+            $('#activityForm #description,[name=internal]').attr('disabled', 'disabled');
+            $("#activityForm").foundation('open');
+        });
     }
 }
 function View(FLLogID, Type, FLID) {
     if (Type == 'SF') {
         $.when(getServiceDetails(FLLogID, Type)).then(function () {
-
             $("#ServiceForm").foundation('open');
         });
     } else if (Type == 'R') {
-
+        $.when(getServiceDetails(FLLogID, Type)).then(function () {
+            $('#activityForm #description,[name=internal],#Reason,#VoidBy,#VoidDate').removeAttr('disabled', 'disabled');
+            $('#activityForm #ReasonDiv,#VoidByDiv').show();
+            $('#activityForm #submit').hide();
+            $('#activityForm #description,[name=internal],#Reason,#VoidBy,#VoidDate').attr('disabled', 'disabled');
+            $("#activityForm").foundation('open');
+        });
     }
 }
 function getServiceDetails(FLLogID, Type) {
@@ -936,6 +946,14 @@ function getServiceDetails(FLLogID, Type) {
                     $('#ServiceForm #ServiceName1').attr("disabled", "disabled");
                     $('#ServiceForm #ServiceEmail1').attr("disabled", "disabled");
                     $('#ServiceForm #ServiceContactNo1').attr("disabled", "disabled");
+
+                    if (caseDetails.Type && caseDetails.Type == 'R') {
+                        $('#activityForm #description').val(caseDetails.Details || '');
+                        caseDetails.Internal ? $('#activityForm #internal').prop('checked', true) : $('#activityForm #internalAll').prop('checked', true);
+                        $('#activityForm #Reason').val(caseDetails.Reason || '');
+                        $('#activityForm #VoidBy').val(caseDetails.VoidBy || '');
+                        $('#activityForm #VoidDate').val(caseDetails.VoidDate || '');
+                    }
                 }
             }
             else {
@@ -1169,13 +1187,25 @@ function SaveServiceForm(caseID) {
         }
     }
 
+    var UpdateVoid = $('#ServiceForm #ServiceVoidReason').is(':visible');
+    var ServiceVoidReason = $("#ServiceForm #ServiceVoidReason").val() || '';
+    if (UpdateVoid == true) {
+        if (ServiceVoidReason.length == 0) {
+            alert('Please fill in void reason fields!');
+            return false;
+        } else {
+            ServiceFormID = '';
+            ServiceVoidReason = '';
+        }
+    }
 
     var data = {
         'FLID': caseID, 'ServiceActualDateTimeFrom': ServiceActualDateTimeFrom, 'ServiceActualDateTimeTo': ServiceActualDateTimeTo,
         'ServicePHWeekend': ServicePHWeekend, 'Urgent': Urgent, 'ServiceActualHours': ServiceActualHours, 'ServiceOffSetHours': ServiceOffSetHours, 'ServiceReason': ServiceReason,
         'ServiceBillingHours': ServiceBillingHours, 'ServiceChargeToPackage': ServiceChargeToPackage, 'ServiceHoursCalculation': ServiceHoursCalculation,
         'ServiceDiagnosis': ServiceDiagnosis, 'ServiceBigRemarks': ServiceBigRemarks, 'ServiceCustomerAck': ServiceCustomerAck, 'ServiceName1': ServiceName1,
-        'ServiceEmail1': ServiceEmail1, 'ServiceContactNo1': ServiceContactNo1, 'ServiceFormID': ServiceFormID
+        'ServiceEmail1': ServiceEmail1, 'ServiceContactNo1': ServiceContactNo1, 'ServiceFormID': ServiceFormID, 'ServiceVoidReason': ServiceVoidReason
+
     };
     $.ajax({
         url: apiSrc + "BCMain/FL1.SaveServiceForm.json",
