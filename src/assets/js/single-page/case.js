@@ -209,7 +209,7 @@ function AddNewServiceForm() {
     caseID = urlParams.get('caseID');
 
     $.when(GetCaseDetails(caseID)).then(function () {
-        window.ServiceFormID='';
+        window.ServiceFormID = '';
         $('#ServiceForm #CustomerAckDiv').show();
         $('#ServiceForm #ServiceNameDiv').hide();
         $('#ServiceForm #ServiceEmailDiv').hide();
@@ -217,8 +217,8 @@ function AddNewServiceForm() {
         //$('#ServiceForm #ActualTimeFrom').val('');
         //  $('#ServiceForm #ServiceActualDateTo').val('');
         //$('#ServiceForm #ActualTimeTo').val('');
-        $('#ServiceForm #ServicePHWeekend').prop('checked','');
-        $('#ServiceForm #ServiceUrgent').prop('checked','');
+        $('#ServiceForm #ServicePHWeekend').prop('checked', '');
+        $('#ServiceForm #ServiceUrgent').prop('checked', '');
         $('#ServiceForm #ServiceOffSetHours').val('');
         $('#ServiceForm #ServiceBillingHours').val('');
         $('#ServiceForm #ServiceActualHours').val('');
@@ -861,7 +861,7 @@ function GetCaseHistory(caseId) {
                             else {
                                 threadContainer += '<div class="top"><span class="datetime">' + date + '<i> ' + time + '</i> by ' + caseLogs[i].CreatedBy + '</span> </div>'
                             }
-                            threadContainer += caseLogs[i].Status!='Voided'?('<div  class="text">' + caseLogs[i].Details + '</div> </div>'):('<div  class="text">This content has been voided. Please click on the view link to see details.</div> </div>');
+                            threadContainer += caseLogs[i].Status != 'Voided' ? ('<div  class="text">' + caseLogs[i].Details + '</div> </div>') : ('<div  class="text">This content has been voided. Please click on the view link to see details.</div> </div>');
                         }
                     }
                     $('#logThread .threadLog').html(threadContainer);
@@ -925,80 +925,85 @@ function getServiceDetails(FLLogID, Type) {
             if ((data) && (data.d.RetVal === -1)) {
                 if (data.d.RetData.Tbl.Rows.length > 0) {
                     var caseDetails = data.d.RetData.Tbl.Rows[0];
-                    $("#ServiceForm #ServiceVoid").show();
-                    $("#ServiceForm #ServiceVoidBy").show();
-                    $("#ServiceForm #ServiceVoidDate").show();
-                    $('#ServiceForm #submit').hide();
-                    $('#ServiceForm #PrintService').hide();
-                    $('#ServiceForm #ServicePHWeekend').prop('checked', caseDetails.PHWeekend || '')
-                    $('#ServiceForm #ServiceUrgent').prop('checked', caseDetails.Urgent || '')
-                    $('#ServiceForm #ServiceActualHours').val(caseDetails.ActualHours);
-                    $('#ServiceForm #ServiceOffSetHours').val(caseDetails.OffSetHours);
-                    $('#ServiceForm #ServiceReason').val(caseDetails.OffSetReason);
-                    $('#ServiceForm #ServiceBillingHours').val(caseDetails.BillingHours);
-                    $('#ServiceForm #ServiceChargeToPackage').val(caseDetails.Subject);
-                    $('#ServiceForm #ServiceHoursCalculation').val(caseDetails.HoursCalculation);
-                    $('#ServiceForm #ServiceDiagnosis').val(caseDetails.Diagnosis);
-                    $('#ServiceForm #ServiceBigRemarks').val(caseDetails.FollowupRemarks);
-
-                    if (caseDetails.Type && caseDetails.Type == 'SF') {
-                        $('#ServiceForm #ServiceVoidReason').val(caseDetails.Reason || '');
-                        $('#ServiceForm #ServiceVoidBy').val(caseDetails.DisPlayName || '');
-                        $('#ServiceForm #ServiceVoidDate').val(caseDetails.VoidDate||'');
-                    }
-                    var CustomerAck = caseDetails.CustomerAck || '';
-                    if (CustomerAck == '1' || CustomerAck == 1) {
-                        $('#ServiceForm #ServiceCustomerAck').prop('checked', 'checked');
-                        $('#ServiceForm #CustomerAckDiv').show();
-                    } else {
-                        $('#ServiceForm #ServiceCustomerAck').prop('checked', '');
-                        $('#ServiceForm #CustomerAckDiv').hide();
-                    }
-
-
-                    $.when(GetServiceChargeToPackage('ServiceForm', 'ServiceChargeToPackage', '')).then(function () {
-                        $('#ServiceForm #ServiceChargeToPackage').val(caseDetails.PackageType);
-                    });
-                    if ($('#ServiceForm #ServiceCustomerAck').is(':checked')) {
-                        $('#ServiceForm #ServiceNameDiv').show();
-                        $('#ServiceForm #ServiceEmailDiv').show();
-                        $('#ServiceForm #ServiceContactNoDiv').show();
-                        $('#ServiceForm #NameLb').html('Name<span style="color:red">*</span>');
-                        $('#ServiceForm #EmailLb').html('Email<span style="color:red">*</span>');
-                        $('#ServiceForm #ContactNoLb').html('ContactNo<span style="color:red">*</span>');
-                        $('#ServiceForm #ServiceName1').val(caseDetails.ServiceName);
-                        $('#ServiceForm #ServiceEmail1').val(caseDetails.ServiceEmail);
-                        $('#ServiceForm #ServiceContactNo1').val(caseDetails.ServiceContactNo);
-
-                    } else {
-                        $('#ServiceForm #ServiceNameDiv').hide();
-                        $('#ServiceForm #ServiceEmailDiv').hide();
-                        $('#ServiceForm #ServiceContactNoDiv').hide();
-                    }
-                    $('#ServiceForm #ServiceActualDateFrom').attr("disabled", "disabled");
-                    $('#ServiceForm #ActualTimeFrom').attr("disabled", "disabled");
-                    $('#ServiceForm #ServiceActualDateTo').attr("disabled", "disabled");
-                    $('#ServiceForm #ActualTimeTo').attr("disabled", "disabled");
-                    $('#ServiceForm #ServicePHWeekend').attr("disabled", "disabled");
-                    $('#ServiceForm #ServiceUrgent').attr("disabled", "disabled");
-                    $('#ServiceForm #ServiceOffSetHours').attr("disabled", "disabled");
-                    $('#ServiceForm #ServiceReason').attr("disabled", "disabled");
-                    $('#ServiceForm #ServiceChargeToPackage').attr("disabled", "disabled");
-                    $('#ServiceForm #ServiceHoursCalculation').attr("disabled", "disabled");
-                    $('#ServiceForm #ServiceDiagnosis').attr("disabled", "disabled");
-                    $('#ServiceForm #ServiceBigRemarks').attr("disabled", "disabled");
-                    $('#ServiceForm #ServiceName1').attr("disabled", "disabled");
-                    $('#ServiceForm #ServiceEmail1').attr("disabled", "disabled");
-                    $('#ServiceForm #ServiceContactNo1').attr("disabled", "disabled");
-                    $('#ServiceForm #ServiceCustomerAck').attr("disabled", "disabled");
                     if (caseDetails.Type && caseDetails.Type == 'R') {
                         $('#activityForm #description').val(caseDetails.Details || '');
                         caseDetails.Internal ? $('#activityForm #internal').prop('checked', true) : $('#activityForm #internalAll').prop('checked', true);
                         $('#activityForm #Reason').val(caseDetails.Reason || '');
                         $('#activityForm #VoidBy').val(caseDetails.VoidBy || '');
                         $('#activityForm #VoidDate').val(moment(caseDetails.VoidDate).format('YYYY-MM-DD'));
-                    }
+                    } else if (caseDetails.Type && caseDetails.Type == 'SF') {
 
+                        $("#ServiceForm #ServiceVoid").show();
+                        $("#ServiceForm #ServiceVoidBy").show();
+                        $("#ServiceForm #ServiceVoidDate").show();
+                        $('#ServiceForm #submit').hide();
+                        $('#ServiceForm #PrintService').hide();
+                        $('#ServiceForm #ServicePHWeekend').prop('checked', caseDetails.PHWeekend || '')
+                        $('#ServiceForm #ServiceUrgent').prop('checked', caseDetails.Urgent || '')
+                        $('#ServiceForm #ServiceActualHours').val(caseDetails.ActualHours);
+                        $('#ServiceForm #ServiceOffSetHours').val(caseDetails.OffSetHours);
+                        $('#ServiceForm #ServiceReason').val(caseDetails.OffSetReason);
+                        $('#ServiceForm #ServiceBillingHours').val(caseDetails.BillingHours);
+                        $('#ServiceForm #ServiceChargeToPackage').val(caseDetails.Subject);
+                        $('#ServiceForm #ServiceHoursCalculation').val(caseDetails.HoursCalculation);
+                        $('#ServiceForm #ServiceDiagnosis').val(caseDetails.Diagnosis);
+                        $('#ServiceForm #ServiceBigRemarks').val(caseDetails.FollowupRemarks);
+                        $('#ServiceForm #ServiceActualDateFrom').val(moment(caseDetails.StartDate).format('YYYY-MM-DD'));
+                        $('#ServiceForm #ActualTimeFrom').val(moment(caseDetails.StartDate).format('HH:mm'));
+                        $('#ServiceForm #ServiceActualDateTo').val(moment(caseDetails.EndDate).format('YYYY-MM-DD'));
+                        $('#ServiceForm #ActualTimeTo').val(moment(caseDetails.EndDate).format('HH:mm'));
+
+                        $('#ServiceForm #ServiceVoidReason').val(caseDetails.Reason || '');
+                        $('#ServiceForm #ServiceVoidBy').val(caseDetails.DisPlayName || '');
+                        $('#ServiceForm #ServiceVoidDate').val(caseDetails.VoidDate || '');
+
+                        var CustomerAck = caseDetails.CustomerAck || '';
+                        if (CustomerAck == '1' || CustomerAck == 1) {
+                            $('#ServiceForm #ServiceCustomerAck').prop('checked', 'checked');
+                            $('#ServiceForm #CustomerAckDiv').show();
+                        } else {
+                            $('#ServiceForm #ServiceCustomerAck').prop('checked', '');
+                            $('#ServiceForm #CustomerAckDiv').hide();
+                        }
+
+
+                        $.when(GetServiceChargeToPackage('ServiceForm', 'ServiceChargeToPackage', '')).then(function () {
+                            $('#ServiceForm #ServiceChargeToPackage').val(caseDetails.PackageType);
+                        });
+                        if ($('#ServiceForm #ServiceCustomerAck').is(':checked')) {
+                            $('#ServiceForm #ServiceNameDiv').show();
+                            $('#ServiceForm #ServiceEmailDiv').show();
+                            $('#ServiceForm #ServiceContactNoDiv').show();
+                            $('#ServiceForm #NameLb').html('Name<span style="color:red">*</span>');
+                            $('#ServiceForm #EmailLb').html('Email<span style="color:red">*</span>');
+                            $('#ServiceForm #ContactNoLb').html('ContactNo<span style="color:red">*</span>');
+                            $('#ServiceForm #ServiceName1').val(caseDetails.ServiceName);
+                            $('#ServiceForm #ServiceEmail1').val(caseDetails.ServiceEmail);
+                            $('#ServiceForm #ServiceContactNo1').val(caseDetails.ServiceContactNo);
+
+                        } else {
+                            $('#ServiceForm #ServiceNameDiv').hide();
+                            $('#ServiceForm #ServiceEmailDiv').hide();
+                            $('#ServiceForm #ServiceContactNoDiv').hide();
+                        }
+                        $('#ServiceForm #ServiceActualDateFrom').attr("disabled", "disabled");
+                        $('#ServiceForm #ActualTimeFrom').attr("disabled", "disabled");
+                        $('#ServiceForm #ServiceActualDateTo').attr("disabled", "disabled");
+                        $('#ServiceForm #ActualTimeTo').attr("disabled", "disabled");
+                        $('#ServiceForm #ServicePHWeekend').attr("disabled", "disabled");
+                        $('#ServiceForm #ServiceUrgent').attr("disabled", "disabled");
+                        $('#ServiceForm #ServiceOffSetHours').attr("disabled", "disabled");
+                        $('#ServiceForm #ServiceReason').attr("disabled", "disabled");
+                        $('#ServiceForm #ServiceChargeToPackage').attr("disabled", "disabled");
+                        $('#ServiceForm #ServiceHoursCalculation').attr("disabled", "disabled");
+                        $('#ServiceForm #ServiceDiagnosis').attr("disabled", "disabled");
+                        $('#ServiceForm #ServiceBigRemarks').attr("disabled", "disabled");
+                        $('#ServiceForm #ServiceName1').attr("disabled", "disabled");
+                        $('#ServiceForm #ServiceEmail1').attr("disabled", "disabled");
+                        $('#ServiceForm #ServiceContactNo1').attr("disabled", "disabled");
+                        $('#ServiceForm #ServiceCustomerAck').attr("disabled", "disabled");
+
+                    }
                 }
             }
             else {
