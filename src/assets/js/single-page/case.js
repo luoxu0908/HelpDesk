@@ -1,4 +1,4 @@
-var RoleName = '', PrintFlag = '', FileID = '', caseID = '', TargetRoleID = '', ServiceFormID = '', TimeTypeMap = {};
+var RoleName = '', PrintFlag = '', FileID = '', caseID = '', TargetRoleID = '', TimeTypeMap = {};
 var startDate = '', endDate = '', standDate = '', execCount = 0.0, actualHour = 0.0, billingHours = 0.0, hourDeatils = '',
 offSetHour = 0.0, ServiceTimePoint9, ServiceTimePoint18, ServiceTimePoint22, ServiceTimePoint24;
 
@@ -204,29 +204,33 @@ function AddNewServiceForm() {
     $('#ServiceForm #ServiceVoidBy').hide();
     $('#ServiceForm #ServiceVoid').hide();
 
-    $('#ServiceForm #ServiceActualDateFrom').val('');
-    $('#ServiceForm #ActualTimeFrom').val('');
-    $('#ServiceForm #ServiceActualDateTo').val('');
-    $('#ServiceForm #ActualTimeTo').val('');
-    $('#ServiceForm #ServicePHWeekend').val('');
-    $('#ServiceForm #ServiceUrgent').val('');
-    $('#ServiceForm #ServiceOffSetHours').val('');
-    $('#ServiceForm #ServiceBillingHours').val('');
-    $('#ServiceForm #ServiceActualHours').val('');
-    $('#ServiceForm #ServiceReason').val('');
-    $('#ServiceForm #ServiceChargeToPackage').val('');
-    $('#ServiceForm #ServiceHoursCalculation').val('');
-    $('#ServiceForm #ServiceDiagnosis').val('');
-    $('#ServiceForm #ServiceBigRemarks').val('');
-    $('#ServiceForm #ServiceName1').val('');
-    $('#ServiceForm #ServiceEmail1').val('');
-    $('#ServiceForm #ServiceContactNo1').val('');
-    $('#ServiceForm #CustomerAckDiv').show();
 
     var urlParams = new URLSearchParams(window.location.search),
     caseID = urlParams.get('caseID');
 
     $.when(GetCaseDetails(caseID)).then(function () {
+        window.ServiceFormID='';
+        $('#ServiceForm #CustomerAckDiv').show();
+        $('#ServiceForm #ServiceNameDiv').hide();
+        $('#ServiceForm #ServiceEmailDiv').hide();
+        //$('#ServiceForm #ServiceActualDateFrom').val('');
+        //$('#ServiceForm #ActualTimeFrom').val('');
+        //  $('#ServiceForm #ServiceActualDateTo').val('');
+        //$('#ServiceForm #ActualTimeTo').val('');
+        $('#ServiceForm #ServicePHWeekend').prop('checked','');
+        $('#ServiceForm #ServiceUrgent').prop('checked','');
+        $('#ServiceForm #ServiceOffSetHours').val('');
+        $('#ServiceForm #ServiceBillingHours').val('');
+        $('#ServiceForm #ServiceActualHours').val('');
+        $('#ServiceForm #ServiceReason').val('');
+        $('#ServiceForm #ServiceChargeToPackage').val('');
+        $('#ServiceForm #ServiceHoursCalculation').val('');
+        $('#ServiceForm #ServiceDiagnosis').val('');
+        $('#ServiceForm #ServiceBigRemarks').val('');
+        $('#ServiceForm #ServiceName1').val('');
+        $('#ServiceForm #ServiceEmail1').val('');
+        $('#ServiceForm #ServiceContactNo1').val('');
+        $('#ServiceForm #CustomerAckDiv').show();
         $("#ServiceForm").foundation('open');
     });
 
@@ -875,11 +879,11 @@ function GetCaseHistory(caseId) {
 function Void(FLLogID, Type, FLID) {
     //FLLOGID
     window.FLLogID = FLLogID;
-    ServiceFormID = FLLogID
+    window.ServiceFormID = FLLogID;
     if (Type == 'SF') {
         $.when(getServiceDetails(FLLogID, Type)).then(function () {
             $('#ServiceForm #submit').show();
-            $('#ServiceForm #PrintService').show();
+            //$('#ServiceForm #PrintService').show();
             $('#ServiceForm #ServiceVoidDate').hide();
             $('#ServiceForm #ServiceVoidBy').hide();
             $("#ServiceForm").foundation('open');
@@ -936,6 +940,12 @@ function getServiceDetails(FLLogID, Type) {
                     $('#ServiceForm #ServiceHoursCalculation').val(caseDetails.HoursCalculation);
                     $('#ServiceForm #ServiceDiagnosis').val(caseDetails.Diagnosis);
                     $('#ServiceForm #ServiceBigRemarks').val(caseDetails.FollowupRemarks);
+
+                    if (caseDetails.Type && caseDetails.Type == 'SF') {
+                        $('#ServiceForm #ServiceVoidReason').val(caseDetails.Reason || '');
+                        $('#ServiceForm #ServiceVoidBy').val(caseDetails.DisPlayName || '');
+                        $('#ServiceForm #ServiceVoidDate').val(caseDetails.VoidDate||'');
+                    }
                     var CustomerAck = caseDetails.CustomerAck || '';
                     if (CustomerAck == '1' || CustomerAck == 1) {
                         $('#ServiceForm #ServiceCustomerAck').prop('checked', 'checked');
@@ -988,6 +998,7 @@ function getServiceDetails(FLLogID, Type) {
                         $('#activityForm #VoidBy').val(caseDetails.VoidBy || '');
                         $('#activityForm #VoidDate').val(moment(caseDetails.VoidDate).format('YYYY-MM-DD'));
                     }
+
                 }
             }
             else {
@@ -1227,19 +1238,14 @@ function SaveServiceForm(caseID) {
         if (ServiceVoidReason.length == 0) {
             alert('Please fill in void reason fields!');
             return false;
-        } else {
-            ServiceFormID = '';
-            ServiceVoidReason = '';
         }
     }
-
     var data = {
         'FLID': caseID, 'ServiceActualDateTimeFrom': ServiceActualDateTimeFrom, 'ServiceActualDateTimeTo': ServiceActualDateTimeTo,
         'ServicePHWeekend': ServicePHWeekend, 'Urgent': Urgent, 'ServiceActualHours': ServiceActualHours, 'ServiceOffSetHours': ServiceOffSetHours, 'ServiceReason': ServiceReason,
         'ServiceBillingHours': ServiceBillingHours, 'ServiceChargeToPackage': ServiceChargeToPackage, 'ServiceHoursCalculation': ServiceHoursCalculation,
         'ServiceDiagnosis': ServiceDiagnosis, 'ServiceBigRemarks': ServiceBigRemarks, 'ServiceCustomerAck': ServiceCustomerAck, 'ServiceName1': ServiceName1,
-        'ServiceEmail1': ServiceEmail1, 'ServiceContactNo1': ServiceContactNo1, 'ServiceFormID': ServiceFormID, 'ServiceVoidReason': ServiceVoidReason
-
+        'ServiceEmail1': ServiceEmail1, 'ServiceContactNo1': ServiceContactNo1, 'ServiceFormID': window.ServiceFormID, 'ServiceVoidReason': ServiceVoidReason
     };
     $.ajax({
         url: apiSrc + "BCMain/FL1.SaveServiceForm.json",
