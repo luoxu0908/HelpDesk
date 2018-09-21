@@ -177,6 +177,7 @@ $(function () {
     $('#activityForm').on('closed.zf.reveal', function () {
         $('#activityForm :input').removeAttr('disabled').val('');
         $('#activityForm #ReasonDiv,#VoidByDiv').hide();
+        $('#activityForm #sumbit').show();
     });
 });
 
@@ -224,7 +225,7 @@ function AddNewServiceForm() {
 
     var urlParams = new URLSearchParams(window.location.search),
     caseID = urlParams.get('caseID');
-    
+
     $.when(GetCaseDetails(caseID)).then(function () {
         $("#ServiceForm").foundation('open');
     });
@@ -592,12 +593,11 @@ function addNewInvolvement(caseID) {
 }
 
 function addNewActivity(caseID) {
-    var Description, internal, Reason,Void;
+    var Description, internal, Reason, Void;
     Description = $('#activityForm #description').val();
 
-    internal = $("#activityForm [name=internal]:checked").val() || '';
-    Void=false;
-
+    internal = $("#activityForm [name=internal]:checked").val();
+    Void = false;
     if (Description.length == 0) {
         alert('Please fill in description!');
         return false;
@@ -610,13 +610,14 @@ function addNewActivity(caseID) {
     }
     if ($("#activityForm #Reason").is(':visible')) {
         Reason = $('#activityForm #Reason').val() || '';
-        if (Reason.length<=0) {
+        if (Reason.length <= 0) {
             alert('Please fill in Void Reason!');
             return false;
         }
-        Void=true;
+        Void = true;
     }
-    var data = { 'FLID': caseID, 'Details': Description, 'Internal': internal, 'Reason': Reason || '', 'Void': Void };
+    alert(window.FLLogID);
+    var data = { 'FLID': caseID, 'Details': Description, 'Internal': internal, 'Reason': Reason || '', 'Void': Void, 'FLLogID': window.FLLogID || '' };
     $.ajax({
         url: apiSrc + "BCMain/FL1.InsertActivityLog.json",
         method: "POST",
@@ -845,12 +846,18 @@ function GetCaseHistory(caseId) {
                                 threadContainer += '<div class="thread" style="border-left:15px #e60000 solid;margin-top:3px;">'
                             }
                             if (caseLogs[i].Status) {
-                                threadContainer += '<div class="top"><span class="datetime">' + date + '<i> ' + time + '</i> by ' + caseLogs[i].CreatedBy + '</span> <span class="tag">' + caseLogs[i].Status + '</span><span class="tag" style="background:#60C2EC;cursor:pointer;color:white;" onclick=Void("' + caseLogs[i].FLLogID + '","' + caseLogs[i].Type + '","' + caseId + '")>Void</span><span class="tag" style="background:#60C2EC;cursor:pointer;color:white;" onclick=View("' + caseLogs[i].FLLogID + '","' + caseLogs[i].Type + '","' + caseId + '")>View</span></div>';
+                                if (caseLogs[i].Status != 'Voided') {
+                                    threadContainer += '<div class="top"><span class="datetime">' + date + '<i> ' + time + '</i> by ' + caseLogs[i].CreatedBy + '</span> <span class="tag">' + caseLogs[i].Status + '</span><span class="tag" style="background:#60C2EC;cursor:pointer;color:white;" onclick=Void("' + caseLogs[i].FLLogID + '","' + caseLogs[i].Type + '","' + caseId + '")>Void</span><span class="tag" style="background:#60C2EC;cursor:pointer;color:white;" onclick=View("' + caseLogs[i].FLLogID + '","' + caseLogs[i].Type + '","' + caseId + '")>View</span></div>';
+                                }
+                                else {
+                                    threadContainer += '<div class="top"><span class="datetime">' + date + '<i> ' + time + '</i> by ' + caseLogs[i].CreatedBy + '</span> <span class="tag">' + caseLogs[i].Status + '</span><span class="tag" style="background:#60C2EC;cursor:pointer;color:white;" onclick=View("' + caseLogs[i].FLLogID + '","' + caseLogs[i].Type + '","' + caseId + '")>View</span></div>';
+                                }
+
                             }
                             else {
                                 threadContainer += '<div class="top"><span class="datetime">' + date + '<i> ' + time + '</i> by ' + caseLogs[i].CreatedBy + '</span> </div>'
                             }
-                            threadContainer += '<div  class="text">' + caseLogs[i].Details + '</div> </div>';
+                            threadContainer += caseLogs[i].Status!='Voided'?('<div  class="text">' + caseLogs[i].Details + '</div> </div>'):('<div  class="text">This content has been voided. Please click on the view link to see details.</div> </div>');
                         }
                     }
                     $('#logThread .threadLog').html(threadContainer);
@@ -867,6 +874,7 @@ function GetCaseHistory(caseId) {
 };
 function Void(FLLogID, Type, FLID) {
     //FLLOGID
+    window.FLLogID = FLLogID;
     ServiceFormID = FLLogID
     if (Type == 'SF') {
         $.when(getServiceDetails(FLLogID, Type)).then(function () {
@@ -878,7 +886,7 @@ function Void(FLLogID, Type, FLID) {
         });
     } else if (Type == 'R') {
         $.when(getServiceDetails(FLLogID, Type)).then(function () {
-            $('#activityForm #ReasonDiv,#VoidByDiv,#submit').show();
+            $('#activityForm #ReasonDiv').show();
             $('#activityForm #description,[name=internal]').attr('disabled', 'disabled');
             $("#activityForm").foundation('open');
         });
@@ -891,7 +899,6 @@ function View(FLLogID, Type, FLID) {
         });
     } else if (Type == 'R') {
         $.when(getServiceDetails(FLLogID, Type)).then(function () {
-            $('#activityForm #description,[name=internal],#Reason,#VoidBy,#VoidDate').removeAttr('disabled', 'disabled');
             $('#activityForm #ReasonDiv,#VoidByDiv').show();
             $('#activityForm #submit').hide();
             $('#activityForm #description,[name=internal],#Reason,#VoidBy,#VoidDate').attr('disabled', 'disabled');
@@ -929,14 +936,14 @@ function getServiceDetails(FLLogID, Type) {
                     $('#ServiceForm #ServiceHoursCalculation').val(caseDetails.HoursCalculation);
                     $('#ServiceForm #ServiceDiagnosis').val(caseDetails.Diagnosis);
                     $('#ServiceForm #ServiceBigRemarks').val(caseDetails.FollowupRemarks);
-                    var CustomerAck=caseDetails.CustomerAck||'';
-                    if(CustomerAck=='1'||CustomerAck==1){
+                    var CustomerAck = caseDetails.CustomerAck || '';
+                    if (CustomerAck == '1' || CustomerAck == 1) {
                         $('#ServiceForm #ServiceCustomerAck').prop('checked', 'checked');
                         $('#ServiceForm #CustomerAckDiv').show();
-                        }else{
+                    } else {
                         $('#ServiceForm #ServiceCustomerAck').prop('checked', '');
                         $('#ServiceForm #CustomerAckDiv').hide();
-                      }
+                    }
 
 
                     $.when(GetServiceChargeToPackage('ServiceForm', 'ServiceChargeToPackage', '')).then(function () {
@@ -979,7 +986,7 @@ function getServiceDetails(FLLogID, Type) {
                         caseDetails.Internal ? $('#activityForm #internal').prop('checked', true) : $('#activityForm #internalAll').prop('checked', true);
                         $('#activityForm #Reason').val(caseDetails.Reason || '');
                         $('#activityForm #VoidBy').val(caseDetails.VoidBy || '');
-                        $('#activityForm #VoidDate').val(caseDetails.VoidDate || '');
+                        $('#activityForm #VoidDate').val(moment(caseDetails.VoidDate).format('YYYY-MM-DD'));
                     }
                 }
             }
