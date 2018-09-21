@@ -175,7 +175,7 @@ $(function () {
     });
 
     $('#activityForm').on('closed.zf.reveal', function(){
-      $('#activityForm :input').removeAttr('disabled');
+      $('#activityForm :input').removeAttr('disabled').val('');
       $('#activityForm #ReasonDiv,#VoidByDiv').hide();
     });
 });
