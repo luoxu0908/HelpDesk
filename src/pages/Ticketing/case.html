@@ -141,7 +141,7 @@
     <section id="activityLog">
         <header class="grid-x">
             <h2 class="cell auto">Case History</h2>
-            <button id="AddNewService" type="button" class="buttonType2 buttonType2Add cell medium-3 text-right" data-open="ServiceForm">Service Form</button>
+            <button id="AddNewService" type="button" class="buttonType2 buttonType2Add cell medium-3 text-right" onclick="AddNewServiceForm();return false;">Service Form</button>
             <button id="AddNewAttachment" type="button" class="buttonType2 buttonType2Add cell medium-3 text-right" onclick="AddNewAttactment();return false;">Add Case Attachments</button>
             <button id="AddNewActivity" type="button" class="buttonType2 buttonType2Add cell medium-3 text-right" data-open="activityForm">Add Case Remarks</button>
         </header>
@@ -667,6 +667,28 @@
                     ContactNo
                 </label>
                 <input type="text" id="ServiceContactNo1" name="ServiceContactNo1" />
+            </div>
+        </div>
+        <div class="grid-x grid-padding-x" id="ServiceVoid" style="display:none">
+            <div class="cell">
+                <label>
+                    Void Reason
+                    <textarea id="ServiceVoidReason" name="ServiceVoidReason" style="height:30%" ></textarea>
+                </label>
+            </div>
+        </div>
+        <div class="grid-x grid-padding-x" id="ServiceVoidBy">
+            <div class="cell small-4 medium-4">
+                <label id="ServiceVoidBy">
+                    Void By
+                </label>
+                <input type="text" id="ServiceVoidBy" name="ServiceVoidBy" />
+            </div>
+            <div class="cell small-4 medium-4">
+                <label id="ServiceVoidDate">
+                    Void Date
+                </label>
+                <input type="text" id="ServiceVoidDate" name="ServiceVoidDate" />
             </div>
         </div>
         <footer class="grid-x grid-margin-x" style="text-align:center">
