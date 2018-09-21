@@ -199,6 +199,7 @@ function AddNewServiceForm() {
     $('#ServiceForm #ServiceName1').removeAttr("disabled");
     $('#ServiceForm #ServiceEmail1').removeAttr("disabled");
     $('#ServiceForm #ServiceContactNo1').removeAttr("disabled");
+    $('#ServiceForm #ServiceCustomerAck').removeAttr("disabled");
     $('#ServiceForm #ServiceVoidBy').hide();
     $('#ServiceForm #ServiceVoid').hide();
 
@@ -219,7 +220,11 @@ function AddNewServiceForm() {
     $('#ServiceForm #ServiceName1').val('');
     $('#ServiceForm #ServiceEmail1').val('');
     $('#ServiceForm #ServiceContactNo1').val('');
+    $('#ServiceForm #CustomerAckDiv').show();
 
+    var urlParams = new URLSearchParams(window.location.search),
+    caseID = urlParams.get('caseID');
+    
     $.when(GetCaseDetails(caseID)).then(function () {
         $("#ServiceForm").foundation('open');
     });
@@ -924,7 +929,16 @@ function getServiceDetails(FLLogID, Type) {
                     $('#ServiceForm #ServiceHoursCalculation').val(caseDetails.HoursCalculation);
                     $('#ServiceForm #ServiceDiagnosis').val(caseDetails.Diagnosis);
                     $('#ServiceForm #ServiceBigRemarks').val(caseDetails.FollowupRemarks);
-                    $('#ServiceForm #ServiceCustomerAck').prop('checked', caseDetails.CustomerAck || '')
+                    var CustomerAck=caseDetails.CustomerAck||'';
+                    if(CustomerAck=='1'||CustomerAck==1){
+                        $('#ServiceForm #ServiceCustomerAck').prop('checked', 'checked');
+                        $('#ServiceForm #CustomerAckDiv').show();
+                        }else{
+                        $('#ServiceForm #ServiceCustomerAck').prop('checked', '');
+                        $('#ServiceForm #CustomerAckDiv').hide();
+                      }
+
+
                     $.when(GetServiceChargeToPackage('ServiceForm', 'ServiceChargeToPackage', '')).then(function () {
                         $('#ServiceForm #ServiceChargeToPackage').val(caseDetails.PackageType);
                     });
@@ -959,7 +973,7 @@ function getServiceDetails(FLLogID, Type) {
                     $('#ServiceForm #ServiceName1').attr("disabled", "disabled");
                     $('#ServiceForm #ServiceEmail1').attr("disabled", "disabled");
                     $('#ServiceForm #ServiceContactNo1').attr("disabled", "disabled");
-
+                    $('#ServiceForm #ServiceCustomerAck').attr("disabled", "disabled");
                     if (caseDetails.Type && caseDetails.Type == 'R') {
                         $('#activityForm #description').val(caseDetails.Details || '');
                         caseDetails.Internal ? $('#activityForm #internal').prop('checked', true) : $('#activityForm #internalAll').prop('checked', true);
