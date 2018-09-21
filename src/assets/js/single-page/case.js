@@ -175,9 +175,11 @@ $(function () {
     });
 
     $('#activityForm').on('closed.zf.reveal', function () {
-        $('#activityForm :input').removeAttr('disabled').val('');
-        $('#activityForm #ReasonDiv,#VoidByDiv').hide();
-        $('#activityForm #sumbit').show();
+        $('#activityForm :input').removeAttr('disabled');
+        $('#activityForm [name=interval]').prop('checked', false)
+        $('#activityForm #description').val('');
+        $('#activityForm #ReasonDiv,#VoidByDiv').hide().find(':input').val('');
+        $('#activityForm #submit').show();
     });
 });
 
@@ -620,7 +622,6 @@ function addNewActivity(caseID) {
         }
         Void = true;
     }
-    alert(window.FLLogID);
     var data = { 'FLID': caseID, 'Details': Description, 'Internal': internal, 'Reason': Reason || '', 'Void': Void, 'FLLogID': window.FLLogID || '' };
     $.ajax({
         url: apiSrc + "BCMain/FL1.InsertActivityLog.json",
