@@ -202,9 +202,8 @@ function AddNewServiceForm() {
     $('#ServiceForm #ServiceEmail1').removeAttr("disabled");
     $('#ServiceForm #ServiceContactNo1').removeAttr("disabled");
     $('#ServiceForm #ServiceCustomerAck').removeAttr("disabled");
-    $('#ServiceForm #ServiceVoidBy').hide();
-    $('#ServiceForm #ServiceVoid').hide();
-
+    $('#ServiceForm #ServiceVoid,#ServiceVoidByDiv').hide();
+    $('#ServiceForm #ServiceCustomerAck').prop('checked', '');
 
     var urlParams = new URLSearchParams(window.location.search),
     caseID = urlParams.get('caseID');
@@ -881,9 +880,7 @@ function Void(FLLogID, Type, FLID) {
     if (Type == 'SF') {
         $.when(getServiceDetails(FLLogID, Type)).then(function () {
             $('#ServiceForm #submit').show();
-            //$('#ServiceForm #PrintService').show();
-            $('#ServiceForm #ServiceVoidDate').hide();
-            $('#ServiceForm #ServiceVoidBy').hide();
+            $('#ServiceForm #ServiceVoid').show();
             $("#ServiceForm").foundation('open');
         });
     } else if (Type == 'R') {
@@ -901,7 +898,7 @@ function View(FLLogID, Type, FLID) {
         });
     } else if (Type == 'R') {
         $.when(getServiceDetails(FLLogID, Type)).then(function () {
-            $('#activityForm #ReasonDiv,#VoidByDiv').show();
+
             $('#activityForm #submit').hide();
             $('#activityForm #description,[name=internal],#Reason,#VoidBy,#VoidDate').attr('disabled', 'disabled');
             $("#activityForm").foundation('open');
@@ -932,11 +929,9 @@ function getServiceDetails(FLLogID, Type) {
                             $('#activityForm #VoidDate').val(moment(caseDetails.VoidDate).format('YYYY-MM-DD'));
                         }
 
+
                     } else if (caseDetails.Type && caseDetails.Type == 'SF') {
 
-                        $("#ServiceForm #ServiceVoid").show();
-                        $("#ServiceForm #ServiceVoidBy").show();
-                        $("#ServiceForm #ServiceVoidDate").show();
                         $('#ServiceForm #submit').hide();
                         $('#ServiceForm #PrintService').hide();
                         $('#ServiceForm #ServicePHWeekend').prop('checked', caseDetails.PHWeekend || '')
@@ -958,6 +953,12 @@ function getServiceDetails(FLLogID, Type) {
                         $('#ServiceForm #ServiceVoidBy').val(caseDetails.DisPlayName || '');
                         $('#ServiceForm #ServiceVoidDate').val(caseDetails.VoidDate || '');
 
+                        if(caseDetails.STATUS=='Voided'){
+                          $('#ServiceForm #ServiceVoid,#ServiceVoidByDiv').show();
+                        }else{
+                          $('#ServiceForm #ServiceVoid,#ServiceVoidByDiv').hide();
+                        }
+
                         var CustomerAck = caseDetails.CustomerAck || '';
                         if (CustomerAck == '1' || CustomerAck == 1) {
                             $('#ServiceForm #ServiceCustomerAck').prop('checked', 'checked');
@@ -966,6 +967,7 @@ function getServiceDetails(FLLogID, Type) {
                             $('#ServiceForm #ServiceCustomerAck').prop('checked', '');
                             $('#ServiceForm #CustomerAckDiv').hide();
                         }
+
 
 
                         $.when(GetServiceChargeToPackage('ServiceForm', 'ServiceChargeToPackage', '')).then(function () {
@@ -1003,6 +1005,7 @@ function getServiceDetails(FLLogID, Type) {
                         $('#ServiceForm #ServiceEmail1').attr("disabled", "disabled");
                         $('#ServiceForm #ServiceContactNo1').attr("disabled", "disabled");
                         $('#ServiceForm #ServiceCustomerAck').attr("disabled", "disabled");
+
 
                     }
                 }
@@ -1192,7 +1195,7 @@ function SaveServiceForm(caseID) {
     ActualTimeTo = $('#ServiceForm #ActualTimeTo').val(),
     ServiceActualDateTimeFrom = ServiceActualDateFrom + ' ' + ActualTimeFrom,
     ServiceActualDateTimeTo = ServiceActualDateTo + ' ' + ActualTimeTo;
-    if (moment(endDate).diff(startDate) <= 0) {
+    if (moment(ServiceActualDateTimeTo).diff(ServiceActualDateTimeFrom) <= 0) {
         alert('Actual date to need more than actual date from.');
         return false;
     }
@@ -1277,6 +1280,8 @@ function SaveServiceForm(caseID) {
                         $('#ServiceForm #ServiceBillingHours').val('');
                         $('#ServiceForm #BigRemarks').val('');
                         $('#ServiceForm #ServicePHWeekend').removeAttr("checked")
+                        caseID=$('#ServiceForm #ServiceCaseID').val();
+                        GetCaseHistory(caseID);
                         alert('update success')
                         $('#ServiceForm').foundation('close');
                     } else { alert(data.d.RetData.Tbl.Rows[0].ReturnMsg); }

@@ -521,7 +521,6 @@
                         <option value="22:30">22:30</option>
                         <option value="23:00">23:00</option>
                         <option value="23:30">23:30</option>
-                        <option value="24:00">24:00</option>
                     </select>
                 </label>
             </div>
@@ -584,7 +583,6 @@
                         <option value="22:30">22:30</option>
                         <option value="23:00">23:00</option>
                         <option value="23:30">23:30</option>
-                        <option value="24:00">24:00</option>
                     </select>
                 </label>
             </div>
@@ -685,10 +683,10 @@
                 <input type="text" id="ServiceEmail1" name="ServiceEmail1" />
             </div>
             <div class="cell small-4 medium-4" id="ServiceContactNoDiv" style="display:none">
-                <label id="ContactNoLb">
+                <label id="ContactNoLb" style="display:none">
                     ContactNo
                 </label>
-                <input type="text" id="ServiceContactNo1" name="ServiceContactNo1" />
+                <input type="text" id="ServiceContactNo1" name="ServiceContactNo1" style="display:none"/>
             </div>
         </div>
         <div class="grid-x grid-padding-x" id="ServiceVoid" style="display:none">
@@ -699,15 +697,15 @@
                 </label>
             </div>
         </div>
-        <div class="grid-x grid-padding-x" id="ServiceVoidBy">
+        <div class="grid-x grid-padding-x" id="ServiceVoidByDiv">
             <div class="cell small-4 medium-4">
-                <label id="ServiceVoidBy">
+                <label>
                     Void By
                 </label>
                 <input type="text" id="ServiceVoidBy" name="ServiceVoidBy" />
             </div>
             <div class="cell small-4 medium-4">
-                <label id="ServiceVoidDate">
+                <label>
                     Void Date
                 </label>
                 <input type="text" id="ServiceVoidDate" name="ServiceVoidDate" />
