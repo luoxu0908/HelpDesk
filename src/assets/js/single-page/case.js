@@ -233,6 +233,7 @@ function AddNewServiceForm() {
         $('#ServiceForm #ServiceContactNo1').val('');
         $('#ServiceForm #CustomerAckDiv').show();
         $("#ServiceForm").foundation('open');
+        ecexHourSetting();
     });
 
 }
@@ -1209,7 +1210,7 @@ function SaveServiceForm(caseID) {
     var ServiceReason = $("#ServiceForm #ServiceReason").val() || '';
     if (ServiceOffSetHours.length > 0) {
         if (ServiceReason.length == 0) {
-            alert('Please fill in Service Reason fields!');
+            alert('Please fill in OffSet Reason fields!');
             return false;
         }
     }
