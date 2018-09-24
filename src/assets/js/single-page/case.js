@@ -841,8 +841,15 @@ function GetCaseHistory(caseId) {
                         var time = convertDateTime(caseLogs[i].CreatedDate, 'time');
                         if (caseLogs[i].Internal) {
                             threadContainer += '<div class="thread">'
-                            threadContainer += '<div class="top"> <span class="datetime">' + date + '<i> ' + time + '</i> by ' + caseLogs[i].CreatedBy + '</span> <span class="tag">Internal</span></div>'
+                            threadContainer += '<div class="top"> <span class="datetime">' + date + '<i> ' + time + '</i> by ' + caseLogs[i].CreatedBy + '</span> <span class="tag">Internal</span>'
+                            if (caseLogs[i].Status != 'Voided') {
+                            threadContainer += '<span class="tag">' + caseLogs[i].Status + '</span><span class="tag" style="background:#60C2EC;cursor:pointer;color:white;" onclick=Void("' + caseLogs[i].FLLogID + '","' + caseLogs[i].Type + '","' + caseId + '")>Void</span><span class="tag" style="background:#60C2EC;cursor:pointer;color:white;" onclick=View("' + caseLogs[i].FLLogID + '","' + caseLogs[i].Type + '","' + caseId + '")>View</span></div>';
+                            }
+                            else {
+                            threadContainer += '<span class="tag">' + caseLogs[i].Status + '</span><span class="tag" style="background:#60C2EC;cursor:pointer;color:white;" onclick=View("' + caseLogs[i].FLLogID + '","' + caseLogs[i].Type + '","' + caseId + '")>View</span></div>';
+                            }
                             threadContainer += '<div class="text">' + caseLogs[i].Details + '</div> </div>';
+
                         } else {
                             if (caseLogs[i].StaffOrClient == 'colorCodeActive') {
                                 threadContainer += '<div class="thread" style="border-left:15px #00cc00 solid;margin-top:3px;">'
