@@ -96,7 +96,7 @@ $(function () {
             $('#ServiceForm #ServiceContactNoDiv').show();
             $('#ServiceForm #NameLb').html('Name<span style="color:red">*</span>');
             $('#ServiceForm #EmailLb').html('Email<span style="color:red">*</span>');
-            $('#ServiceForm #ContactNoLb').html('ContactNo<span style="color:red">*</span>');
+            //$('#ServiceForm #ContactNoLb').html('ContactNo<span style="color:red">*</span>');
 
         } else {
             $('#ServiceForm #ServiceNameDiv').hide();
@@ -196,7 +196,6 @@ function AddNewServiceForm() {
     $('#ServiceForm #ServiceOffSetHours').removeAttr("disabled");
     $('#ServiceForm #ServiceReason').removeAttr("disabled");
     $('#ServiceForm #ServiceChargeToPackage').removeAttr("disabled");
-    $('#ServiceForm #ServiceHoursCalculation').removeAttr("disabled");
     $('#ServiceForm #ServiceDiagnosis').removeAttr("disabled");
     $('#ServiceForm #ServiceBigRemarks').removeAttr("disabled");
     $('#ServiceForm #ServiceName1').removeAttr("disabled");
@@ -269,10 +268,7 @@ function GetTimeClockType() {
 }
 function ecexHourSetting() {
     execDays();
-    if (moment(endDate).diff(startDate) <= 0) {
-        alert('Actual date to need more than actual date from.');
-        return false;
-    }
+
     actualHour = 0, billingHours = 0, hourDeatils = '';
     if (execCount == 0) {
         standDate = new Date($('#ServiceForm #ServiceActualDateFrom').val());
@@ -980,7 +976,7 @@ function getServiceDetails(FLLogID, Type) {
                             $('#ServiceForm #ServiceContactNoDiv').show();
                             $('#ServiceForm #NameLb').html('Name<span style="color:red">*</span>');
                             $('#ServiceForm #EmailLb').html('Email<span style="color:red">*</span>');
-                            $('#ServiceForm #ContactNoLb').html('ContactNo<span style="color:red">*</span>');
+                              //$('#ServiceForm #ContactNoLb').html('ContactNo<span style="color:red">*</span>');
                             $('#ServiceForm #ServiceName1').val(caseDetails.ServiceName);
                             $('#ServiceForm #ServiceEmail1').val(caseDetails.ServiceEmail);
                             $('#ServiceForm #ServiceContactNo1').val(caseDetails.ServiceContactNo);
@@ -1195,6 +1191,12 @@ function SaveServiceForm(caseID) {
     ActualTimeTo = $('#ServiceForm #ActualTimeTo').val(),
     ServiceActualDateTimeFrom = ServiceActualDateFrom + ' ' + ActualTimeFrom,
     ServiceActualDateTimeTo = ServiceActualDateTo + ' ' + ActualTimeTo;
+    if (moment(endDate).diff(startDate) <= 0) {
+        alert('Actual date to need more than actual date from.');
+        return false;
+    }
+
+
     if ($("#ServiceForm #ServicePHWeekend").is(':checked')) {
         ServicePHWeekend = $("#ServiceForm #ServicePHWeekend").val();
     }
@@ -1233,10 +1235,6 @@ function SaveServiceForm(caseID) {
         }
         if (ServiceEmail1.length == 0) {
             alert('Please fill in Email fields!');
-            return false;
-        }
-        if (ServiceContactNo1.length == 0) {
-            alert('Please fill in Contact No fields!');
             return false;
         }
     }
