@@ -94,6 +94,7 @@ $(function () {
             $('#ServiceForm #ServiceNameDiv').show();
             $('#ServiceForm #ServiceEmailDiv').show();
             $('#ServiceForm #ServiceContactNoDiv').show();
+
             $('#ServiceForm #NameLb').html('Name<span style="color:red">*</span>');
             $('#ServiceForm #EmailLb').html('Email<span style="color:red">*</span>');
             //$('#ServiceForm #ContactNoLb').html('ContactNo<span style="color:red">*</span>');
@@ -203,6 +204,8 @@ function AddNewServiceForm() {
     $('#ServiceForm #ServiceContactNo1').removeAttr("disabled");
     $('#ServiceForm #ServiceCustomerAck').removeAttr("disabled");
     $('#ServiceForm #ServiceVoid,#ServiceVoidByDiv').hide();
+    $('#ServiceForm #ServiceContactNoDiv').hide();
+
     $('#ServiceForm #ServiceCustomerAck').prop('checked', '');
 
     var urlParams = new URLSearchParams(window.location.search),
@@ -598,7 +601,7 @@ function addNewActivity(caseID) {
     var Description, internal, Reason, Void;
     Description = $('#activityForm #description').val();
 
-    internal = $("#activityForm [name=internal]:checked").val();
+    internal = $("#activityForm [name=internal]:checked").val()||'';
     Void = false;
     if (Description.length == 0) {
         alert('Please fill in description!');
@@ -928,7 +931,13 @@ function getServiceDetails(FLLogID, Type) {
                         if (caseDetails.VoidDate) {
                             $('#activityForm #VoidDate').val(moment(caseDetails.VoidDate).format('YYYY-MM-DD'));
                         }
-
+                      if (caseDetails.Status=='Voided') {
+                          $('#activityForm #ReasonDiv').show();
+                          $('#activityForm #VoidByDiv').show();
+                      }else{
+                          $('#activityForm #ReasonDiv').hide();
+                          $('#activityForm #VoidByDiv').hide();
+                      }
 
                     } else if (caseDetails.Type && caseDetails.Type == 'SF') {
 
@@ -1250,7 +1259,15 @@ function SaveServiceForm(caseID) {
             alert('Please fill in void reason fields!');
             return false;
         }
+    }else{
+
+      if (!$('#ServiceForm #ServiceCustomerAck').is(':checked'))
+      {
+        alert('Please tikc Customer Acknowledgement!');
+        return false;
+      }
     }
+
     var data = {
         'FLID': caseID, 'ServiceActualDateTimeFrom': ServiceActualDateTimeFrom, 'ServiceActualDateTimeTo': ServiceActualDateTimeTo,
         'ServicePHWeekend': ServicePHWeekend, 'Urgent': Urgent, 'ServiceActualHours': ServiceActualHours, 'ServiceOffSetHours': ServiceOffSetHours, 'ServiceReason': ServiceReason,
