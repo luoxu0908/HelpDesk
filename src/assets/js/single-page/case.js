@@ -840,7 +840,14 @@ function GetCaseHistory(caseId) {
                         var date = convertDateTime(caseLogs[i].CreatedDate, 'date');
                         var time = convertDateTime(caseLogs[i].CreatedDate, 'time');
                         if (caseLogs[i].Internal) {
-                            threadContainer += '<div class="thread">'
+                            //threadContainer += '<div class="thread">'
+                            
+                            if (caseLogs[i].StaffOrClient == 'colorCodeActive') {
+                                threadContainer += '<div class="thread" style="border-left:15px #00cc00 solid;margin-top:3px;">'
+                            } else if (caseLogs[i].StaffOrClient == 'colorCodeNonActive') {
+                                threadContainer += '<div class="thread" style="border-left:15px #e60000 solid;margin-top:3px;">'
+                            }
+
                             threadContainer += '<div class="top"> <span class="datetime">' + date + '<i> ' + time + '</i> by ' + caseLogs[i].CreatedBy + '</span> <span class="tag">Internal</span>'
                             if (caseLogs[i].Status != 'Voided') {
                             threadContainer += '<span class="tag">' + caseLogs[i].Status + '</span><span class="tag" style="background:#60C2EC;cursor:pointer;color:white;" onclick=Void("' + caseLogs[i].FLLogID + '","' + caseLogs[i].Type + '","' + caseId + '")>Void</span><span class="tag" style="background:#60C2EC;cursor:pointer;color:white;" onclick=View("' + caseLogs[i].FLLogID + '","' + caseLogs[i].Type + '","' + caseId + '")>View</span></div>';
@@ -891,6 +898,7 @@ function Void(FLLogID, Type, FLID) {
         $.when(getServiceDetails(FLLogID, Type)).then(function () {
             $('#ServiceForm #submit').show();
             $('#ServiceForm #ServiceVoid').show();
+            $('#ServiceForm #ServiceVoidReason').removeAttr("disabled");
             $("#ServiceForm").foundation('open');
         });
     } else if (Type == 'R') {
@@ -904,6 +912,7 @@ function Void(FLLogID, Type, FLID) {
 function View(FLLogID, Type, FLID) {
     if (Type == 'SF') {
         $.when(getServiceDetails(FLLogID, Type)).then(function () {
+            $('#ServiceForm #ServiceVoidReason').attr('disabled', 'disabled');
             $("#ServiceForm").foundation('open');
         });
     } else if (Type == 'R') {
