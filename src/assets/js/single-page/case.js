@@ -214,20 +214,18 @@ function AddNewServiceForm() {
     $('#ServiceForm #ServiceVoid,#ServiceVoidByDiv').hide();
     $('#ServiceForm #ServiceContactNoDiv').hide();
 
-    $('#ServiceForm #ServiceCustomerAck').prop('checked', '');
+
 
     var urlParams = new URLSearchParams(window.location.search),
     caseID = urlParams.get('caseID');
 
     $.when(GetCaseDetails(caseID)).then(function () {
         window.ServiceFormID = '';
+        $('#ServiceForm #ServiceCustomerAck').prop('checked', '');
         $('#ServiceForm #CustomerAckDiv').show();
         $('#ServiceForm #ServiceNameDiv').hide();
         $('#ServiceForm #ServiceEmailDiv').hide();
-        //$('#ServiceForm #ServiceActualDateFrom').val('');
-        //$('#ServiceForm #ActualTimeFrom').val('');
-        //  $('#ServiceForm #ServiceActualDateTo').val('');
-        //$('#ServiceForm #ActualTimeTo').val('');
+    
         $('#ServiceForm #ServicePHWeekend').prop('checked', '');
         $('#ServiceForm #ServiceUrgent').prop('checked', '');
         $('#ServiceForm #ServiceOffSetHours').val('');
@@ -1361,7 +1359,7 @@ function SaveServiceForm(caseID) {
             return false;
         }
     }else{
-      if ($('#ServiceForm #ServiceCustomerAck').val()!='Remote Support') {
+      if ($('#ServiceForm #ServiceType').val()!='Remote Support') {
           if (!$('#ServiceForm #ServiceCustomerAck').is(':checked'))
           {
             alert('Please tikc Customer Acknowledgement!');
