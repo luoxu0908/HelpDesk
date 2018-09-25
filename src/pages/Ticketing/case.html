@@ -123,6 +123,7 @@
         <header class="grid-x">
             <h2 class="cell auto">Assigned Engineer(s)</h2>
             <button type="button" style="display:none" class="buttonType2 buttonType2Add cell medium-3 text-right teamLeadControl" data-open="involvementForm">Add Involvement</button>
+            <button type="button" style="display:none" class="buttonType2 buttonType2Add cell medium-3 text-right teamLeadControl" data-open="RemoveinvolvementForm">Remove Involvement</button>
         </header>
         <div class="threadContainer" id="taskThread">
             <div class="scrollContainer threadTask">
@@ -190,6 +191,37 @@
             <button type="button" id="submit" class="btn cell small-12 medium-4 medium-offset-4">Submit</button>
         </footer>
     </form>
+
+    <form id="RemoveinvolvementForm" class="reveal lightBg" data-reveal>
+        <header class="grid-x grid-padding-x">
+            <h3 class="cell">Remove Involvement</h3>
+            <button class="close-button" aria-label="Dismiss alert" type="button" data-close>
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </header>
+        <div class="grid-x grid-padding-x">
+            <div class="cell">
+                <label>
+                    Staff <span style="color:red">*</span>
+                    <select id="RemovePerson" name="person">
+
+                    </select>
+                </label>
+            </div>
+        </div>
+        <div class="grid-x grid-padding-x" style="display:none">
+            <div class="cell">
+                <label>
+                    Task <span style="color:red">*</span>
+                    <textarea id="task" name="task" placeholder="Task"></textarea>
+                </label>
+            </div>
+        </div>
+        <footer class="grid-x grid-margin-x">
+            <button type="button" id="submit" class="btn cell small-12 medium-4 medium-offset-4">Submit</button>
+        </footer>
+    </form>
+
     <form id="activityForm" class="reveal lightBg" data-reveal>
         <header class="grid-x grid-padding-x">
             <h3 class="cell">Case Remarks</h3>

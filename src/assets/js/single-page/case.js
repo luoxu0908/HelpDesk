@@ -55,6 +55,7 @@ $(function () {
         });
         GetCaseHistory(caseID);
         GetCaseInvolvement(caseID);
+        getRemoveStaffList(caseID);
         if (RoleName == 'Admin') {
 
         } else if (RoleName == 'Clients') {
@@ -77,6 +78,11 @@ $(function () {
     $('#involvementForm #submit').click(function () {
         addNewInvolvement(caseID);
     });
+
+    $('#RemoveinvolvementForm #submit').click(function () {
+        RemoveNewInvolvement(caseID);
+    });
+
 
     $('#reviewForm #submit').click(function () {
         reviewCase(caseID);
@@ -115,6 +121,7 @@ $(function () {
         $('#reviewForm #organisation').attr('disabled', 'disabled');
         GetreviewCase(caseID);
     });
+
     GetTimeClockType();
     $("#ServiceForm #ServicePHWeekend").click(function () {
         actualHour = $('#ServiceForm #ServiceActualHours').val();
@@ -186,6 +193,7 @@ $(function () {
 
 function AddNewServiceForm() {
 
+
     $('#ServiceForm #submit').show();
     $('#ServiceForm #PrintService').show();
     $('#ServiceForm #ServiceActualDateFrom').removeAttr("disabled");
@@ -233,7 +241,12 @@ function AddNewServiceForm() {
         $('#ServiceForm #ServiceName1').val('');
         $('#ServiceForm #ServiceEmail1').val('');
         $('#ServiceForm #ServiceContactNo1').val('');
-        $('#ServiceForm #CustomerAckDiv').show();
+        var Type=$('#reviewForm #Type').val();
+        if (Type=='Remote Support') {
+          $('#ServiceForm #CustomerAckDiv').hide();
+        }else{
+          $('#ServiceForm #CustomerAckDiv').show();
+        }
         $("#ServiceForm").foundation('open');
         ecexHourSetting();
     });
@@ -596,6 +609,43 @@ function addNewInvolvement(caseID) {
         }
     });
 }
+function RemoveNewInvolvement(caseID) {
+    var staff, task;
+    staff = $('#RemoveinvolvementForm #RemovePerson').val();
+    task = $('#involvementForm #task').val();
+
+
+    var data = { 'FLID': caseID, 'RoleID': staff};
+    $.ajax({
+        url: apiSrc + "BCMain/FL1.RemoveInvolvement.json",
+        method: "POST",
+        dataType: "json",
+        xhrFields: { withCredentials: true },
+        data: {
+            'data': JSON.stringify(data),
+            'WebPartKey': WebPartVal,
+            'ReqGUID': getGUID()
+        },
+        success: function (data) {
+            if ((data) && (data.d.RetVal === -1)) {
+                if (data.d.RetData.Tbl.Rows.length > 0) {
+                    if (data.d.RetData.Tbl.Rows[0].Success == true) {
+                        getRemoveStaffList(caseID);
+                        GetCaseHistory(caseID);
+                        $('#RemoveinvolvementForm #RemovePerson').val('');
+                        $('#RemoveinvolvementForm').foundation('close');
+                    } else { alert(data.d.RetData.Tbl.Rows[0].ReturnMsg); }
+                }
+            }
+            else {
+                alert(data.d.RetMsg);
+            }
+        },
+        error: function (data) {
+            alert("Error: " + data.responseJSON.d.RetMsg);
+        }
+    });
+}
 
 function addNewActivity(caseID) {
     var Description, internal, Reason, Void;
@@ -841,7 +891,7 @@ function GetCaseHistory(caseId) {
                         var time = convertDateTime(caseLogs[i].CreatedDate, 'time');
                         if (caseLogs[i].Internal) {
                             //threadContainer += '<div class="thread">'
-                            
+
                             if (caseLogs[i].StaffOrClient == 'colorCodeActive') {
                                 threadContainer += '<div class="thread" style="border-left:15px #00cc00 solid;margin-top:3px;">'
                             } else if (caseLogs[i].StaffOrClient == 'colorCodeNonActive') {
@@ -1175,6 +1225,41 @@ function getStaffList() {
         }
     });
 }
+
+function getRemoveStaffList(caseID) {
+    $('#RemoveinvolvementForm #RemovePerson').html('<option value="">-- Please Select --</option>');
+    var html = '';
+    var data = {'FLID': caseID};
+    $.ajax({
+        url: apiSrc + "BCMain/iCtc1.GetRemoveStaffList.json",
+        method: "POST",
+        dataType: "json",
+        xhrFields: { withCredentials: true },
+        data: {
+            'data': JSON.stringify(data),
+            'WebPartKey': WebPartVal,
+            'ReqGUID': getGUID()
+        },
+        success: function (data) {
+            if ((data) && (data.d.RetVal === -1)) {
+                if (data.d.RetData.Tbl.Rows.length > 0) {
+                    var staffList = data.d.RetData.Tbl.Rows;
+                    for (var i = 0; i < staffList.length; i++) {
+                        html += ('<option value="' + staffList[i].RoleID + '">' + staffList[i].StaffDetails + '</option>');
+                    }
+                }
+            }
+            else {
+                alert(data.d.RetMsg);
+            }
+            $('#RemoveinvolvementForm #RemovePerson').append(html);
+        },
+        error: function (data) {
+            alert("Error: " + data.responseJSON.d.RetMsg);
+        }
+    });
+}
+
 
 function getOrgnaisationList() {
     $.ajax({
