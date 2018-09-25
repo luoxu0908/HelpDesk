@@ -1361,14 +1361,14 @@ function SaveServiceForm(caseID) {
             return false;
         }
     }else{
-
-      if (!$('#ServiceForm #ServiceCustomerAck').is(':checked'))
-      {
-        alert('Please tikc Customer Acknowledgement!');
-        return false;
+      if ($('#ServiceForm #ServiceCustomerAck').val()!='Remote Support') {
+          if (!$('#ServiceForm #ServiceCustomerAck').is(':checked'))
+          {
+            alert('Please tikc Customer Acknowledgement!');
+            return false;
+          }
       }
     }
-
     var data = {
         'FLID': caseID, 'ServiceActualDateTimeFrom': ServiceActualDateTimeFrom, 'ServiceActualDateTimeTo': ServiceActualDateTimeTo,
         'ServicePHWeekend': ServicePHWeekend, 'Urgent': Urgent, 'ServiceActualHours': ServiceActualHours, 'ServiceOffSetHours': ServiceOffSetHours, 'ServiceReason': ServiceReason,
