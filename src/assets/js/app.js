@@ -287,7 +287,7 @@ $(function(){
 
   formOthersInit();
   formSectionsInit();
-  //loadMenu();
+  loadMenu();
 
 });//onready
 
@@ -362,7 +362,7 @@ var menu = [];
 function loadMenu() {
   var data = {};
   $.ajax({
-    url: apiSrc+"BCMain/Sec1.Menu.json",
+    url: apiSrc+"BCMain/FL1.GetTicketMenu.json",
     method: "POST",
     dataType: "json",
     xhrFields: {withCredentials: true},
@@ -374,82 +374,79 @@ function loadMenu() {
     success: function(data){
       if ((data) && (data.d.RetData.Tbl.Rows.length > 0)) {
         var menus = data.d.RetData.Tbl.Rows;
-        //var moduleRegex = /(.+)\\/;
-        var moduleItemRegex = /\\(.+)/;
-        var mainMenuContainer = $('#mainMenu');
-        mainMenuContainer.html('');
-        var module;
-        var moduleMenu;
-        var moduleName;
-        var moduleNameOriginal;
+        var menuList = new Array();
 
-        module = $('<ul class="module"></ul>');
-        mainMenuContainer.append(module);
-        for (var i =0; i < menus.length; i++) {
-          var menuObj = menus[i];
-
-          //main menu module
-          if (menuObj.MenuName.indexOf("\\") <= -1 && menu.indexOf(menuObj.MenuName) <= -1 && menuObj.MenuType.toLowerCase() == 'text') {
-            moduleNameOriginal = menuObj.MenuName;
-              menu.push(moduleNameOriginal);
-              moduleName = moduleNameOriginal.replace(/[^A-Za-z0-9]/g,'');
-
-              moduleMenu = $('<ul id="moduleMenu-'+ moduleName +'" class="moduleMenu"><li><a href="'+menuObj.RelativeURL+'" target="'+menuObj.TargetFrame+'" data-sort-key="'+menuObj.SortKey+'" >'+moduleNameOriginal+'</a></li></ul>');
-              console.log('menuObj.RelativeURL:' + menuObj.RelativeURL);
-              var moduleItem = $('<li><a href="/'+menuObj.RelativeURL+'/" data-menu="'+moduleName+'" data-sort-key="'+menuObj.SortKey+'" >'+moduleNameOriginal+'</a></li>');
-              module.append(moduleItem);
-              mainMenuContainer.append(moduleMenu);
+        for (var i = 0; i < menus.length; i++) {
+          var menuItem = {};
+          var manuName = menus[i].MenuName.split('\\')[0];
+          var subName=menus[i].MenuName.split('\\')[1];
+          var subItem={};
+          var flag = false;
+          for (var j = 0; j < menuList.length; j++) {
+            if (menuList[j].Name.indexOf(manuName) > -1) {
+              subItem.Name=subName;
+              subItem.Value=menus[i].RelativeURL;
+              menuList[j].URLList.push(subItem);
+              flag = true;
+            }
           }
-          else {
-            moduleMenu = $('#moduleMenu-'+moduleName);
-          }
-
-          var moduleItemName = menuObj.MenuName.match(moduleItemRegex);
-          if (moduleItemName != null) {
-            //console.log(moduleItemName[1]);
-            //console.log(apiSrc.substr(0,apiSrc.length-1));
-
-            var moduleMenuItem = $('<li><a href="'+ (( /\/$/.test(apiSrc) ) ? apiSrc.substr(0,apiSrc.length-1) : apiSrc ) + menuObj.RelativeURL +'" target="'+menuObj.TargetFrame+'" data-sort-key="'+menuObj.SortKey+'" >'+moduleItemName[1]+'</a></li>');
-            //console.log(moduleMenu);
-            moduleMenu.append(moduleMenuItem);
+          if (!flag) {
+            menuItem.Name = manuName;
+            menuItem.URLList = new Array();
+            subItem.Name=subName;
+            subItem.Value=menus[i].RelativeURL;
+            menuItem.URLList.push(subItem);
+            menuList.push(menuItem);
+            console.log(subItem);
+            console.log(menuItem);
           }
         }
+        var menuHtml = '';
+        for (var i = 0; i < menuList.length; i++) {
+          menuHtml += ' <ul class="module"><li><a href="javascript:;" data-menu="' + menuList[i].Name + '"" >' + menuList[i].Name + '</a></li></ul>';
+          menuHtml += '<ul id="moduleMenu-' + menuList[i].Name + '" class="moduleMenu" data-redirect="false">';
+          for (var j = 0; j < menuList[i].URLList.length; j++) {
+            menuHtml+=' <li><a target="_top" href="'+menuList[i].URLList[j].Value+'">'+menuList[i].URLList[j].Name+'</a></li>';
+          }
+          menuHtml +='</ul>';
+        }
+        $('#mainMenu').html(menuHtml);
         //console.log(menu);
         //console.log($('#mainMenu .module a').length);
-        $('#mainMenu .module a').click(function() {
-          var targetId = $(this).data('menu');
-          var targetObj = $('#moduleMenu-'+targetId);
-          //console.log(targetObj.length);
-          if (Foundation.MediaQuery.current == 'small')
-          {
-            if (targetObj.find('li').length > 1) {
-              $('.module').hide();
-              $('.moduleMenu').hide();
-              targetObj.show();
-            }
-            else {
-              console.log('aaa');
-              window.location.href = $(this).prop('href');
-            }
-          }
-          else {
-            //console.log('aaa');
-            $('.moduleMenu').hide();
-            targetObj.show();
-          }
-          return false;
-        });//module Links
+        // $('#mainMenu .module a').click(function() {
+        //   var targetId = $(this).data('menu');
+        //   var targetObj = $('#moduleMenu-'+targetId);
+        //   //console.log(targetObj.length);
+        //   if (Foundation.MediaQuery.current == 'small')
+        //   {
+        //     if (targetObj.find('li').length > 1) {
+        //       $('.module').hide();
+        //       $('.moduleMenu').hide();
+        //       targetObj.show();
+        //     }
+        //     else {
+        //       console.log('aaa');
+        //       window.location.href = $(this).prop('href');
+        //     }
+        //   }
+        //   else {
+        //     //console.log('aaa');
+        //     $('.moduleMenu').hide();
+        //     targetObj.show();
+        //   }
+        //   return false;
+        // });//module Links
 
-        $('.moduleMenu').find('a').click(function() {
-          var thisObj = $(this);
-          var target = thisObj.prop('target');
-          var href = thisObj.attr('href');
-
-          mainMenuToggle();
-          loadPage(href,target);
-
-          return false;
-        });
+        // $('.moduleMenu').find('a').click(function() {
+        //   var thisObj = $(this);
+        //   var target = thisObj.prop('target');
+        //   var href = thisObj.attr('href');
+        //
+        //   mainMenuToggle();
+        //   loadPage(href,target);
+        //
+        //   return false;
+        // });
       }//rows
     },//success
     error: function(XMLHttpRequest, data, errorThrown){
