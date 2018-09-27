@@ -50,12 +50,6 @@ $(function () {
       });
 
     $.when(checkRoleAccess).then(function (x) {
-        $.when(GetCaseDetails(caseID)).then(function () {
-            GetOrgAddressLocation('OrgAddressLocation', TargetRoleID);
-        });
-        GetCaseHistory(caseID);
-        GetCaseInvolvement(caseID);
-        getRemoveStaffList(caseID);
         if (RoleName == 'Admin') {
 
         } else if (RoleName == 'Clients') {
@@ -64,10 +58,7 @@ $(function () {
             $('.supportControl').show();
         } else if (RoleName == 'Support Team Lead') {
             getStaffList();
-            GetAvailablePackage(caseID);
             $('.teamLeadControl, .supportControl').show();
-        } else if (RoleName == 'Sales') {
-
         }
     });
 
@@ -82,8 +73,6 @@ $(function () {
     $('#RemoveinvolvementForm #submit').click(function () {
         RemoveNewInvolvement(caseID);
     });
-
-
     $('#reviewForm #submit').click(function () {
         reviewCase(caseID);
     });
@@ -115,13 +104,17 @@ $(function () {
         }
     });
 
-
     $.when(getOrgnaisationList(), GetDropDownList('reviewForm', 'category', 'Category'), GetDropDownList('reviewForm', 'Location', 'OrgAddressLocation')
-    , GetDropDownList('reviewForm', 'PriorityLevel', 'PriorityLevel'), GetDropDownList('reviewForm', 'Type', 'Type')).then(function () {
+    , GetDropDownList('reviewForm', 'PriorityLevel', 'PriorityLevel'), GetDropDownList('reviewForm', 'Type', 'Type'),GetServiceChargeToPackage('ServiceForm', 'ServiceChargeToPackage', '')).then(function () {
         $('#reviewForm #organisation').attr('disabled', 'disabled');
+        $.when(GetCaseDetails(caseID)).then(function () {
+            GetOrgAddressLocation('OrgAddressLocation', TargetRoleID);
+        });
+        GetCaseHistory(caseID);
         GetreviewCase(caseID);
+        getRemoveStaffList(caseID);
     });
-
+    GetServicePoint('ServiceTimePoint');
     GetTimeClockType();
     $("#ServiceForm #ServicePHWeekend").click(function () {
         actualHour = $('#ServiceForm #ServiceActualHours').val();
@@ -163,7 +156,7 @@ $(function () {
         $('#ServiceForm #ServiceActualHours').val(actualHour);
         $('#ServiceForm #ServiceBillingHours').val(billingHours);
     });
-    GetServicePoint('ServiceTimePoint');
+
     $('#ServiceForm #ActualTimeFrom').change(function () {
         ecexHourSetting();
     });
@@ -192,8 +185,6 @@ $(function () {
 });
 
 function AddNewServiceForm() {
-
-
     $('#ServiceForm #submit').show();
     $('#ServiceForm #PrintService').show();
     $('#ServiceForm #ServiceActualDateFrom').removeAttr("disabled");
@@ -213,9 +204,6 @@ function AddNewServiceForm() {
     $('#ServiceForm #ServiceCustomerAck').removeAttr("disabled");
     $('#ServiceForm #ServiceVoid,#ServiceVoidByDiv').hide();
     $('#ServiceForm #ServiceContactNoDiv').hide();
-
-
-
     var urlParams = new URLSearchParams(window.location.search),
     caseID = urlParams.get('caseID');
 
@@ -225,7 +213,7 @@ function AddNewServiceForm() {
         $('#ServiceForm #CustomerAckDiv').show();
         $('#ServiceForm #ServiceNameDiv').hide();
         $('#ServiceForm #ServiceEmailDiv').hide();
-    
+
         $('#ServiceForm #ServicePHWeekend').prop('checked', '');
         $('#ServiceForm #ServiceUrgent').prop('checked', '');
         $('#ServiceForm #ServiceOffSetHours').val('');
@@ -435,6 +423,48 @@ function execHours(startDate, endDate, standDate) {
     }
 }
 function DoPrintServiceForm() {
+      $('#PrintServiceForm .PrintCaseID').html(caseDetails.FLID);
+      $('#PrintServiceForm .PrintOrganisation').html(caseDetails.Organisation);
+      $('#PrintServiceForm .PrintContactPerson').html(caseDetails.ContactPerson);
+      $('#PrintServiceForm .PrintSubject').html(caseDetails.Subject);
+      $('#PrintServiceForm .PrintLocation').html(caseDetails.TagData3);
+      $('#PrintServiceForm .PrintDetails').html(caseDetails.Details);
+      $('#PrintServiceForm .PrintStatus').html(caseDetails.Status);
+      $('#PrintServiceForm .PrintCategory').html(caseDetails.Category);
+      $('#PrintServiceForm .PrintType').html(caseDetails.NewType);
+      $('#PrintServiceForm .PrintActualDateFrom').html(moment(caseDetails.DateFrom).format('YYYY-MM-DD'));
+      $('#PrintServiceForm .PrintActualTimeFrom').html(moment(caseDetails.DateFrom).format('HH:mm'));
+      $('#PrintServiceForm .PrintActualDateTo').html(moment(caseDetails.DateTo).format('YYYY-MM-DD'));
+      $('#PrintServiceForm .PrintActualTimeTo').html(moment(caseDetails.DateTo).format('HH:mm'));
+
+      if (caseDetails.PHWeekend == '1') {
+          $('#PrintServiceForm .PrintPHWeekend').html('Yes');
+      } else {
+          $('#PrintServiceForm .PrintPHWeekend').html('No');
+      }
+
+      if (caseDetails.Urgent == '1') {
+          $('#PrintServiceForm .PrintUrgent').html('Yes');
+      } else {
+          $('#PrintServiceForm .PrintUrgent').html('No');
+      }
+      $('#PrintServiceForm .PrintActualHours').html(caseDetails.ActualHours);
+      $('#PrintServiceForm .PrintOffSetHours').html(caseDetails.OffSetHours);
+      $('#PrintServiceForm .PrintOffSetReason').html(caseDetails.OffSetReason);
+      $('#PrintServiceForm .PrintBillingHours').html(caseDetails.BillingHours);
+      $('#PrintServiceForm .PrintHoursCalculatio').html(caseDetails.HoursCalculation);
+      $('#PrintServiceForm .PrintDiagnosis').html(caseDetails.Diagnosis);
+      $('#PrintServiceForm .PrintFollowRemarks').html(caseDetails.FollowupRemarks);
+
+      if (caseDetails.CustomerAck == '1') {
+          $('#PrintServiceForm .PrintCustomerAck').html('Yes');
+      } else {
+          $('#PrintServiceForm .PrintCustomerAck').html('No');
+      }
+      $('#PrintServiceForm .PrintName2').html(caseDetails.ServiceName);
+      $('#PrintServiceForm .PrintEmail2').html(caseDetails.ServiceEmail);
+      $('#PrintServiceForm .PrintContactNo2').html(caseDetails.ServiceContactNo);
+
     var printData = document.getElementById("PrintServiceForm").innerHTML;
     window.document.body.innerHTML = printData
     window.print()
@@ -494,7 +524,6 @@ function GetreviewCase(caseID) {
 
 }
 
-
 function reviewCase(caseID) {
 
     var Organization, status, ContactPerson, Email, Contact, Subject, Product, Category, NewLocation, Details, PriorityLevel;
@@ -549,7 +578,7 @@ function reviewCase(caseID) {
                         $('#reviewForm #PriorityLevel').val('');
                         $('#reviewForm #description').val('');
                         $('#reviewForm').foundation('close');
-                        GetreviewCase(caseID);
+
                         GetCaseDetails(caseID);
                         GetCaseHistory(caseID);
                         $('#reviewForm').foundation('close');
@@ -591,7 +620,7 @@ function addNewInvolvement(caseID) {
             if ((data) && (data.d.RetVal === -1)) {
                 if (data.d.RetData.Tbl.Rows.length > 0) {
                     if (data.d.RetData.Tbl.Rows[0].Success == true) {
-                        GetCaseInvolvement(caseID);
+
                         GetCaseHistory(caseID);
                         $('#involvementForm #person').val('');
                         $('#involvementForm').foundation('close');
@@ -700,39 +729,6 @@ function addNewActivity(caseID) {
     });
 }
 
-function GetAvailablePackage(caseId) {
-    $('#chargeForm #packageID').html('');
-    var html = '<option value="">-- Please Select --</option>';
-    html += '<option value="0">Quotation</option>';
-    $.ajax({
-        url: apiSrc + "BCMain/Ctc1.GetAvailablePackage.json",
-        method: "POST",
-        dataType: "json",
-        xhrFields: { withCredentials: true },
-        data: {
-            'data': JSON.stringify({ 'FLID': caseId }),
-            'WebPartKey': WebPartVal,
-            'ReqGUID': getGUID()
-        },
-        success: function (data) {
-            if ((data) && (data.d.RetVal === -1)) {
-                if (data.d.RetData.Tbl.Rows.length > 0) {
-                    var availablePackage = data.d.RetData.Tbl.Rows;
-                    for (var i = 0; i < availablePackage.length; i++) {
-                        html += '<option value="' + availablePackage[i].PackageID + '">' + availablePackage[i].AvailablePackage + '</option>';
-                    }
-                }
-            } else {
-                alert(data.d.RetMsg);
-            }
-            $('#chargeForm #packageID').html(html);
-        },
-        error: function (data) {
-            alert("Error: " + data.responseJSON.d.RetMsg);
-        }
-    });
-}
-
 //Get Case Details
 function GetCaseDetails(caseId) {
     return $.ajax({
@@ -765,22 +761,11 @@ function GetCaseDetails(caseId) {
                     $('#summary .updatedDate').html(updatedDate);
                     $('#reviewInfo .status').html(caseDetails.Status);
                     $('#reviewInfo .category').html(caseDetails.Category);
-                    $('#reviewInfo .dateFrom').html(caseDetails.DateFrom);
-                    $('#reviewInfo .dateTo').html(caseDetails.DateTo);
                     $('#reviewInfo .manHours').html(caseDetails.ActualHours);
-
                     $('#reviewInfo .actualHour').html(caseDetails.BillingHours);
                     $('#reviewInfo .type').html(caseDetails.NewType);
 
-                    $('#reviewForm #Type').val(caseDetails.NewType);
-                    $('#reviewForm #status').val(caseDetails.Status);
-                    $('#reviewForm #category').val(caseDetails.Category);
-                    $('#reviewForm #PriorityLevel').val(caseDetails.PriorityLevel);
-                    $('#reviewForm #manHours').val(caseDetails.ChargeHours);
-                    $('#reviewForm #scheduleDateFrom').val(caseDetails.DateFrom);
-                    $('#reviewForm #scheduleDateTo').val(caseDetails.DateTo);
-                    $('#chargeForm #actualManHours').val(caseDetails.ChargeHours);
-                    // $('#reviewForm #actualManHours').val(caseDetails.ActualHours);
+
                     $('#ServiceForm #ServiceCaseID').val(caseDetails.FLID);
                     $('#ServiceForm #ServiceOrganisation').val(caseDetails.Organisation);
                     $('#ServiceForm #ServiceContactPerson').val(caseDetails.ContactPerson);
@@ -803,58 +788,9 @@ function GetCaseDetails(caseId) {
                     $('#ServiceForm #ServiceActualDateFrom').val(moment(caseDetails.DateFrom).format('YYYY-MM-DD'));
                     $('#ServiceForm #ActualTimeFrom').val(moment(caseDetails.DateFrom).format('HH:mm'));
                     $('#ServiceForm #ServiceActualDateTo').val(moment(caseDetails.DateTo).format('YYYY-MM-DD'));
-
                     $('#ServiceForm #ActualTimeTo').val(moment(caseDetails.DateTo).format('HH:mm'));
-
-                    $('#PrintServiceForm .PrintCaseID').html(caseDetails.FLID);
-                    $('#PrintServiceForm .PrintOrganisation').html(caseDetails.Organisation);
-                    $('#PrintServiceForm .PrintContactPerson').html(caseDetails.ContactPerson);
                     $('#ServiceForm #ServiceName1').val(caseDetails.ServiceName);
                     $('#ServiceForm #ServiceEmail1').val(caseDetails.ServiceEmail);
-
-                    $('#PrintServiceForm .PrintSubject').html(caseDetails.Subject);
-                    $('#PrintServiceForm .PrintLocation').html(caseDetails.TagData3);
-                    $('#PrintServiceForm .PrintDetails').html(caseDetails.Details);
-                    $('#PrintServiceForm .PrintStatus').html(caseDetails.Status);
-                    $('#PrintServiceForm .PrintCategory').html(caseDetails.Category);
-                    $('#PrintServiceForm .PrintType').html(caseDetails.NewType);
-                    $('#PrintServiceForm .PrintActualDateFrom').html(moment(caseDetails.DateFrom).format('YYYY-MM-DD'));
-                    $('#PrintServiceForm .PrintActualTimeFrom').html(moment(caseDetails.DateFrom).format('HH:mm'));
-                    $('#PrintServiceForm .PrintActualDateTo').html(moment(caseDetails.DateTo).format('YYYY-MM-DD'));
-                    $('#PrintServiceForm .PrintActualTimeTo').html(moment(caseDetails.DateTo).format('HH:mm'));
-
-                    if (caseDetails.PHWeekend == '1') {
-                        $('#PrintServiceForm .PrintPHWeekend').html('Yes');
-                    } else {
-                        $('#PrintServiceForm .PrintPHWeekend').html('No');
-                    }
-
-                    if (caseDetails.Urgent == '1') {
-                        $('#PrintServiceForm .PrintUrgent').html('Yes');
-                    } else {
-                        $('#PrintServiceForm .PrintUrgent').html('No');
-                    }
-                    $('#PrintServiceForm .PrintActualHours').html(caseDetails.ActualHours);
-                    $('#PrintServiceForm .PrintOffSetHours').html(caseDetails.OffSetHours);
-                    $('#PrintServiceForm .PrintOffSetReason').html(caseDetails.OffSetReason);
-                    $('#PrintServiceForm .PrintBillingHours').html(caseDetails.BillingHours);
-                    $('#PrintServiceForm .PrintHoursCalculatio').html(caseDetails.HoursCalculation);
-                    $('#PrintServiceForm .PrintDiagnosis').html(caseDetails.Diagnosis);
-                    $('#PrintServiceForm .PrintFollowRemarks').html(caseDetails.FollowupRemarks);
-
-                    if (caseDetails.CustomerAck == '1') {
-                        $('#PrintServiceForm .PrintCustomerAck').html('Yes');
-                    } else {
-                        $('#PrintServiceForm .PrintCustomerAck').html('No');
-                    }
-
-                    $.when(GetServiceChargeToPackage('ServiceForm', 'ServiceChargeToPackage', '')).then(function () {
-                        $('#PrintServiceForm .PrintChargeToPackage').html(caseDetails.PackageTypeNew);
-                        //PrintChargeToPackage
-                    });
-                    $('#PrintServiceForm .PrintName2').html(caseDetails.ServiceName);
-                    $('#PrintServiceForm .PrintEmail2').html(caseDetails.ServiceEmail);
-                    $('#PrintServiceForm .PrintContactNo2').html(caseDetails.ServiceContactNo);
 
                 }
             }
@@ -1013,7 +949,7 @@ function getServiceDetails(FLLogID, Type) {
                         $('#ServiceForm #ServiceOffSetHours').val(caseDetails.OffSetHours);
                         $('#ServiceForm #ServiceReason').val(caseDetails.OffSetReason);
                         $('#ServiceForm #ServiceBillingHours').val(caseDetails.BillingHours);
-                        $('#ServiceForm #ServiceChargeToPackage').val(caseDetails.Subject);
+                        $('#ServiceForm #ServiceChargeToPackage').val(caseDetails.PackageType||'');
                         $('#ServiceForm #ServiceHoursCalculation').val(caseDetails.HoursCalculation);
                         $('#ServiceForm #ServiceDiagnosis').val(caseDetails.Diagnosis);
                         $('#ServiceForm #ServiceBigRemarks').val(caseDetails.FollowupRemarks);
@@ -1078,8 +1014,6 @@ function getServiceDetails(FLLogID, Type) {
                         $('#ServiceForm #ServiceEmail1').attr("disabled", "disabled");
                         $('#ServiceForm #ServiceContactNo1').attr("disabled", "disabled");
                         $('#ServiceForm #ServiceCustomerAck').attr("disabled", "disabled");
-
-
                     }
                 }
             }
@@ -1092,103 +1026,6 @@ function getServiceDetails(FLLogID, Type) {
         }
     });
 }
-
-function GetCaseInvolvement(caseId) {
-    $.ajax({
-        url: apiSrc + "BCMain/FL1.GetCasesInvolvement.json",
-        method: "POST",
-        dataType: "json",
-        xhrFields: { withCredentials: true },
-        data: {
-            'data': JSON.stringify({ 'FLID': caseId }),
-            'WebPartKey': WebPartVal,
-            'ReqGUID': getGUID()
-        },
-        success: function (data) {
-            if ((data) && (data.d.RetVal === -1)) {
-                if (data.d.RetData.Tbl.Rows.length > 0) {
-                    var caseInvolvements = data.d.RetData.Tbl.Rows;
-                    var involvementContainer = '';
-                    for (var i = 0; i < caseInvolvements.length; i++) {
-                        var date = convertDateTime(caseInvolvements[i].CreatedDate, 'date');
-                        var time = convertDateTime(caseInvolvements[i].CreatedDate, 'time');
-                        involvementContainer += '<div class="thread">'
-                        involvementContainer += '<div class="top"> <span class="datetime">' + date + '<i> ' + time + '</i> </span> </div>'
-                        involvementContainer += '<div class="text">' + caseInvolvements[i].RolePerson + '</div> </div>'
-                        //involvementContainer += '<div class="text">'+caseInvolvements[i].RolePerson+': '+caseInvolvements[i].Remarks+'</div> </div>'
-                    }
-                    $('#taskThread .threadTask').html(involvementContainer);
-                }
-            }
-            else {
-                alert(data.d.RetMsg);
-            }
-        },
-        error: function (data) {
-            alert("Error: " + data.responseJSON.d.RetMsg);
-        }
-    });
-};
-
-function chargeToPackage(caseID) {
-    var packageID, ManHours;
-    packageID = $('#chargeForm #packageID').val();
-    ManHours = $('#chargeForm #actualManHours').val();
-    if (packageID == '') {
-        alert('Please select package to charge!');
-        return false;
-    }
-
-    if (ManHours == '') {
-        alert('Please fill in all mandatory fields!');
-        return false;
-    }
-
-    ManHours = parseInt(ManHours);
-
-    if (isNaN(ManHours)) {
-        alert('Invalid Actual Man-hour(s)!');
-        return false;
-    }
-
-    var data = { 'FLID': caseID, 'packageID': packageID, 'ManHours': ManHours };
-    if (confirm("Confirming charging to package?")) {
-        $.ajax({
-            url: apiSrc + "BCMain/FL1.ChargeToPackageID.json",
-            method: "POST",
-            dataType: "json",
-            xhrFields: { withCredentials: true },
-            data: {
-                'data': JSON.stringify(data),
-                'WebPartKey': WebPartVal,
-                'ReqGUID': getGUID()
-            },
-            success: function (data) {
-                if ((data) && (data.d.RetVal === -1)) {
-                    if (data.d.RetData.Tbl.Rows.length > 0) {
-                        if (data.d.RetData.Tbl.Rows[0].Success == true) {
-                            $.when(GetAvailablePackage(caseID)).then(function () {
-                                $('#chargeForm #packageID').val('');
-                                $('#chargeForm #actualManHours').val('');
-                                $('#chargeForm').foundation('close');
-                                GetCaseDetails(caseID);
-                                GetCaseHistory(caseID);
-                            });
-                        } else { alert(data.d.RetData.Tbl.Rows[0].ReturnMsg); }
-                    }
-                }
-                else {
-                    alert(data.d.RetMsg);
-                }
-            },
-            error: function (data) {
-                alert("Error: " + data.responseJSON.d.RetMsg);
-            }
-        });
-    } else {
-        return false;
-    }
-};
 
 function getStaffList() {
     $('#involvementForm #person').html('<option value="">-- Please Select --</option>');
@@ -1470,7 +1307,7 @@ function GetServiceChargeToPackage(FatherId, Id, LookupCat) {
                 if (data.d.RetData.Tbl.Rows.length > 0) {
                     var Result = data.d.RetData.Tbl.Rows;
                     for (var i = 0; i < Result.length; i++) {
-                        $('#' + FatherId + ' #' + Id + '').append('<option value="' + Result[i].Description + '">' + Result[i].TagData3 + '</option>');
+                        $('#' + FatherId + ' #' + Id + '').append('<option value="' + Result[i].Description + '">' + Result[i].Description + '</option>');
                     }
                 }
             }
