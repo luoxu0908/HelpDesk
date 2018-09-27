@@ -397,8 +397,6 @@ function loadMenu() {
             subItem.Value=menus[i].RelativeURL;
             menuItem.URLList.push(subItem);
             menuList.push(menuItem);
-            console.log(subItem);
-            console.log(menuItem);
           }
         }
         var menuHtml = '';

@@ -2,7 +2,7 @@ var menu = [];
 
 function Logout(){
   return  $.JSONPost('Sec1.Logout.json', { }).done(function (data) {
-  	  $.cookie('appCookie', '', { expires: -1 })
+      $.cookie('appCookie', null, { path: "/", expires: -1 })
   	  window.location.href = '../login.html';
   	});
 }
