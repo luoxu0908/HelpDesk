@@ -400,40 +400,42 @@ function loadMenu() {
           }
         }
         var menuHtml = '';
+        var module='<ul class="module">';
         for (var i = 0; i < menuList.length; i++) {
-          menuHtml += ' <ul class="module"><li><a href="javascript:;" data-menu="' + menuList[i].Name + '"" >' + menuList[i].Name + '</a></li></ul>';
+          module+='<li><a href="javascript:;" data-menu="' + menuList[i].Name + '" >' + menuList[i].Name + '</a></li>';
           menuHtml += '<ul id="moduleMenu-' + menuList[i].Name + '" class="moduleMenu" data-redirect="false">';
           for (var j = 0; j < menuList[i].URLList.length; j++) {
             menuHtml+=' <li><a target="_top" href="'+menuList[i].URLList[j].Value+'">'+menuList[i].URLList[j].Name+'</a></li>';
           }
           menuHtml +='</ul>';
         }
-        $('#mainMenu').html(menuHtml);
-        //console.log(menu);
+        module+='</ul>';
+        $('#mainMenu').html(module+menuHtml);
+
+        //console.log(menu)
         //console.log($('#mainMenu .module a').length);
-        // $('#mainMenu .module a').click(function() {
-        //   var targetId = $(this).data('menu');
-        //   var targetObj = $('#moduleMenu-'+targetId);
-        //   //console.log(targetObj.length);
-        //   if (Foundation.MediaQuery.current == 'small')
-        //   {
-        //     if (targetObj.find('li').length > 1) {
-        //       $('.module').hide();
-        //       $('.moduleMenu').hide();
-        //       targetObj.show();
-        //     }
-        //     else {
-        //       console.log('aaa');
-        //       window.location.href = $(this).prop('href');
-        //     }
-        //   }
-        //   else {
-        //     //console.log('aaa');
-        //     $('.moduleMenu').hide();
-        //     targetObj.show();
-        //   }
-        //   return false;
-        // });//module Links
+        $('#mainMenu .module a').click(function() {
+          var targetId = $(this).data('menu');
+          var targetObj = $('#moduleMenu-'+targetId);
+          //console.log(targetObj.length);
+          if (Foundation.MediaQuery.current == 'small')
+          {
+            if (targetObj.find('li').length > 1) {
+              $('.module').hide();
+              $('.moduleMenu').hide();
+              targetObj.show();
+            }
+            else {
+              window.location.href = $(this).prop('href');
+            }
+          }
+          else {
+            //console.log('aaa');
+            $('.moduleMenu').hide();
+            targetObj.show();
+          }
+          return false;
+        });//module Links
 
         // $('.moduleMenu').find('a').click(function() {
         //   var thisObj = $(this);

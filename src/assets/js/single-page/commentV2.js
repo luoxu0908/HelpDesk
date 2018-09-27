@@ -1,13 +1,16 @@
 var menu = [];
 
-function Logout(){
-  return  $.JSONPost('Sec1.Logout.json', { }).done(function (data) {
-      $.cookie('appCookie', null, { path: "/", expires: -1 })
-  	  window.location.href = '../login.html';
-  	});
+function Logout() {
+  return $.JSONPost('Sec1.Logout.json', {}).done(function(data) {
+    $.cookie('appCookie', null, {
+      path: "/",
+      expires: -1
+    })
+    window.location.href = '../login.html';
+  });
 }
-function loadMenu(){
-  return  $.JSONPost('FL1.GetTicketMenu.json', { }).done(function (data) {
+function loadMenu() {
+  return $.JSONPost('FL1.GetTicketMenu.json', {}).done(function(data) {
     if ((data) && (data.d.RetData.Tbl.Rows.length > 0)) {
       var menus = data.d.RetData.Tbl.Rows;
       var menuList = new Array();
@@ -35,15 +38,26 @@ function loadMenu(){
         }
       }
       var menuHtml = '';
+      var module = '<ul class="module">';
       for (var i = 0; i < menuList.length; i++) {
-        menuHtml += ' <ul class="module"><li><a href="javascript:;" data-menu="' + menuList[i].Name + '"" >' + menuList[i].Name + '</a></li></ul>';
+        module += '<li><a href="javascript:;" data-menu="' + menuList[i].Name + '" >' + menuList[i].Name + '</a></li>';
         menuHtml += '<ul id="moduleMenu-' + menuList[i].Name + '" class="moduleMenu" data-redirect="false">';
         for (var j = 0; j < menuList[i].URLList.length; j++) {
           menuHtml += ' <li><a target="_top" href="' + menuList[i].URLList[j].Value + '">' + menuList[i].URLList[j].Name + '</a></li>';
         }
         menuHtml += '</ul>';
       }
-      $('#mainMenu').html(menuHtml);
-      }
-  	});
+      module += '</ul>';
+      $('#mainMenu').html(module + menuHtml);
+
+
+      $('#mainMenu .module a').click(function() {
+        var targetId = $(this).data('menu');
+        var targetObj = $('#moduleMenu-' + targetId);
+        $('.moduleMenu').hide();
+        targetObj.show();
+        return false;
+      }); //module Links
+    }
+  });
 }
