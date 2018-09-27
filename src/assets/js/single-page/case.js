@@ -423,51 +423,59 @@ function execHours(startDate, endDate, standDate) {
     }
 }
 function DoPrintServiceForm() {
-      $('#PrintServiceForm .PrintCaseID').html(caseDetails.FLID);
-      $('#PrintServiceForm .PrintOrganisation').html(caseDetails.Organisation);
-      $('#PrintServiceForm .PrintContactPerson').html(caseDetails.ContactPerson);
-      $('#PrintServiceForm .PrintSubject').html(caseDetails.Subject);
-      $('#PrintServiceForm .PrintLocation').html(caseDetails.TagData3);
-      $('#PrintServiceForm .PrintDetails').html(caseDetails.Details);
-      $('#PrintServiceForm .PrintStatus').html(caseDetails.Status);
-      $('#PrintServiceForm .PrintCategory').html(caseDetails.Category);
-      $('#PrintServiceForm .PrintType').html(caseDetails.NewType);
-      $('#PrintServiceForm .PrintActualDateFrom').html(moment(caseDetails.DateFrom).format('YYYY-MM-DD'));
-      $('#PrintServiceForm .PrintActualTimeFrom').html(moment(caseDetails.DateFrom).format('HH:mm'));
-      $('#PrintServiceForm .PrintActualDateTo').html(moment(caseDetails.DateTo).format('YYYY-MM-DD'));
-      $('#PrintServiceForm .PrintActualTimeTo').html(moment(caseDetails.DateTo).format('HH:mm'));
 
-      if (caseDetails.PHWeekend == '1') {
-          $('#PrintServiceForm .PrintPHWeekend').html('Yes');
-      } else {
-          $('#PrintServiceForm .PrintPHWeekend').html('No');
-      }
-
-      if (caseDetails.Urgent == '1') {
-          $('#PrintServiceForm .PrintUrgent').html('Yes');
-      } else {
-          $('#PrintServiceForm .PrintUrgent').html('No');
-      }
-      $('#PrintServiceForm .PrintActualHours').html(caseDetails.ActualHours);
-      $('#PrintServiceForm .PrintOffSetHours').html(caseDetails.OffSetHours);
-      $('#PrintServiceForm .PrintOffSetReason').html(caseDetails.OffSetReason);
-      $('#PrintServiceForm .PrintBillingHours').html(caseDetails.BillingHours);
-      $('#PrintServiceForm .PrintHoursCalculatio').html(caseDetails.HoursCalculation);
-      $('#PrintServiceForm .PrintDiagnosis').html(caseDetails.Diagnosis);
-      $('#PrintServiceForm .PrintFollowRemarks').html(caseDetails.FollowupRemarks);
-
-      if (caseDetails.CustomerAck == '1') {
-          $('#PrintServiceForm .PrintCustomerAck').html('Yes');
-      } else {
-          $('#PrintServiceForm .PrintCustomerAck').html('No');
-      }
-      $('#PrintServiceForm .PrintName2').html(caseDetails.ServiceName);
-      $('#PrintServiceForm .PrintEmail2').html(caseDetails.ServiceEmail);
-      $('#PrintServiceForm .PrintContactNo2').html(caseDetails.ServiceContactNo);
-
+    GetDoPrintServiceForm();
     var printData = document.getElementById("PrintServiceForm").innerHTML;
     window.document.body.innerHTML = printData
     window.print()
+}
+
+function GetDoPrintServiceForm(){
+  $('#PrintServiceForm .PrintCaseID').html($('#ServiceForm #ServiceCaseID').val()||'');
+  $('#PrintServiceForm .PrintOrganisation').html($('#ServiceForm #ServiceOrganisation').val()||'');
+  $('#PrintServiceForm .PrintContactPerson').html($('#ServiceForm #ServiceContactPerson').val());
+  $('#PrintServiceForm .PrintEmail1').html($('#ServiceForm #ServiceEmail').val());
+  $('#PrintServiceForm .PrintContactNo1').html($('#ServiceForm #ServiceContactNo').val());
+  $('#PrintServiceForm .PrintSubject').html($('#ServiceForm #ServiceSubject').val());
+  $('#PrintServiceForm .PrintLocation').html($('#ServiceForm #ServiceLocation').val());
+  $('#PrintServiceForm .PrintDetails').html($('#ServiceForm #ServiceDetails').val());
+  $('#PrintServiceForm .PrintStatus').html($('#ServiceForm #ServiceStatus').val());
+  $('#PrintServiceForm .PrintCategory').html($('#ServiceForm #ServiceCategory').val());
+  $('#PrintServiceForm .PrintType').html($('#ServiceForm #ServiceType').val());
+  $('#PrintServiceForm .PrintActualDateFrom').html( $('#ServiceForm #ServiceActualDateFrom').val());
+  $('#PrintServiceForm .PrintActualTimeFrom').html($('#ServiceForm #ActualTimeFrom').val());
+  $('#PrintServiceForm .PrintActualDateTo').html($('#ServiceForm #ServiceActualDateTo').val());
+  $('#PrintServiceForm .PrintActualTimeTo').html($('#ServiceForm #ActualTimeTo').val());
+
+  if ($("#ServiceForm #ServicePHWeekend").is(':checked')) {
+      $('#PrintServiceForm .PrintPHWeekend').html('Yes');
+  }else{
+    $('#PrintServiceForm .PrintPHWeekend').html('No');
+  }
+
+  if ($("#ServiceForm #ServiceUrgent").is(':checked')) {
+      $('#PrintServiceForm .PrintUrgent').html('Yes');
+  }else{
+      $('#PrintServiceForm .PrintUrgent').html('No');
+  }
+
+  $('#PrintServiceForm .PrintActualHours').html($('#ServiceForm #ServiceActualHours').val());
+  $('#PrintServiceForm .PrintOffSetHours').html($('#ServiceForm #ServiceOffSetHours').val());
+  $('#PrintServiceForm .PrintOffSetReason').html($('#ServiceForm #ServiceReason').val());
+  $('#PrintServiceForm .PrintBillingHours').html($('#ServiceForm #ServiceBillingHours').val());
+  $('#PrintServiceForm .PrintChargeToPackage').html($('#ServiceForm #ServiceChargeToPackage').val());
+  $('#PrintServiceForm .ServiceHoursCalculation').html($('#ServiceForm #ServiceHoursCalculation').val());
+  $('#PrintServiceForm .PrintDiagnosis').html($('#ServiceForm #ServiceDiagnosis').val() );
+  $('#PrintServiceForm .PrintFollowRemarks').html($('#ServiceForm #ServiceBigRemarks').val());
+
+  if ($("#ServiceForm #ServiceCustomerAck").is(':checked')) {
+      $('#PrintServiceForm .PrintCustomerAck').html('Yes');
+  }else{
+      $('#PrintServiceForm .PrintCustomerAck').html('No');
+  }
+  $('#PrintServiceForm .PrintName2').html($('#ServiceForm #ServiceName1').val());
+  $('#PrintServiceForm .PrintEmail2').html($('#ServiceForm #ServiceEmail1').val());
+  $('#PrintServiceForm .PrintContactNo2').html($('#ServiceForm #ServiceContactNo1').val());
 }
 function DoPrint() {
     $('.boxContent').hide();
