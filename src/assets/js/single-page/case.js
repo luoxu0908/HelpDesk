@@ -105,9 +105,10 @@ $(function () {
     });
 
     $.when(getOrgnaisationList(), GetDropDownList('reviewForm', 'category', 'Category'), GetDropDownList('reviewForm', 'Location', 'OrgAddressLocation')
-    , GetDropDownList('reviewForm', 'PriorityLevel', 'PriorityLevel'), GetDropDownList('reviewForm', 'Type', 'Type'),GetServiceChargeToPackage('ServiceForm', 'ServiceChargeToPackage', '')).then(function () {
+    , GetDropDownList('reviewForm', 'PriorityLevel', 'PriorityLevel'), GetDropDownList('reviewForm', 'Type', 'Type')).then(function () {
         $('#reviewForm #organisation').attr('disabled', 'disabled');
         $.when(GetCaseDetails(caseID)).then(function () {
+          GetServiceChargeToPackage('ServiceForm', 'ServiceChargeToPackage', '');
             GetOrgAddressLocation('OrgAddressLocation', TargetRoleID);
         });
         GetCaseHistory(caseID);
