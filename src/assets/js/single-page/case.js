@@ -114,6 +114,7 @@ $(function () {
         GetCaseHistory(caseID);
         GetreviewCase(caseID);
         getRemoveStaffList(caseID);
+        GetCaseInvolvement(caseID);
     });
     GetServicePoint('ServiceTimePoint');
     GetTimeClockType();
@@ -184,6 +185,40 @@ $(function () {
         $('#activityForm #submit').show();
     });
 });
+function GetCaseInvolvement(caseId){
+  $.ajax({
+    url: apiSrc+"BCMain/FL1.GetCasesInvolvement.json",
+    method: "POST",
+    dataType: "json",
+    xhrFields: {withCredentials: true},
+    data: { 'data':JSON.stringify({'FLID':caseId}),
+            'WebPartKey':WebPartVal,
+            'ReqGUID': getGUID() },
+    success: function(data){
+      if ((data) && (data.d.RetVal === -1)) {
+        if (data.d.RetData.Tbl.Rows.length > 0) {
+          var caseInvolvements = data.d.RetData.Tbl.Rows;
+          var involvementContainer = '';
+          for (var i=0; i<caseInvolvements.length; i++ ){
+            var date = convertDateTime(caseInvolvements[i].CreatedDate,'date');
+            var time = convertDateTime(caseInvolvements[i].CreatedDate,'time');
+            involvementContainer += '<div class="thread">'
+            involvementContainer += '<div class="top"> <span class="datetime">'+date+'<i> '+time+'</i> </span> </div>'
+            involvementContainer += '<div class="text">'+caseInvolvements[i].RolePerson+'</div> </div>'
+            //involvementContainer += '<div class="text">'+caseInvolvements[i].RolePerson+': '+caseInvolvements[i].Remarks+'</div> </div>'
+          }
+          $('#taskThread .threadTask').html(involvementContainer);
+        }
+      }
+      else {
+        alert(data.d.RetMsg);
+      }
+    },
+    error: function(data){
+      alert("Error: " + data.responseJSON.d.RetMsg);
+    }
+  });
+};
 
 function AddNewServiceForm() {
     $('#ServiceForm #submit').show();
