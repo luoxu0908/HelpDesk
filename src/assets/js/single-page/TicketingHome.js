@@ -504,7 +504,7 @@ function getProductOwn() {
                         var StartDate = convertDateTime(products[i].StartDate, 'date');
                         htmlString += '<tr id="' + products[i].Product + '">';
                         htmlString += "<td><a href='#' onclick=EditPackageItem(" + products[i].PackageID + ") >Edit</a></td>";
-                        htmlString += "<td><a href=" + hmtlHref + " target='_blank'>" + products[i].PackageType + "</a></td>";
+                        htmlString += "<td>" + products[i].PackageType + "</a></td>";
                         htmlString += '<td>' + StartDate + '</td>';
                         htmlString += '<td>' + expiryDate + '</td>';
                         htmlString += '<td>' + products[i].ContractType + '</td>';
