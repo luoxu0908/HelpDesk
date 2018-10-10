@@ -548,7 +548,7 @@ function reviewCase(caseID) {
     PriorityLevel = $('#reviewForm #PriorityLevel').val();
     Details = $('#reviewForm #description').val();
 
-    if (Organization.length == 0 || status.length == 0 || ContactPerson.length == 0 || Email.length == 0 || Contact.length == 0 || Subject.length == 0 || Type.length == 0 || Details.length == 0 || PriorityLevel.length == 0) {
+    if (Organization.length == 0 || status.length == 0 || ContactPerson.length == 0 || Email.length == 0 || Subject.length == 0 || Type.length == 0 || Details.length == 0 || PriorityLevel.length == 0) {
         alert('Please fill in all mandatory fields!');
         return false;
     }
@@ -556,11 +556,12 @@ function reviewCase(caseID) {
         alert('Invalid email!');
         return false;
     }
-    if (IsValidContact(Contact) == false) {
-        alert('Invalid contact!');
-        return false;
+    if (Contact.length>0) {
+      if (IsValidContact(Contact) == false) {
+          alert('Invalid contact!');
+          return false;
+      }
     }
-
     var data = { 'FLID': caseID, 'Organization': Organization, 'status': status, 'ContactPerson': ContactPerson, 'Email': Email, 'ContactNo': Contact, 'Subject': Subject, 'Category': Category, 'Details': Details, 'Type': Type, 'NewLocation': NewLocation, 'PriorityLevel': PriorityLevel };
     $.ajax({
         url: apiSrc + "BCMain/FL1.ReviewCase.json",
