@@ -949,11 +949,10 @@ function getServiceDetails(FLLogID, Type) {
                       }
 
                     } else if (caseDetails.Type && caseDetails.Type == 'SF') {
-
                         $('#ServiceForm #submit').hide();
                         $('#ServiceForm #PrintService').hide();
-                        $('#ServiceForm #ServicePHWeekend').prop('checked', caseDetails.PHWeekend || '')
-                        $('#ServiceForm #ServiceUrgent').prop('checked', caseDetails.Urgent || '')
+                        $('#ServiceForm #ServicePHWeekend').prop('checked', Boolean(parseFloat(caseDetails.PHWeekend||'')));
+                        $('#ServiceForm #ServiceUrgent').prop('checked',Boolean(parseFloat(caseDetails.Urgent||'')));
                         $('#ServiceForm #ServiceActualHours').val(caseDetails.ActualHours);
                         $('#ServiceForm #ServiceOffSetHours').val(caseDetails.OffSetHours);
                         $('#ServiceForm #ServiceReason').val(caseDetails.OffSetReason);
