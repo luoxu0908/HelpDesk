@@ -1065,9 +1065,7 @@ function getStaffList() {
 
 function EditPackageItem(PackageID) {
     $('#packageUpdateForm').foundation('open');
-    $.when(getOrgnaisationList()).then(function () {
-        GetPackageEntity(PackageID);
-    });
+    GetPackageEntity(PackageID);
 };
 
 function GetPackageEntity(PackageID) {
