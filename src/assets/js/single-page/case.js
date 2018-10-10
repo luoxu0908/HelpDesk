@@ -665,8 +665,8 @@ function addNewInvolvement(caseID) {
             if ((data) && (data.d.RetVal === -1)) {
                 if (data.d.RetData.Tbl.Rows.length > 0) {
                     if (data.d.RetData.Tbl.Rows[0].Success == true) {
-
                         GetCaseHistory(caseID);
+                        GetCaseInvolvement(caseID);
                         $('#involvementForm #person').val('');
                         $('#involvementForm').foundation('close');
                     } else { alert(data.d.RetData.Tbl.Rows[0].ReturnMsg); }
@@ -703,7 +703,7 @@ function RemoveNewInvolvement(caseID) {
                 if (data.d.RetData.Tbl.Rows.length > 0) {
                     if (data.d.RetData.Tbl.Rows[0].Success == true) {
                         getRemoveStaffList(caseID);
-                        GetCaseHistory(caseID);
+                        GetCaseHistory(caseID);  GetCaseInvolvement(caseID);
                         $('#RemoveinvolvementForm #RemovePerson').val('');
                         $('#RemoveinvolvementForm').foundation('close');
                     } else { alert(data.d.RetData.Tbl.Rows[0].ReturnMsg); }
