@@ -77,7 +77,7 @@ $(function(){
     Cookies.set('appCookie', appCookie);
     var LoginID=GetQueryString('Login');
 
-    if(LoginID!=0){
+    if(!LoginID){
       window.location.href = appRootPath +'login.html';
     }
   }
