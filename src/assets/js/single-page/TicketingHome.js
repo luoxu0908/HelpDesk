@@ -27,6 +27,7 @@ $(function () {
     });
     $("#caseAddForm #organisation").change(function () {
       GetOrgAddressLocation('OrgAddressLocation',$('#caseAddForm #organisation').val());
+      GetOrgContactPerson($(this).val());
     });
     getOrgnaisationList();
     getStaffList();
@@ -100,7 +101,7 @@ $(function () {
     GetDropDownList('packageUpdateForm','EditType','PackageType');
     GetDropDownList('packageUpdateForm','EditContractType','ContractType');
     GetDropDownList('packageUpdateForm','EditInterval','Interval');
-
+   
     $.when(checkRoleAccess, getOrgnaisationList()).then(function (x) {
 
         if (RoleName == 'Admin' || RoleName == 'Security Admin') {
@@ -181,6 +182,52 @@ $(function () {
     });
 });
 
+function LoadContactDetail(){
+    $('#caseAddForm #email').val(''); $('#caseAddForm #contact').val('');
+   var val=$('#caseAddForm #name option:selected').attr('textFiled');  
+    var Email=val.split('|')[0],Mobile=val.split('|')[1];
+    console.log(val);console.log(val.split('|')[0]);console.log(val.split('|')[1]);
+    $('#caseAddForm #email').val(Email); $('#caseAddForm #contact').val(Mobile);
+}
+function GetOrgContactPerson(RoleID){
+    var data={'RoleID':RoleID};
+    $("#caseAddForm #name").html(''); $('#caseAddForm #email').val(''); $('#caseAddForm #contact').val('');
+    $.ajax({
+        url: apiSrc + "BCMain/Evt1.GetContactPersonByRoleID.json",
+        method: "POST",
+        dataType: "json",
+        xhrFields: { withCredentials: true },
+        data: {
+            'data': JSON.stringify(data),
+            'WebPartKey': WebPartVal,
+            'ReqGUID': getGUID()
+        },
+        success: function (data) {
+            if ((data) && (data.d.RetVal === -1)) {
+                if (data.d.RetData.Tbl.Rows.length > 0) {
+                    $('#caseAddForm #LinkContact').hide();
+                    var Rows = data.d.RetData.Tbl.Rows;
+                    for (var i = 0; i < Rows.length; i++) {
+                        $("#caseAddForm #name").append('<option value="' + Rows[i].DisplayName + '" textFiled='+Rows[i].Text+'>' + Rows[i].DisplayName + '</option>');
+                    }
+                    LoadContactDetail();
+                }
+                else {
+                    $('#caseAddForm #LinkContact').attr('href','../BCMain/basepgV2.htm?title=Ticketing Lookup&widgets=../EventMgmt/Widgets/ClientContactPerson.bcw.htm|widgets/DefaultGrid.bcw.htm&SGModKey=Evt.ContactPerson&GetLookupCatURL=iCtc1.getOrgnaisationList.json&RoleID='+RoleID)
+                    $('#caseAddForm #LinkContact').show();
+                    
+                }
+            }
+            else {
+                alert(data.d.RetMsg);
+            }
+        },
+        error: function (data) {
+            alert("Error: " + data.responseJSON.d.RetMsg);
+        }
+    });
+
+}
 //get case list
 function getCasesList() {
     var caseContainerTable = $('#caseContainer').find('table'),
