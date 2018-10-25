@@ -212,7 +212,7 @@ function GetOrgContactPerson(RoleID){
                     LoadContactDetail();
                 }
                 else {
-                    $('#caseAddForm #LinkContact').attr('href','../BCMain/basepgV2.htm?title=Ticketing Lookup&widgets=../EventMgmt/Widgets/ClientContactPerson.bcw.htm|widgets/DefaultGrid.bcw.htm&SGModKey=Evt.ContactPerson&GetLookupCatURL=iCtc1.getOrgnaisationList.json&RoleID='+RoleID);  
+                    $('#caseAddForm #LinkContact').attr('hrefData','../BCMain/basepgV2.htm?title=Ticketing Lookup&widgets=../EventMgmt/Widgets/ClientContactPerson.bcw.htm|widgets/DefaultGrid.bcw.htm&SGModKey=Evt.ContactPerson&GetLookupCatURL=iCtc1.getOrgnaisationList.json&RoleID='+RoleID);  
                 }
             }
             else {
@@ -224,6 +224,11 @@ function GetOrgContactPerson(RoleID){
         }
     });
 
+}
+
+function OpenUrl(url){
+  if (!url)return;
+  window.open(url); 
 }
 //get case list
 function getCasesList() {
