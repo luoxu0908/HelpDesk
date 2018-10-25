@@ -205,7 +205,6 @@ function GetOrgContactPerson(RoleID){
         success: function (data) {
             if ((data) && (data.d.RetVal === -1)) {
                 if (data.d.RetData.Tbl.Rows.length > 0) {
-                    $('#caseAddForm #LinkContact').hide();
                     var Rows = data.d.RetData.Tbl.Rows;
                     for (var i = 0; i < Rows.length; i++) {
                         $("#caseAddForm #name").append('<option value="' + Rows[i].DisplayName + '" textFiled='+Rows[i].Text+'>' + Rows[i].DisplayName + '</option>');
@@ -213,9 +212,7 @@ function GetOrgContactPerson(RoleID){
                     LoadContactDetail();
                 }
                 else {
-                    $('#caseAddForm #LinkContact').attr('href','../BCMain/basepgV2.htm?title=Ticketing Lookup&widgets=../EventMgmt/Widgets/ClientContactPerson.bcw.htm|widgets/DefaultGrid.bcw.htm&SGModKey=Evt.ContactPerson&GetLookupCatURL=iCtc1.getOrgnaisationList.json&RoleID='+RoleID)
-                    $('#caseAddForm #LinkContact').show();
-                    
+                    $('#caseAddForm #LinkContact').attr('href','../BCMain/basepgV2.htm?title=Ticketing Lookup&widgets=../EventMgmt/Widgets/ClientContactPerson.bcw.htm|widgets/DefaultGrid.bcw.htm&SGModKey=Evt.ContactPerson&GetLookupCatURL=iCtc1.getOrgnaisationList.json&RoleID='+RoleID);  
                 }
             }
             else {
