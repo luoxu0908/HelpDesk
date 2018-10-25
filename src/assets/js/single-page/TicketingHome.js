@@ -27,7 +27,7 @@ $(function () {
     });
     $("#caseAddForm #organisation").change(function () {
       GetOrgAddressLocation('OrgAddressLocation',$('#caseAddForm #organisation').val());
-      GetOrgContactPerson($(this).val());
+      GetOrgContactPerson($('#caseAddForm #organisation').val());
     });
     getOrgnaisationList();
     getStaffList();
@@ -211,9 +211,7 @@ function GetOrgContactPerson(RoleID){
                     }
                     LoadContactDetail();
                 }
-                else {
-                    $('#caseAddForm #LinkContact').attr('hrefData','../BCMain/basepgV2.htm?title=Ticketing Lookup&widgets=../EventMgmt/Widgets/ClientContactPerson.bcw.htm|widgets/DefaultGrid.bcw.htm&SGModKey=Evt.ContactPerson&GetLookupCatURL=iCtc1.getOrgnaisationList.json&RoleID='+RoleID);  
-                }
+                $('#caseAddForm #LinkContact').attr('hrefData','../BCMain/basepgV2.htm?title=Ticketing Lookup&widgets=../EventMgmt/Widgets/ClientContactPerson.bcw.htm|widgets/DefaultGrid.bcw.htm&SGModKey=Evt.ContactPerson&GetLookupCatURL=iCtc1.getOrgnaisationList.json&RoleID='+RoleID);  
             }
             else {
                 alert(data.d.RetMsg);
