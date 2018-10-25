@@ -624,6 +624,7 @@ function reviewCase(caseID) {
             if ((data) && (data.d.RetVal === -1)) {
                 if (data.d.RetData.Tbl.Rows.length > 0) {
                     if (data.d.RetData.Tbl.Rows[0].Success == true) {
+                        alert('Successfully Updated!');
                         $('#reviewForm #organisation').val('');
                         $('#reviewForm #name').val('');
                         $('#reviewForm #email').val('');

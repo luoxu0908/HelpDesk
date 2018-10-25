@@ -466,7 +466,7 @@ function createNewCase() {
     NewLocation = $('#caseAddForm #Location').val();
     PriorityLevel = $('#caseAddForm #PriorityLevel').val();
     Details = $('#caseAddForm #description').val();
-    if (Organization.length == 0 || ContactPerson.length == 0 || Email.length == 0 || Subject.length == 0 || Type.length == 0|| Details.length == 0 || PriorityLevel.length == 0) {
+    if (Organization.length == 0 || ContactPerson.length == 0 || Email.length == 0 || Subject.length == 0 || Type.length == 0||Category.length==0|| Details.length == 0 || PriorityLevel.length == 0) {
         alert('Please fill in all mandatory fields!');
         return false;
     }
