@@ -305,6 +305,18 @@ function GetTimeClockType() {
     });
 }
 function ecexHourSetting() {
+
+        var ServiceActualDateFromTemp = $('#ServiceForm #ServiceActualDateFrom').val(),
+        ServiceActualDateToTemp = $('#ServiceForm #ServiceActualDateTo').val(),
+        ActualTimeFromTemp = $('#ServiceForm #ActualTimeFrom').val(),
+        ActualTimeToTemp = $('#ServiceForm #ActualTimeTo').val(),
+        ServiceActualDateTimeFromTemp = ServiceActualDateFromTemp + ' ' + ActualTimeFromTemp,
+        ServiceActualDateTimeToTemp = ServiceActualDateToTemp + ' ' + ActualTimeToTemp;
+        if (moment(ServiceActualDateTimeToTemp).diff(ServiceActualDateTimeFromTemp) <= 0) {
+            alert('Actual date to need more than actual date from.');
+            return false;
+        }
+
     execDays();
 
     actualHour = 0, billingHours = 0, hourDeatils = '';
