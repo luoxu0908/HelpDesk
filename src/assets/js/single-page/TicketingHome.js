@@ -312,8 +312,8 @@ function exportCase() {
     Category = $('#caseFilter #category').val();
     DateFrom = $('#caseFilter #dateCreatedFrom').val();
     DateTo = $('#caseFilter #dateCreatedTo').val();
-
-    var data = { 'Organization': Organization, 'Status': Status, 'Subject': Subject, 'Category': Category, 'DateFrom': DateFrom, 'DateTo': DateTo };
+    person = $('#caseFilter #person').val();
+    var data = { 'Organization': Organization, 'Status': Status, 'Subject': Subject, 'Category': Category, 'DateFrom': DateFrom, 'DateTo': DateTo,'Person':person };
     var Opt = $.extend({ Target: '_blank' }, '');
     var $d = $("<input type='hidden' name='data'/>").val(JSON.stringify(data));
     var $wpk = $("<input type='hidden' name='WebPartKey'/>").val(WebPartVal);
