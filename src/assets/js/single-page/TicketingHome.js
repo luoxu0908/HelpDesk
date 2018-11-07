@@ -305,15 +305,16 @@ function getCasesList() {
 };
 
 function exportCase() {
-    var Organization, Status, Subject, Category, DateFrom, DateTo;
+    var Organization, Status, Subject, Category, DateFrom, DateTo,person ;
     Organization = $('#caseFilter #organisation').val();
     Status = $('#caseFilter #status').val();
     Subject = $('#caseFilter #subject').val();
     Category = $('#caseFilter #category').val();
     DateFrom = $('#caseFilter #dateCreatedFrom').val();
     DateTo = $('#caseFilter #dateCreatedTo').val();
+	person = $('#caseFilter #person').val();
 
-    var data = { 'Organization': Organization, 'Status': Status, 'Subject': Subject, 'Category': Category, 'DateFrom': DateFrom, 'DateTo': DateTo };
+    var data = { 'Organization': Organization, 'Status': Status, 'Subject': Subject, 'Category': Category, 'DateFrom': DateFrom, 'DateTo': DateTo ,'Person': person };
     var Opt = $.extend({ Target: '_blank' }, '');
     var $d = $("<input type='hidden' name='data'/>").val(JSON.stringify(data));
     var $wpk = $("<input type='hidden' name='WebPartKey'/>").val(WebPartVal);
