@@ -700,7 +700,7 @@ function addNewUser() {
     Username = $('#newUserForm #Username').val();
     Password = $('#newUserForm #Password').val();
 
-    if (displayName == '' || entityKey == '' || mobile == '' || email == '' || Username == '' || Password == '') {
+    if (displayName == '' || mobile == '' || email == '' || Username == '' || Password == '') {
         alert('Please fill in all mandatory fields!');
         return false;
     }
