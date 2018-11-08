@@ -101,7 +101,7 @@ $(function () {
     GetDropDownList('packageUpdateForm','EditType','PackageType');
     GetDropDownList('packageUpdateForm','EditContractType','ContractType');
     GetDropDownList('packageUpdateForm','EditInterval','Interval');
-   
+
     $.when(checkRoleAccess, getOrgnaisationList()).then(function (x) {
 
         if (RoleName == 'Admin' || RoleName == 'Security Admin') {
@@ -184,7 +184,7 @@ $(function () {
 
 function LoadContactDetail(){
     $('#caseAddForm #email').val(''); $('#caseAddForm #contact').val('');
-   var val=$('#caseAddForm #name option:selected').attr('textFiled');  
+   var val=$('#caseAddForm #name option:selected').attr('textFiled');
     var Email=val.split('|')[0],Mobile=val.split('|')[1];
     console.log(val);console.log(val.split('|')[0]);console.log(val.split('|')[1]);
     $('#caseAddForm #email').val(Email); $('#caseAddForm #contact').val(Mobile);
@@ -211,7 +211,7 @@ function GetOrgContactPerson(RoleID){
                     }
                     LoadContactDetail();
                 }
-                $('#caseAddForm #LinkContact').attr('hrefData','../BCMain/basepgV2.htm?title=Ticketing Lookup&widgets=../EventMgmt/Widgets/ClientContactPerson.bcw.htm|widgets/DefaultGrid.bcw.htm&SGModKey=Evt.ContactPerson&GetLookupCatURL=iCtc1.getOrgnaisationList.json&RoleID='+RoleID);  
+                $('#caseAddForm #LinkContact').attr('hrefData','../BCMain/basepgV2.htm?title=Ticketing Lookup&widgets=../EventMgmt/Widgets/ClientContactPerson.bcw.htm|widgets/DefaultGrid.bcw.htm&SGModKey=Evt.ContactPerson&GetLookupCatURL=iCtc1.getOrgnaisationList.json&RoleID='+RoleID);
             }
             else {
                 alert(data.d.RetMsg);
@@ -226,7 +226,7 @@ function GetOrgContactPerson(RoleID){
 
 function OpenUrl(url){
   if (!url)return;
-  window.open(url); 
+  window.open(url);
 }
 //get case list
 function getCasesList() {
@@ -305,15 +305,17 @@ function getCasesList() {
 };
 
 function exportCase() {
-    var Organization, Status, Subject, Category, DateFrom, DateTo;
+    var Organization, Status, Subject, Category, DateFrom, DateTo,person ;
     Organization = $('#caseFilter #organisation').val();
     Status = $('#caseFilter #status').val();
     Subject = $('#caseFilter #subject').val();
     Category = $('#caseFilter #category').val();
     DateFrom = $('#caseFilter #dateCreatedFrom').val();
     DateTo = $('#caseFilter #dateCreatedTo').val();
+
     person = $('#caseFilter #person').val();
     var data = { 'Organization': Organization, 'Status': Status, 'Subject': Subject, 'Category': Category, 'DateFrom': DateFrom, 'DateTo': DateTo,'Person':person };
+
     var Opt = $.extend({ Target: '_blank' }, '');
     var $d = $("<input type='hidden' name='data'/>").val(JSON.stringify(data));
     var $wpk = $("<input type='hidden' name='WebPartKey'/>").val(WebPartVal);
@@ -755,7 +757,7 @@ function addNewPerson() {
     Username = $('#newPersonForm #Username').val();
     Password = $('#newPersonForm #Password').val();
     role= $('#newPersonForm #role').val();
-    if (displayName == '' || entityKey == '' || mobile == '' || email == '' || role == '' || Username == '' || Password == '') {
+    if (displayName == '' ||mobile == '' || email == '' || role == '' || Username == '' || Password == '') {
         alert('Please fill in all mandatory fields!');
         return false;
     }
