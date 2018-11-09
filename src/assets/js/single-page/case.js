@@ -250,11 +250,6 @@ function AddNewServiceForm() {
 
     $.when(GetCaseDetails(caseID)).then(function () {
         window.ServiceFormID = '';
-        $('#ServiceForm #ServiceCustomerAck').prop('checked', '');
-        $('#ServiceForm #CustomerAckDiv').show();
-        $('#ServiceForm #ServiceNameDiv').hide();
-        $('#ServiceForm #ServiceEmailDiv').hide();
-
         $('#ServiceForm #ServicePHWeekend').prop('checked', '');
         $('#ServiceForm #ServiceUrgent').prop('checked', '');
         $('#ServiceForm #ServiceOffSetHours').val('');
