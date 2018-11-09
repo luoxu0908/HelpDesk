@@ -29,7 +29,15 @@ $(function () {
       GetOrgAddressLocation('OrgAddressLocation',$('#caseAddForm #organisation').val());
       GetOrgContactPerson($('#caseAddForm #organisation').val());
     });
-    getOrgnaisationList();
+    $.when(getOrgnaisationList()).then(function(){
+          $('#packageFilter #organisation').change(function(){
+              if ($('#packageFilter #organisation').find("option:selected").val().length>0) {
+                $('#packageContainer #LbTxtCompanyName').html($('#packageFilter #organisation').find("option:selected").text())
+              }else{
+                $('#packageContainer #LbTxtCompanyName').html('')
+              }
+          });
+    });
     getStaffList();
 
     var getRoleTags =
