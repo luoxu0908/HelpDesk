@@ -84,34 +84,43 @@ $(function () {
         //alert($('#ServiceForm #ServiceActualDateFrom').val());
         SaveServiceForm(caseID);
     });
-    $('#ServiceForm #ServiceCustomerAck').click(function () {
-        if ($(this).is(':checked')) {
-            $('#ServiceForm #ServiceNameDiv').show();
-        } else {
-            $('#ServiceForm #ServiceNameDiv').hide();
-        }
-    });
-    $('#ServiceForm #ServiceFormType').change(function () {
-        var ServiceFormType = $('#ServiceForm #ServiceFormType').val();
-        if (ServiceFormType == 'Onsite Support') {
-            $('#ServiceForm #CustomerAckDiv').show();
-            $('#ServiceForm #ServiceCustomerAck').prop('checked', 'checked')
-            $('#ServiceForm #CustomerNameDiv').show();
-        }else if(ServiceFormType == 'Remote Support'){
-            $('#ServiceForm #CustomerAckDiv').show();
-            $('#ServiceForm #ServiceCustomerAck').prop('checked', '')
-            $('#ServiceForm #CustomerNameDiv').hide();
-        } 
-        else {
-            $('#ServiceForm #CustomerAckDiv').hide();
-            $('#ServiceForm #ServiceCustomerAck').prop('checked', '')
-            $('#ServiceForm #CustomerNameDiv').hide();
+    $('#ServiceForm #ServiceCustomerAck').click(function(){
+        if ($('#ServiceForm #ServiceCustomerAck').is(':checked')) {
+          $('#ServiceForm #CustomerNameDiv').show();
+        }else{
+          $('#ServiceForm #CustomerNameDiv').hide();
         }
     });
     $.when(getOrgnaisationList(), GetDropDownList('reviewForm', 'category', 'Category'), GetDropDownList('reviewForm', 'Location', 'OrgAddressLocation')
     , GetDropDownList('reviewForm', 'PriorityLevel', 'PriorityLevel'), GetDropDownList('reviewForm', 'Type', 'Type'),GetDropDownList('ServiceForm', 'ServiceFormType', 'Type')).then(function () {
         $('#reviewForm #organisation').attr('disabled', 'disabled');
         $.when(GetCaseDetails(caseID)).then(function () {
+
+          $('#ServiceForm #ServiceFormType').change(function () {
+              var ServiceFormType = $('#ServiceForm #ServiceFormType').val();
+              var AddTime = new Date();
+              if (ServiceFormType == 'Onsite Support') {
+                  $('#ServiceForm #CustomerAckDiv').show();
+                  $('#ServiceForm #ServiceCustomerAck').prop('checked', 'checked')
+                  $('#ServiceForm #CustomerNameDiv').show();
+                  AddTime.setHours(AddTime.getHours() + 2);
+                  $('#ServiceForm #ActualTimeTo').val(SplitTime(moment(AddTime).format("HH:mm")));
+              }else if(ServiceFormType == 'Remote Support'){
+                  $('#ServiceForm #CustomerAckDiv').show();
+                  $('#ServiceForm #ServiceCustomerAck').prop('checked', '')
+                  $('#ServiceForm #CustomerNameDiv').hide();
+                  AddTime.setMinutes(AddTime.getMinutes() + 30);
+                  $('#ServiceForm #ActualTimeTo').val(SplitTime(moment(AddTime).format("HH:mm")));
+              }
+              else {
+                  $('#ServiceForm #CustomerAckDiv').hide();
+                  $('#ServiceForm #ServiceCustomerAck').prop('checked', '')
+                  $('#ServiceForm #CustomerNameDiv').hide();
+                  $('#ServiceForm #ActualTimeTo').val(SplitTime(moment(AddTime).format("HH:mm")));
+              }
+          });
+
+
           GetServiceChargeToPackage('ServiceForm', 'ServiceChargeToPackage', '');
             GetOrgAddressLocation('OrgAddressLocation', TargetRoleID);
         });
@@ -244,7 +253,6 @@ function AddNewServiceForm() {
     $('#ServiceForm #ServiceContactNo1').removeAttr("disabled");
     $('#ServiceForm #ServiceCustomerAck').removeAttr("disabled");
     $('#ServiceForm #ServiceVoid,#ServiceVoidByDiv').hide();
-    $('#ServiceForm #ServiceContactNoDiv').hide();
     var urlParams = new URLSearchParams(window.location.search),
     caseID = urlParams.get('caseID');
 
@@ -272,7 +280,7 @@ function AddNewServiceForm() {
             $('#ServiceForm #CustomerAckDiv').show();
             $('#ServiceForm #ServiceCustomerAck').prop('checked', '')
             $('#ServiceForm #CustomerNameDiv').hide();
-        } 
+        }
         else {
             $('#ServiceForm #CustomerAckDiv').hide();
             $('#ServiceForm #ServiceCustomerAck').prop('checked', '')
@@ -1033,32 +1041,19 @@ function getServiceDetails(FLLogID, Type) {
                         if (CustomerAck == '1' || CustomerAck == 1) {
                             $('#ServiceForm #ServiceCustomerAck').prop('checked', 'checked');
                             $('#ServiceForm #CustomerAckDiv').show();
+                            $('#ServiceForm #CustomerNameDiv').show();
                         } else {
                             $('#ServiceForm #ServiceCustomerAck').prop('checked', '');
                             $('#ServiceForm #CustomerAckDiv').hide();
+                            $('#ServiceForm #CustomerNameDiv').hide();
                         }
-
-
 
                         $.when(GetServiceChargeToPackage('ServiceForm', 'ServiceChargeToPackage', '')).then(function () {
                             $('#ServiceForm #ServiceChargeToPackage').val(caseDetails.PackageType);
                         });
-                        if ($('#ServiceForm #ServiceCustomerAck').is(':checked')) {
-                            $('#ServiceForm #ServiceNameDiv').show();
-                            $('#ServiceForm #ServiceEmailDiv').show();
-                            $('#ServiceForm #ServiceContactNoDiv').show();
-                            $('#ServiceForm #NameLb').html('Name<span style="color:red">*</span>');
-                            $('#ServiceForm #EmailLb').html('Email<span style="color:red">*</span>');
-                              //$('#ServiceForm #ContactNoLb').html('ContactNo<span style="color:red">*</span>');
-                            $('#ServiceForm #ServiceName1').val(caseDetails.ServiceName);
-                            $('#ServiceForm #ServiceEmail1').val(caseDetails.ServiceEmail);
-                            $('#ServiceForm #ServiceContactNo1').val(caseDetails.ServiceContactNo);
-
-                        } else {
-                            $('#ServiceForm #ServiceNameDiv').hide();
-                            $('#ServiceForm #ServiceEmailDiv').hide();
-                            $('#ServiceForm #ServiceContactNoDiv').hide();
-                        }
+                        $('#ServiceForm #ServiceName1').val(caseDetails.ServiceName);
+                        $('#ServiceForm #ServiceEmail1').val(caseDetails.ServiceEmail);
+                        $('#ServiceForm #ServiceContactNo1').val(caseDetails.ServiceContactNo);
                         $('#ServiceForm #ServiceActualDateFrom').attr("disabled", "disabled");
                         $('#ServiceForm #ActualTimeFrom').attr("disabled", "disabled");
                         $('#ServiceForm #ServiceActualDateTo').attr("disabled", "disabled");
@@ -1071,6 +1066,7 @@ function getServiceDetails(FLLogID, Type) {
                         $('#ServiceForm #ServiceHoursCalculation').attr("disabled", "disabled");
                         $('#ServiceForm #ServiceDiagnosis').attr("disabled", "disabled");
                         $('#ServiceForm #ServiceBigRemarks').attr("disabled", "disabled");
+                        $('#ServiceForm #ServiceFormType').attr("disabled", "disabled");
                         $('#ServiceForm #ServiceName1').attr("disabled", "disabled");
                         $('#ServiceForm #ServiceEmail1').attr("disabled", "disabled");
                         $('#ServiceForm #ServiceContactNo1').attr("disabled", "disabled");
@@ -1502,3 +1498,15 @@ function GetOrgAddressLocation(LookupCat, organization) {
         }
     });
 }
+function SplitTime(NowTime) {
+       var Time, H, M, T;
+       T = NowTime.split(":");
+       if (parseInt(T[1]) >= 15 && parseInt(T[1]) < 45) {
+           Time = T[0] + ":30";
+       } else if (parseInt(T[1]) >= 0 && parseInt(T[1]) < 15) {
+           Time = T[0] + ":00";
+       } else if (parseInt(T[1]) >= 45) {
+           Time = (parseInt(T[0]) + 1) + ":00";
+       }
+       return (Time);
+   }
