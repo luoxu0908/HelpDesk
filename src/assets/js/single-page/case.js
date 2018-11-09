@@ -15,6 +15,16 @@ $(function () {
             window.location.href = './case.html?caseID=' + caseID;
         }
     });
+  $('#ServiceForm #ServiceFormType').click(function () {
+    var ServiceFormType=$('#ServiceForm #ServiceFormType').val();
+    if (ServiceFormType == 'Remote Support') {
+      $('#ServiceForm #CustomerAckDiv').hide();
+    } else if (ServiceFormType == 'Onsite Support') {
+      $('#ServiceForm #CustomerAckDiv').show();
+      $('#ServiceForm #ServiceCustomerAck').prop('checked', 'checked')
+    }
+  });
+
     $('#PrintService').click(function () {
         DoPrintServiceForm();
         var PrintFlag = document.execCommand("print");
@@ -105,7 +115,7 @@ $(function () {
     });
 
     $.when(getOrgnaisationList(), GetDropDownList('reviewForm', 'category', 'Category'), GetDropDownList('reviewForm', 'Location', 'OrgAddressLocation')
-    , GetDropDownList('reviewForm', 'PriorityLevel', 'PriorityLevel'), GetDropDownList('reviewForm', 'Type', 'Type')).then(function () {
+    , GetDropDownList('reviewForm', 'PriorityLevel', 'PriorityLevel'), GetDropDownList('reviewForm', 'Type', 'Type'),GetDropDownList('ServiceForm', 'ServiceFormType', 'Type')).then(function () {
         $('#reviewForm #organisation').attr('disabled', 'disabled');
         $.when(GetCaseDetails(caseID)).then(function () {
           GetServiceChargeToPackage('ServiceForm', 'ServiceChargeToPackage', '');
@@ -227,6 +237,7 @@ function AddNewServiceForm() {
     $('#ServiceForm #ActualTimeFrom').removeAttr("disabled");
     $('#ServiceForm #ServiceActualDateTo').removeAttr("disabled");
     $('#ServiceForm #ActualTimeTo').removeAttr("disabled");
+    $('#ServiceForm #ServiceFormType').removeAttr("disabled");
     $('#ServiceForm #ServicePHWeekend').removeAttr("disabled");
     $('#ServiceForm #ServiceUrgent').removeAttr("disabled");
     $('#ServiceForm #ServiceOffSetHours').removeAttr("disabled");
@@ -489,7 +500,7 @@ function GetDoPrintServiceForm(){
   $('#PrintServiceForm .PrintDetails').html($('#ServiceForm #ServiceDetails').val());
   $('#PrintServiceForm .PrintStatus').html($('#ServiceForm #ServiceStatus').val());
   $('#PrintServiceForm .PrintCategory').html($('#ServiceForm #ServiceCategory').val());
-  $('#PrintServiceForm .PrintType').html($('#ServiceForm #ServiceType').val());
+  $('#PrintServiceForm .PrintType').html($('#ServiceForm #ServiceFormType').val());
   $('#PrintServiceForm .PrintActualDateFrom').html( $('#ServiceForm #ServiceActualDateFrom').val());
   $('#PrintServiceForm .PrintActualTimeFrom').html($('#ServiceForm #ActualTimeFrom').val());
   $('#PrintServiceForm .PrintActualDateTo').html($('#ServiceForm #ServiceActualDateTo').val());
@@ -836,7 +847,7 @@ function GetCaseDetails(caseId) {
                     $('#ServiceForm #ServiceStatus').val(caseDetails.Status);
                     $('#ServiceForm #ServiceCategory').val(caseDetails.Category);
                     $('#ServiceForm #ServiceType').val(caseDetails.NewType);
-
+                    $('#ServiceForm #ServiceFormType').val(caseDetails.NewType);
                     if (caseDetails.NewType == 'Remote Support') {
                         $('#ServiceForm #CustomerAckDiv').hide();
                     } else if (caseDetails.NewType == 'Onsite Support') {
@@ -1005,6 +1016,7 @@ function getServiceDetails(FLLogID, Type) {
                         $('#ServiceForm #ServiceActualHours').val(caseDetails.ActualHours);
                         $('#ServiceForm #ServiceOffSetHours').val(caseDetails.OffSetHours);
                         $('#ServiceForm #ServiceReason').val(caseDetails.OffSetReason);
+                        $('#ServiceForm #ServiceFormType').val(caseDetails.ServiceFormType);
                         $('#ServiceForm #ServiceBillingHours').val(caseDetails.BillingHours);
                         $('#ServiceForm #ServiceChargeToPackage').val(caseDetails.PackageType||'');
                         $('#ServiceForm #ServiceHoursCalculation').val(caseDetails.HoursCalculation);
@@ -1190,13 +1202,19 @@ function getOrgnaisationList() {
 
 
 function SaveServiceForm(caseID) {
-    var ServicePHWeekend = 0, Urgent = 0, ServiceCustomerAck = 0, ServiceName1 = '', ServiceEmail1 = '', ServiceContactNo1 = '';
+    var ServicePHWeekend = 0, Urgent = 0, ServiceCustomerAck = 0, ServiceName1 = '', ServiceEmail1 = '', ServiceContactNo1 = '',ServiceFormType='';
     var ServiceActualDateFrom = $('#ServiceForm #ServiceActualDateFrom').val(),
     ServiceActualDateTo = $('#ServiceForm #ServiceActualDateTo').val(),
     ActualTimeFrom = $('#ServiceForm #ActualTimeFrom').val(),
     ActualTimeTo = $('#ServiceForm #ActualTimeTo').val(),
+    ServiceFormType=$('#ServiceForm #ServiceFormType').val(),
     ServiceActualDateTimeFrom = ServiceActualDateFrom + ' ' + ActualTimeFrom,
     ServiceActualDateTimeTo = ServiceActualDateTo + ' ' + ActualTimeTo;
+
+    if (ServiceFormType.length == 0) {
+        alert('Please fill in Type!');
+        return false;
+    }
     if (moment(ServiceActualDateTimeTo).diff(ServiceActualDateTimeFrom) <= 0) {
         alert('Actual date to need more than actual date from.');
         return false;
@@ -1266,7 +1284,7 @@ function SaveServiceForm(caseID) {
         'ServicePHWeekend': ServicePHWeekend, 'Urgent': Urgent, 'ServiceActualHours': ServiceActualHours, 'ServiceOffSetHours': ServiceOffSetHours, 'ServiceReason': ServiceReason,
         'ServiceBillingHours': ServiceBillingHours, 'ServiceChargeToPackage': ServiceChargeToPackage, 'ServiceHoursCalculation': ServiceHoursCalculation,
         'ServiceDiagnosis': ServiceDiagnosis, 'ServiceBigRemarks': ServiceBigRemarks, 'ServiceCustomerAck': ServiceCustomerAck, 'ServiceName1': ServiceName1,
-        'ServiceEmail1': ServiceEmail1, 'ServiceContactNo1': ServiceContactNo1, 'ServiceFormID': window.ServiceFormID, 'ServiceVoidReason': ServiceVoidReason
+        'ServiceEmail1': ServiceEmail1, 'ServiceContactNo1': ServiceContactNo1, 'ServiceFormID': window.ServiceFormID, 'ServiceVoidReason': ServiceVoidReason,'ServiceFormType':ServiceFormType
     };
     $.ajax({
         url: apiSrc + "BCMain/FL1.SaveServiceForm.json",

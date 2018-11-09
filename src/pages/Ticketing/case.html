@@ -488,7 +488,8 @@
             <div class="cell small-4 medium-4">
                 <label>
                     Type
-                    <input type="text" id="ServiceType" name="ServiceType" disabled="disabled" />
+                    <input type="text" id="ServiceType" name="ServiceType" disabled="disabled" style="display:none"/>
+                    <select id="ServiceFormType" name="ServiceFormType"></select>
                     </label>
             </div>
 
@@ -673,7 +674,7 @@
             <div class="cell">
                 <label>
                     Hours Calculation Breakdown
-                    <textarea id="ServiceHoursCalculation" name="ServiceHoursCalculation" style="height:30%" disabled="disabled"></textarea>
+                    <textarea id="ServiceHoursCalculation" name="ServiceHoursCalculation" style="height:0%" rows="4"> disabled="disabled"></textarea>
                 </label>
             </div>
         </div>
@@ -681,7 +682,7 @@
             <div class="cell">
                 <label>
                     Diagnosis / Action taken / Services Rendered
-                    <textarea id="ServiceDiagnosis" name="ServiceDiagnosis" style="height:30%"></textarea>
+                    <textarea id="ServiceDiagnosis" name="ServiceDiagnosis" style="height:30%" rows="4"></textarea>
                 </label>
             </div>
         </div>
@@ -689,7 +690,7 @@
             <div class="cell">
                 <label>
                     Follow-up / Remarks
-                    <textarea id="ServiceBigRemarks" name="ServiceBigRemarks" style="height:30%"></textarea>
+                    <textarea id="ServiceBigRemarks" name="ServiceBigRemarks" style="height:30%" rows="4">></textarea>
                 </label>
             </div>
         </div>
