@@ -15,16 +15,6 @@ $(function () {
             window.location.href = './case.html?caseID=' + caseID;
         }
     });
-  $('#ServiceForm #ServiceFormType').click(function () {
-    var ServiceFormType=$('#ServiceForm #ServiceFormType').val();
-    if (ServiceFormType == 'Remote Support') {
-      $('#ServiceForm #CustomerAckDiv').hide();
-    } else if (ServiceFormType == 'Onsite Support') {
-      $('#ServiceForm #CustomerAckDiv').show();
-      $('#ServiceForm #ServiceCustomerAck').prop('checked', 'checked')
-    }
-  });
-
     $('#PrintService').click(function () {
         DoPrintServiceForm();
         var PrintFlag = document.execCommand("print");
@@ -97,23 +87,27 @@ $(function () {
     $('#ServiceForm #ServiceCustomerAck').click(function () {
         if ($(this).is(':checked')) {
             $('#ServiceForm #ServiceNameDiv').show();
-            $('#ServiceForm #ServiceEmailDiv').show();
-            $('#ServiceForm #ServiceContactNoDiv').show();
-
-            $('#ServiceForm #NameLb').html('Name<span style="color:red">*</span>');
-            $('#ServiceForm #EmailLb').html('Email<span style="color:red">*</span>');
-            //$('#ServiceForm #ContactNoLb').html('ContactNo<span style="color:red">*</span>');
-
         } else {
             $('#ServiceForm #ServiceNameDiv').hide();
-            $('#ServiceForm #ServiceEmailDiv').hide();
-            $('#ServiceForm #ServiceContactNoDiv').hide();
-            $('#ServiceForm #NameLb').html('Name');
-            $('#ServiceForm #EmailLb').html('Email');
-            $('#ServiceForm #ContactNoLb').html('ContactNo');
         }
     });
-
+    $('#ServiceForm #ServiceFormType').change(function () {
+        var ServiceFormType = $('#ServiceForm #ServiceFormType').val();
+        if (ServiceFormType == 'Onsite Support') {
+            $('#ServiceForm #CustomerAckDiv').show();
+            $('#ServiceForm #ServiceCustomerAck').prop('checked', 'checked')
+            $('#ServiceForm #CustomerNameDiv').show();
+        }else if(ServiceFormType == 'Remote Support'){
+            $('#ServiceForm #CustomerAckDiv').show();
+            $('#ServiceForm #ServiceCustomerAck').prop('checked', '')
+            $('#ServiceForm #CustomerNameDiv').hide();
+        } 
+        else {
+            $('#ServiceForm #CustomerAckDiv').hide();
+            $('#ServiceForm #ServiceCustomerAck').prop('checked', '')
+            $('#ServiceForm #CustomerNameDiv').hide();
+        }
+    });
     $.when(getOrgnaisationList(), GetDropDownList('reviewForm', 'category', 'Category'), GetDropDownList('reviewForm', 'Location', 'OrgAddressLocation')
     , GetDropDownList('reviewForm', 'PriorityLevel', 'PriorityLevel'), GetDropDownList('reviewForm', 'Type', 'Type'),GetDropDownList('ServiceForm', 'ServiceFormType', 'Type')).then(function () {
         $('#reviewForm #organisation').attr('disabled', 'disabled');
@@ -274,11 +268,20 @@ function AddNewServiceForm() {
         $('#ServiceForm #ServiceName1').val('');
         $('#ServiceForm #ServiceEmail1').val('');
         $('#ServiceForm #ServiceContactNo1').val('');
-        var Type=$('#reviewForm #Type').val();
-        if (Type=='Remote Support') {
-          $('#ServiceForm #CustomerAckDiv').hide();
-        }else{
-          $('#ServiceForm #CustomerAckDiv').show();
+        var ServiceFormType = $('#ServiceForm #ServiceFormType').val();
+        if (ServiceFormType == 'Onsite Support') {
+            $('#ServiceForm #CustomerAckDiv').show();
+            $('#ServiceForm #ServiceCustomerAck').prop('checked', 'checked')
+            $('#ServiceForm #CustomerNameDiv').show();
+        }else if(ServiceFormType == 'Remote Support'){
+            $('#ServiceForm #CustomerAckDiv').show();
+            $('#ServiceForm #ServiceCustomerAck').prop('checked', '')
+            $('#ServiceForm #CustomerNameDiv').hide();
+        } 
+        else {
+            $('#ServiceForm #CustomerAckDiv').hide();
+            $('#ServiceForm #ServiceCustomerAck').prop('checked', '')
+            $('#ServiceForm #CustomerNameDiv').hide();
         }
         $("#ServiceForm").foundation('open');
         ecexHourSetting();
@@ -848,12 +851,6 @@ function GetCaseDetails(caseId) {
                     $('#ServiceForm #ServiceCategory').val(caseDetails.Category);
                     $('#ServiceForm #ServiceType').val(caseDetails.NewType);
                     $('#ServiceForm #ServiceFormType').val(caseDetails.NewType);
-                    if (caseDetails.NewType == 'Remote Support') {
-                        $('#ServiceForm #CustomerAckDiv').hide();
-                    } else if (caseDetails.NewType == 'Onsite Support') {
-                        $('#ServiceForm #CustomerAckDiv').show();
-                        $('#ServiceForm #ServiceCustomerAck').prop('checked', 'checked')
-                    }
                     $('#ServiceForm #ServiceActualDateFrom').val(moment(caseDetails.DateFrom).format('YYYY-MM-DD'));
                     $('#ServiceForm #ActualTimeFrom').val(moment(caseDetails.DateFrom).format('HH:mm'));
                     $('#ServiceForm #ServiceActualDateTo').val(moment(caseDetails.DateTo).format('YYYY-MM-DD'));
