@@ -329,7 +329,7 @@ function ecexHourSetting() {
         ActualTimeToTemp = $('#ServiceForm #ActualTimeTo').val(),
         ServiceActualDateTimeFromTemp = ServiceActualDateFromTemp + ' ' + ActualTimeFromTemp,
         ServiceActualDateTimeToTemp = ServiceActualDateToTemp + ' ' + ActualTimeToTemp;
-        if (moment(ServiceActualDateTimeToTemp).diff(ServiceActualDateTimeFromTemp) <= 0) {
+        if (moment(ServiceActualDateTimeToTemp).diff(ServiceActualDateTimeFromTemp) < 0) {
             alert('Actual date to need more than actual date from.');
             return false;
         }
@@ -1203,7 +1203,7 @@ function SaveServiceForm(caseID) {
         alert('Please fill in Type!');
         return false;
     }
-    if (moment(ServiceActualDateTimeTo).diff(ServiceActualDateTimeFrom) <= 0) {
+    if (moment(ServiceActualDateTimeTo).diff(ServiceActualDateTimeFrom) < 0) {
         alert('Actual date to need more than actual date from.');
         return false;
     }
