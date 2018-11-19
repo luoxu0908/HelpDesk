@@ -235,7 +235,7 @@ function GetCaseInvolvement(caseId){
 
 function AddNewServiceForm() {
     $('#ServiceForm #submit').show();
-    $('#ServiceForm #PrintService').show();
+    $('#ServiceForm #PrintService').hide();
     $('#ServiceForm #ServiceActualDateFrom').removeAttr("disabled");
     $('#ServiceForm #ActualTimeFrom').removeAttr("disabled");
     $('#ServiceForm #ServiceActualDateTo').removeAttr("disabled");
