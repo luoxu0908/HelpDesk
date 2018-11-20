@@ -1,11 +1,11 @@
 var RoleName = '', PrintFlag = '', FileID = '', caseID = '', TargetRoleID = '', TimeTypeMap = {};
 var startDate = '', endDate = '', standDate = '', execCount = 0.0, actualHour = 0.0, billingHours = 0.0, hourDeatils = '',
-offSetHour = 0.0, ServiceTimePoint9, ServiceTimePoint18, ServiceTimePoint22, ServiceTimePoint24;
+    offSetHour = 0.0, ServiceTimePoint9, ServiceTimePoint18, ServiceTimePoint22, ServiceTimePoint24;
 
 $(function () {
     //get caseID from URL
     var urlParams = new URLSearchParams(window.location.search),
-    caseID = urlParams.get('caseID');
+        caseID = urlParams.get('caseID');
     FileID = urlParams.get('FileID');
 
     $('#Print').click(function () {
@@ -24,30 +24,30 @@ $(function () {
     });
 
     var checkRoleAccess =
-      $.ajax({
-          url: apiSrc + "BCMain/iCtc1.CheckRoleAccess.json",
-          method: "POST",
-          dataType: "json",
-          xhrFields: { withCredentials: true },
-          data: {
-              'data': JSON.stringify({}),
-              'WebPartKey': WebPartVal,
-              'ReqGUID': getGUID()
-          },
-          success: function (data) {
-              if ((data) && (data.d.RetVal === -1)) {
-                  if (data.d.RetData.Tbl.Rows.length > 0) {
-                      RoleName = data.d.RetData.Tbl.Rows[0].RoleName;
-                  }
-              }
-              else {
-                  alert(data.d.RetMsg);
-              }
-          },
-          error: function (data) {
-              alert("Error: " + data.responseJSON.d.RetMsg);
-          }
-      });
+        $.ajax({
+            url: apiSrc + "BCMain/iCtc1.CheckRoleAccess.json",
+            method: "POST",
+            dataType: "json",
+            xhrFields: { withCredentials: true },
+            data: {
+                'data': JSON.stringify({}),
+                'WebPartKey': WebPartVal,
+                'ReqGUID': getGUID()
+            },
+            success: function (data) {
+                if ((data) && (data.d.RetVal === -1)) {
+                    if (data.d.RetData.Tbl.Rows.length > 0) {
+                        RoleName = data.d.RetData.Tbl.Rows[0].RoleName;
+                    }
+                }
+                else {
+                    alert(data.d.RetMsg);
+                }
+            },
+            error: function (data) {
+                alert("Error: " + data.responseJSON.d.RetMsg);
+            }
+        });
 
     $.when(checkRoleAccess).then(function (x) {
         if (RoleName == 'Admin') {
@@ -84,92 +84,66 @@ $(function () {
         //alert($('#ServiceForm #ServiceActualDateFrom').val());
         SaveServiceForm(caseID);
     });
-    $('#ServiceForm #ServiceCustomerAck').click(function(){
+    $('#ServiceForm #ServiceCustomerAck').click(function () {
         if ($('#ServiceForm #ServiceCustomerAck').is(':checked')) {
-          $('#ServiceForm #CustomerNameDiv').show();
-        }else{
-          $('#ServiceForm #CustomerNameDiv').hide();
+            $('#ServiceForm #CustomerNameDiv').show();
+        } else {
+            $('#ServiceForm #CustomerNameDiv').hide();
         }
     });
     $.when(getOrgnaisationList(), GetDropDownList('reviewForm', 'category', 'Category'), GetDropDownList('reviewForm', 'Location', 'OrgAddressLocation')
-    , GetDropDownList('reviewForm', 'PriorityLevel', 'PriorityLevel'), GetDropDownList('reviewForm', 'Type', 'Type'),GetDropDownList('ServiceForm', 'ServiceFormType', 'Type')).then(function () {
-        $('#reviewForm #organisation').attr('disabled', 'disabled');
-        $.when(GetCaseDetails(caseID)).then(function () {
+        , GetDropDownList('reviewForm', 'PriorityLevel', 'PriorityLevel'), GetDropDownList('reviewForm', 'Type', 'Type'), GetDropDownList('ServiceForm', 'ServiceFormType', 'Type')).then(function () {
+            $('#reviewForm #organisation').attr('disabled', 'disabled');
+            $.when(GetCaseDetails(caseID)).then(function () {
 
-          $('#ServiceForm #ServiceFormType').change(function () {
-              var ServiceFormType = $('#ServiceForm #ServiceFormType').val();
-              var AddTime = new Date();
-              if (ServiceFormType == 'Onsite Support') {
-                  $('#ServiceForm #CustomerAckDiv').show();
-                  $('#ServiceForm #ServiceCustomerAck').prop('checked', 'checked')
-                  $('#ServiceForm #CustomerNameDiv').show();
-                  AddTime.setHours(AddTime.getHours() + 2);
-                  $('#ServiceForm #ActualTimeTo').val(SplitTime(moment(AddTime).format("HH:mm")));
-              }else if(ServiceFormType == 'Remote Support'){
-                  $('#ServiceForm #CustomerAckDiv').hide();
-                  $('#ServiceForm #ServiceCustomerAck').prop('checked', '')
-                  $('#ServiceForm #CustomerNameDiv').hide();
-                  AddTime.setMinutes(AddTime.getMinutes() + 30);
-                  $('#ServiceForm #ActualTimeTo').val(SplitTime(moment(AddTime).format("HH:mm")));
-              }
-              else {
-                  $('#ServiceForm #CustomerAckDiv').hide();
-                  $('#ServiceForm #ServiceCustomerAck').prop('checked', '')
-                  $('#ServiceForm #CustomerNameDiv').hide();
-                  $('#ServiceForm #ActualTimeTo').val(SplitTime(moment(AddTime).format("HH:mm")));
-              }
-          });
+                $('#ServiceForm #ServiceFormType').change(function () {
+                    var ServiceFormType = $('#ServiceForm #ServiceFormType').val();
+                    var AddTime = new Date();
+                    if (ServiceFormType == 'Onsite Support') {
+                        $('#ServiceForm #CustomerAckDiv').show();
+                        $('#ServiceForm #ServiceCustomerAck').prop('checked', 'checked')
+                        $('#ServiceForm #CustomerNameDiv').show();
+                        AddTime.setHours(AddTime.getHours() + 2);
+                        $('#ServiceForm #ActualTimeTo').val(SplitTime(moment(AddTime).format("HH:mm")));
+                    } else if (ServiceFormType == 'Remote Support') {
+                        $('#ServiceForm #CustomerAckDiv').hide();
+                        $('#ServiceForm #ServiceCustomerAck').prop('checked', '')
+                        $('#ServiceForm #CustomerNameDiv').hide();
+                        AddTime.setMinutes(AddTime.getMinutes() + 30);
+                        $('#ServiceForm #ActualTimeTo').val(SplitTime(moment(AddTime).format("HH:mm")));
+                    }
+                    else {
+                        $('#ServiceForm #CustomerAckDiv').hide();
+                        $('#ServiceForm #ServiceCustomerAck').prop('checked', '')
+                        $('#ServiceForm #CustomerNameDiv').hide();
+                        $('#ServiceForm #ActualTimeTo').val(SplitTime(moment(AddTime).format("HH:mm")));
+                    }
+                });
 
 
-          GetServiceChargeToPackage('ServiceForm', 'ServiceChargeToPackage', '');
-            GetOrgAddressLocation('OrgAddressLocation', TargetRoleID);
+                GetServiceChargeToPackage('ServiceForm', 'ServiceChargeToPackage', '');
+                GetOrgAddressLocation('OrgAddressLocation', TargetRoleID);
+            });
+            GetCaseHistory(caseID);
+            GetreviewCase(caseID);
+            getRemoveStaffList(caseID);
+            GetCaseInvolvement(caseID);
         });
-        GetCaseHistory(caseID);
-        GetreviewCase(caseID);
-        getRemoveStaffList(caseID);
-        GetCaseInvolvement(caseID);
-    });
     GetServicePoint('ServiceTimePoint');
     GetTimeClockType();
     $("#ServiceForm #ServicePHWeekend").click(function () {
-        actualHour = $('#ServiceForm #ServiceActualHours').val();
-        billingHours = $('#ServiceForm #ServiceBillingHours').val();
-        actualHour = parseFloat(actualHour);
-        billingHours = parseFloat(billingHours);
-        PHWeekend = parseFloat(TimeTypeMap['PHWeekend']) || 2;
-        if ($(this).is(':checked')) {
-            actualHour = actualHour * PHWeekend;
-            billingHours = billingHours * PHWeekend;
-        } else {
-            actualHour = actualHour / PHWeekend;
-            billingHours = billingHours / PHWeekend;
-        }
+        ecexHourSetting();
         if ($('#ServiceForm #ServiceType').val() == 'Professional Service') {
             billingHours = 0;
         }
-
-        $('#ServiceForm #ServiceActualHours').val(actualHour);
-        $('#ServiceForm #ServiceBillingHours').val(billingHours);
     });
 
     $("#ServiceForm #ServiceUrgent").click(function () {
-        actualHour = $('#ServiceForm #ServiceActualHours').val();
-        billingHours = $('#ServiceForm #ServiceBillingHours').val();
-        actualHour = parseFloat(actualHour);
-        billingHours = parseFloat(billingHours);
-        UrgentTime = parseFloat(TimeTypeMap['Urgent']) || 2;
-        if ($(this).is(':checked')) {
-            actualHour = actualHour * UrgentTime;
-            billingHours = billingHours * UrgentTime;
-        } else {
-            actualHour = actualHour / UrgentTime;
-            billingHours = billingHours / UrgentTime;
-        }
+        ecexHourSetting();
         if ($('#ServiceForm #ServiceType').val() == 'Professional Service') {
             billingHours = 0;
         }
-        $('#ServiceForm #ServiceActualHours').val(actualHour);
-        $('#ServiceForm #ServiceBillingHours').val(billingHours);
+
     });
 
     $('#ServiceForm #ActualTimeFrom').change(function () {
@@ -198,39 +172,41 @@ $(function () {
         $('#activityForm #submit').show();
     });
 });
-function GetCaseInvolvement(caseId){
-  $.ajax({
-    url: apiSrc+"BCMain/FL1.GetCasesInvolvement.json",
-    method: "POST",
-    dataType: "json",
-    xhrFields: {withCredentials: true},
-    data: { 'data':JSON.stringify({'FLID':caseId}),
-            'WebPartKey':WebPartVal,
-            'ReqGUID': getGUID() },
-    success: function(data){
-      if ((data) && (data.d.RetVal === -1)) {
-        if (data.d.RetData.Tbl.Rows.length > 0) {
-          var caseInvolvements = data.d.RetData.Tbl.Rows;
-          var involvementContainer = '';
-          for (var i=0; i<caseInvolvements.length; i++ ){
-            var date = convertDateTime(caseInvolvements[i].CreatedDate,'date');
-            var time = convertDateTime(caseInvolvements[i].CreatedDate,'time');
-            involvementContainer += '<div class="thread">'
-            involvementContainer += '<div class="top"> <span class="datetime">'+date+'<i> '+time+'</i> </span> </div>'
-            involvementContainer += '<div class="text">'+caseInvolvements[i].RolePerson+'</div> </div>'
-            //involvementContainer += '<div class="text">'+caseInvolvements[i].RolePerson+': '+caseInvolvements[i].Remarks+'</div> </div>'
-          }
-          $('#taskThread .threadTask').html(involvementContainer);
+function GetCaseInvolvement(caseId) {
+    $.ajax({
+        url: apiSrc + "BCMain/FL1.GetCasesInvolvement.json",
+        method: "POST",
+        dataType: "json",
+        xhrFields: { withCredentials: true },
+        data: {
+            'data': JSON.stringify({ 'FLID': caseId }),
+            'WebPartKey': WebPartVal,
+            'ReqGUID': getGUID()
+        },
+        success: function (data) {
+            if ((data) && (data.d.RetVal === -1)) {
+                if (data.d.RetData.Tbl.Rows.length > 0) {
+                    var caseInvolvements = data.d.RetData.Tbl.Rows;
+                    var involvementContainer = '';
+                    for (var i = 0; i < caseInvolvements.length; i++) {
+                        var date = convertDateTime(caseInvolvements[i].CreatedDate, 'date');
+                        var time = convertDateTime(caseInvolvements[i].CreatedDate, 'time');
+                        involvementContainer += '<div class="thread">'
+                        involvementContainer += '<div class="top"> <span class="datetime">' + date + '<i> ' + time + '</i> </span> </div>'
+                        involvementContainer += '<div class="text">' + caseInvolvements[i].RolePerson + '</div> </div>'
+                        //involvementContainer += '<div class="text">'+caseInvolvements[i].RolePerson+': '+caseInvolvements[i].Remarks+'</div> </div>'
+                    }
+                    $('#taskThread .threadTask').html(involvementContainer);
+                }
+            }
+            else {
+                alert(data.d.RetMsg);
+            }
+        },
+        error: function (data) {
+            alert("Error: " + data.responseJSON.d.RetMsg);
         }
-      }
-      else {
-        alert(data.d.RetMsg);
-      }
-    },
-    error: function(data){
-      alert("Error: " + data.responseJSON.d.RetMsg);
-    }
-  });
+    });
 };
 
 function AddNewServiceForm() {
@@ -254,7 +230,7 @@ function AddNewServiceForm() {
     $('#ServiceForm #ServiceCustomerAck').removeAttr("disabled");
     $('#ServiceForm #ServiceVoid,#ServiceVoidByDiv').hide();
     var urlParams = new URLSearchParams(window.location.search),
-    caseID = urlParams.get('caseID');
+        caseID = urlParams.get('caseID');
 
     $.when(GetCaseDetails(caseID)).then(function () {
         window.ServiceFormID = '';
@@ -276,7 +252,7 @@ function AddNewServiceForm() {
             $('#ServiceForm #CustomerAckDiv').show();
             $('#ServiceForm #ServiceCustomerAck').prop('checked', 'checked')
             $('#ServiceForm #CustomerNameDiv').show();
-        }else if(ServiceFormType == 'Remote Support'){
+        } else if (ServiceFormType == 'Remote Support') {
             $('#ServiceForm #CustomerAckDiv').hide();
             $('#ServiceForm #ServiceCustomerAck').prop('checked', '')
             $('#ServiceForm #CustomerNameDiv').hide();
@@ -323,16 +299,16 @@ function GetTimeClockType() {
 }
 function ecexHourSetting() {
 
-        var ServiceActualDateFromTemp = $('#ServiceForm #ServiceActualDateFrom').val(),
+    var ServiceActualDateFromTemp = $('#ServiceForm #ServiceActualDateFrom').val(),
         ServiceActualDateToTemp = $('#ServiceForm #ServiceActualDateTo').val(),
         ActualTimeFromTemp = $('#ServiceForm #ActualTimeFrom').val(),
         ActualTimeToTemp = $('#ServiceForm #ActualTimeTo').val(),
         ServiceActualDateTimeFromTemp = ServiceActualDateFromTemp + ' ' + ActualTimeFromTemp,
         ServiceActualDateTimeToTemp = ServiceActualDateToTemp + ' ' + ActualTimeToTemp;
-        if (moment(ServiceActualDateTimeToTemp).diff(ServiceActualDateTimeFromTemp) < 0) {
-            alert('Actual date to need more than actual date from.');
-            return false;
-        }
+    if (moment(ServiceActualDateTimeToTemp).diff(ServiceActualDateTimeFromTemp) < 0) {
+        alert('Actual date to need more than actual date from.');
+        return false;
+    }
 
     execDays();
 
@@ -393,98 +369,105 @@ function execHours(startDate, endDate, standDate) {
     var NightDate = new Date(standDate + ' ' + ServiceTimePoint22);
     var LastDate = new Date(standDate + ' ' + ServiceTimePoint24);
     var Normal3 = parseFloat(TimeTypeMap['Normal3']) || 2, Normal2 = parseFloat(TimeTypeMap['Normal2']) || 1.5;
+    var PHWeekend = 1, Urgent = 1;
+    if ($("#ServiceForm #ServicePHWeekend").is(':checked')) {
+        PHWeekend = parseFloat(TimeTypeMap['PHWeekend']) || 2;
+    }
+    if ($("#ServiceForm #ServiceUrgent").is(':checked')) {
+        Urgent = parseFloat(TimeTypeMap['Urgent']) || 2;
+    }
     if (startDate < MorningDate) {
         if (endDate <= MorningDate) {
             actualHour = moment(endDate).diff(startDate, 'minutes') / 60.00;
-            billingHours = actualHour * Normal3;
+            billingHours = actualHour * Normal3 * PHWeekend * Urgent;
             hourDeatils += 'from : ' + moment(startDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(endDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + actualHour + ' Billing Hours : ' + billingHours + '\r\n'
         } else if (endDate > MorningDate && endDate <= AfterNoonDate) {
             actualHour = moment(MorningDate).diff(startDate, 'minutes') / 60.00;
-            billingHours = actualHour * Normal3;
+            billingHours = actualHour * Normal3 * PHWeekend * Urgent;
             hourDeatils += 'from : ' + moment(startDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(MorningDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + actualHour + ' Billing Hours : ' + billingHours + '\r\n'
 
             actualHour = actualHour + moment(endDate).diff(MorningDate, 'minutes') / 60.00;
-            billingHours = billingHours + moment(endDate).diff(MorningDate, 'minutes') / 60.00;
-            hourDeatils += 'from : ' + moment(MorningDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(endDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(endDate).diff(MorningDate, 'minutes') / 60.00 + ' Billing Hours : ' + moment(endDate).diff(MorningDate, 'minutes') / 60.00 + '\r\n'
+            billingHours = billingHours + (moment(endDate).diff(MorningDate, 'minutes') / 60.00) * PHWeekend * Urgent;
+            hourDeatils += 'from : ' + moment(MorningDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(endDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(endDate).diff(MorningDate, 'minutes') / 60.00 + ' Billing Hours : ' + (moment(endDate).diff(MorningDate, 'minutes') / 60.00) * PHWeekend * Urgent + '\r\n'
         } else if (endDate > AfterNoonDate && endDate <= NightDate) {
 
             actualHour = moment(MorningDate).diff(startDate, 'minutes') / 60.00;
-            billingHours = actualHour * Normal3;
+            billingHours = actualHour * Normal3 * PHWeekend * Urgent;
             hourDeatils += 'from : ' + moment(startDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(MorningDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + actualHour + ' Billing Hours : ' + billingHours + '\r\n'
 
             actualHour = actualHour + moment(AfterNoonDate).diff(MorningDate, 'minutes') / 60.00;
-            billingHours = billingHours + moment(AfterNoonDate).diff(MorningDate, 'minutes') / 60.00;
-            hourDeatils += 'from : ' + moment(MorningDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(AfterNoonDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(AfterNoonDate).diff(MorningDate, 'minutes') / 60.00 + ' Billing Hours : ' + moment(AfterNoonDate).diff(MorningDate, 'minutes') / 60.00 + '\r\n'
+            billingHours = billingHours + (moment(AfterNoonDate).diff(MorningDate, 'minutes') / 60.00) * PHWeekend * Urgent;
+            hourDeatils += 'from : ' + moment(MorningDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(AfterNoonDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(AfterNoonDate).diff(MorningDate, 'minutes') / 60.00 + ' Billing Hours : ' + (moment(AfterNoonDate).diff(MorningDate, 'minutes') / 60.00) * PHWeekend * Urgent + '\r\n'
 
             actualHour = actualHour + moment(endDate).diff(AfterNoonDate, 'minutes') / 60.00;
-            billingHours = billingHours + (moment(endDate).diff(AfterNoonDate, 'minutes') / 60.00) * Normal2;
-            hourDeatils += 'from : ' + moment(AfterNoonDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(endDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(endDate).diff(AfterNoonDate, 'minutes') / 60.00 + ' Billing Hours : ' + (moment(endDate).diff(AfterNoonDate, 'minutes') / 60.00) * 1.5 + '\r\n'
+            billingHours = billingHours + (moment(endDate).diff(AfterNoonDate, 'minutes') / 60.00) * Normal2 * PHWeekend * Urgent;
+            hourDeatils += 'from : ' + moment(AfterNoonDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(endDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(endDate).diff(AfterNoonDate, 'minutes') / 60.00 + ' Billing Hours : ' + (moment(endDate).diff(AfterNoonDate, 'minutes') / 60.00) * Normal2 * PHWeekend * Urgent + '\r\n'
 
         } else if (endDate > NightDate && NightDate <= LastDate) {
             actualHour = moment(MorningDate).diff(startDate, 'minutes') / 60.00;
-            billingHours = actualHour * Normal3;
+            billingHours = actualHour * Normal3 * PHWeekend * Urgent;
             hourDeatils += 'from : ' + moment(startDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(MorningDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + actualHour + ' Billing Hours : ' + billingHours + '\r\n'
 
             actualHour = actualHour + moment(AfterNoonDate).diff(MorningDate, 'minutes') / 60.00;
-            billingHours = billingHours + moment(AfterNoonDate).diff(MorningDate, 'minutes') / 60.00;
-            hourDeatils += 'from : ' + moment(MorningDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(AfterNoonDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(AfterNoonDate).diff(MorningDate, 'minutes') / 60.00 + ' Billing Hours : ' + moment(AfterNoonDate).diff(MorningDate, 'minutes') / 60.00 + '\r\n'
+            billingHours = billingHours + (moment(AfterNoonDate).diff(MorningDate, 'minutes') / 60.00) * PHWeekend * Urgent;
+            hourDeatils += 'from : ' + moment(MorningDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(AfterNoonDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(AfterNoonDate).diff(MorningDate, 'minutes') / 60.00 + ' Billing Hours : ' + (moment(AfterNoonDate).diff(MorningDate, 'minutes') / 60.00) * PHWeekend * Urgent + '\r\n'
 
             actualHour = actualHour + moment(NightDate).diff(AfterNoonDate, 'minutes') / 60.00;
-            billingHours = billingHours + (moment(NightDate).diff(AfterNoonDate, 'minutes') / 60.00) * Normal2;
-            hourDeatils += 'from : ' + moment(AfterNoonDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(NightDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(NightDate).diff(AfterNoonDate, 'minutes') / 60.00 + ' Billing Hours : ' + (moment(NightDate).diff(AfterNoonDate, 'minutes') / 60.00) * 1.5 + '\r\n'
+            billingHours = billingHours + (moment(NightDate).diff(AfterNoonDate, 'minutes') / 60.00) * Normal2 * PHWeekend * Urgent;
+            hourDeatils += 'from : ' + moment(AfterNoonDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(NightDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(NightDate).diff(AfterNoonDate, 'minutes') / 60.00 + ' Billing Hours : ' + (moment(NightDate).diff(AfterNoonDate, 'minutes') / 60.00) * Normal2 * PHWeekend * Urgent + '\r\n'
 
             actualHour = actualHour + moment(endDate).diff(NightDate, 'minutes') / 60.00;
-            billingHours = billingHours + (moment(endDate).diff(NightDate, 'minutes') / 60.00) * Normal3;
-            hourDeatils += 'from : ' + moment(NightDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(endDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(endDate).diff(NightDate, 'minutes') / 60.00 + ' Billing Hours : ' + (moment(endDate).diff(NightDate, 'minutes') / 60.00) * 2 + '\r\n'
+            billingHours = billingHours + (moment(endDate).diff(NightDate, 'minutes') / 60.00) * Normal3 * PHWeekend * Urgent;
+            hourDeatils += 'from : ' + moment(NightDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(endDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(endDate).diff(NightDate, 'minutes') / 60.00 + ' Billing Hours : ' + (moment(endDate).diff(NightDate, 'minutes') / 60.00) * Normal3 * PHWeekend * Urgent + '\r\n'
         }
 
     } else if (startDate >= MorningDate && startDate < AfterNoonDate) {
         if (endDate <= AfterNoonDate) {
             actualHour = moment(endDate).diff(startDate, 'minutes') / 60.00;
-            billingHours = actualHour;
+            billingHours = actualHour * PHWeekend * Urgent;
             hourDeatils += 'from : ' + moment(startDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(endDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + actualHour + ' Billing Hours : ' + billingHours + '\r\n'
         } else if (endDate > AfterNoonDate && endDate <= NightDate) {
             actualHour = moment(AfterNoonDate).diff(startDate, 'minutes') / 60.00;
-            billingHours = actualHour;
-            hourDeatils += 'from : ' + moment(startDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(AfterNoonDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(AfterNoonDate).diff(startDate, 'minutes') / 60.00 + ' Billing Hours : ' + moment(AfterNoonDate).diff(startDate, 'minutes') / 60.00 + '\r\n'
-            actualHour = actualHour + moment(endDate).diff(AfterNoonDate, 'minutes') / 60.00;
+            billingHours = actualHour * PHWeekend * Urgent;
+            hourDeatils += 'from : ' + moment(startDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(AfterNoonDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(AfterNoonDate).diff(startDate, 'minutes') / 60.00 + ' Billing Hours : ' + (moment(AfterNoonDate).diff(startDate, 'minutes') / 60.00) * PHWeekend * Urgent + '\r\n'
 
-            billingHours = billingHours + (moment(endDate).diff(AfterNoonDate, 'minutes') / 60.00) * Normal2;
-            hourDeatils += 'from : ' + moment(AfterNoonDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(endDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(endDate).diff(AfterNoonDate, 'minutes') / 60.00 + ' Billing Hours : ' + (moment(endDate).diff(AfterNoonDate, 'minutes') / 60.00) * 1.5 + '\r\n'
+            actualHour = actualHour + moment(endDate).diff(AfterNoonDate, 'minutes') / 60.00;
+            billingHours = billingHours + (moment(endDate).diff(AfterNoonDate, 'minutes') / 60.00) * Normal2 * PHWeekend * Urgent;
+            hourDeatils += 'from : ' + moment(AfterNoonDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(endDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(endDate).diff(AfterNoonDate, 'minutes') / 60.00 + ' Billing Hours : ' + (moment(endDate).diff(AfterNoonDate, 'minutes') / 60.00) * Normal2 * PHWeekend * Urgent + '\r\n'
         } else if (endDate > NightDate && endDate <= LastDate) {
             actualHour = moment(AfterNoonDate).diff(startDate, 'minutes') / 60.00;
-            billingHours = actualHour;
-            hourDeatils += 'from : ' + moment(startDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(AfterNoonDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(AfterNoonDate).diff(startDate, 'minutes') / 60.00 + ' Billing Hours : ' + moment(AfterNoonDate).diff(startDate, 'minutes') / 60.00 + '\r\n'
+            billingHours = actualHour * PHWeekend * Urgent;
+            hourDeatils += 'from : ' + moment(startDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(AfterNoonDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(AfterNoonDate).diff(startDate, 'minutes') / 60.00 + ' Billing Hours : ' + (moment(AfterNoonDate).diff(startDate, 'minutes') / 60.00) * PHWeekend * Urgent + '\r\n'
 
             actualHour = actualHour + moment(NightDate).diff(AfterNoonDate, 'minutes') / 60.00;
-            billingHours = billingHours + moment(NightDate).diff(AfterNoonDate, 'minutes') / 60.00 * Normal2;
-            hourDeatils += 'from : ' + moment(AfterNoonDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(NightDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(NightDate).diff(AfterNoonDate, 'minutes') / 60.00 + ' Billing Hours : ' + moment(NightDate).diff(AfterNoonDate, 'minutes') / 60.00 * 1.5 + '\r\n'
+            billingHours = billingHours + moment(NightDate).diff(AfterNoonDate, 'minutes') / 60.00 * Normal2 * PHWeekend * Urgent;
+            hourDeatils += 'from : ' + moment(AfterNoonDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(NightDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(NightDate).diff(AfterNoonDate, 'minutes') / 60.00 + ' Billing Hours : ' + (moment(NightDate).diff(AfterNoonDate, 'minutes') / 60.00) * Normal2 * PHWeekend * Urgent + '\r\n'
 
             actualHour = actualHour + moment(endDate).diff(NightDate, 'minutes') / 60.00;
-            billingHours = billingHours + moment(endDate).diff(NightDate, 'minutes') / 60.00 * Normal3;
-            hourDeatils += 'from : ' + moment(NightDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(endDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(endDate).diff(NightDate, 'minutes') / 60.00 + ' Billing Hours : ' + moment(endDate).diff(NightDate, 'minutes') / 60.00 * 2 + '\r\n'
+            billingHours = billingHours + moment(endDate).diff(NightDate, 'minutes') / 60.00 * Normal3 * PHWeekend * Urgent;
+            hourDeatils += 'from : ' + moment(NightDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(endDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(endDate).diff(NightDate, 'minutes') / 60.00 + ' Billing Hours : ' + (moment(endDate).diff(NightDate, 'minutes') / 60.00) * Normal3 * PHWeekend * Urgent + '\r\n'
         }
 
     } else if (startDate >= AfterNoonDate && startDate < NightDate) {
 
         if (endDate <= NightDate) {
             actualHour = moment(endDate).diff(startDate, 'minutes') / 60.00;
-            billingHours = moment(endDate).diff(startDate, 'minutes') / 60.00 * Normal2;
-            hourDeatils += 'from : ' + moment(startDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(endDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(endDate).diff(startDate, 'minutes') / 60.00 + ' Billing Hours : ' + moment(endDate).diff(startDate, 'minutes') / 60.00 * 1.5 + '\r\n'
+            billingHours = moment(endDate).diff(startDate, 'minutes') / 60.00 * Normal2 * PHWeekend * Urgent;
+            hourDeatils += 'from : ' + moment(startDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(endDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(endDate).diff(startDate, 'minutes') / 60.00 + ' Billing Hours : ' + moment(endDate).diff(startDate, 'minutes') / 60.00 * Normal2 * PHWeekend * Urgent + '\r\n'
         } else if (endDate > NightDate && endDate <= LastDate) {
             actualHour = moment(NightDate).diff(startDate, 'minutes') / 60.00;
-            billingHours = moment(NightDate).diff(startDate, 'minutes') / 60.00 * Normal2;
-            hourDeatils += 'from : ' + moment(startDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(NightDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(NightDate).diff(startDate, 'minutes') / 60.00 + ' Billing Hours : ' + moment(NightDate).diff(startDate, 'minutes') / 60.00 * 1.5 + '\r\n'
+            billingHours = moment(NightDate).diff(startDate, 'minutes') / 60.00 * Normal2 * PHWeekend * Urgent;
+            hourDeatils += 'from : ' + moment(startDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(NightDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(NightDate).diff(startDate, 'minutes') / 60.00 + ' Billing Hours : ' + moment(NightDate).diff(startDate, 'minutes') / 60.00 * Normal2 * PHWeekend * Urgent + '\r\n'
 
             actualHour = actualHour + moment(endDate).diff(NightDate, 'minutes') / 60.00;
-            billingHours = billingHours + moment(endDate).diff(NightDate, 'minutes') / 60.00 * Normal3
-            hourDeatils += 'from : ' + moment(NightDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(endDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(endDate).diff(NightDate, 'minutes') / 60.00 + ' Billing Hours : ' + moment(endDate).diff(NightDate, 'minutes') / 60.00 * 2 + '\r\n'
+            billingHours = billingHours + moment(endDate).diff(NightDate, 'minutes') / 60.00 * Normal3 * PHWeekend * Urgent;
+            hourDeatils += 'from : ' + moment(NightDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(endDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(endDate).diff(NightDate, 'minutes') / 60.00 + ' Billing Hours : ' + moment(endDate).diff(NightDate, 'minutes') / 60.00 * Normal3 * PHWeekend * Urgent + '\r\n'
 
         }
     } else if (startDate >= NightDate && endDate <= LastDate) {
         actualHour = moment(endDate).diff(startDate, 'minutes') / 60.00;
-        billingHours = actualHour * Normal3;
-        hourDeatils += 'from : ' + moment(startDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(endDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(endDate).diff(startDate, 'minutes') / 60.00 + ' Billing Hours : ' + actualHour * 2 + '\r\n'
+        billingHours = actualHour * Normal3 * PHWeekend * Urgent;
+        hourDeatils += 'from : ' + moment(startDate).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(endDate).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + moment(endDate).diff(startDate, 'minutes') / 60.00 + ' Billing Hours : ' + actualHour * Normal3 * PHWeekend * Urgent + '\r\n'
     }
 }
 function DoPrintServiceForm() {
@@ -495,52 +478,52 @@ function DoPrintServiceForm() {
     window.print()
 }
 
-function GetDoPrintServiceForm(){
-  $('#PrintServiceForm .PrintCaseID').html($('#ServiceForm #ServiceCaseID').val()||'');
-  $('#PrintServiceForm .PrintOrganisation').html($('#ServiceForm #ServiceOrganisation').val()||'');
-  $('#PrintServiceForm .PrintContactPerson').html($('#ServiceForm #ServiceContactPerson').val());
-  $('#PrintServiceForm .PrintEmail1').html($('#ServiceForm #ServiceEmail').val());
-  $('#PrintServiceForm .PrintContactNo1').html($('#ServiceForm #ServiceContactNo').val());
-  $('#PrintServiceForm .PrintSubject').html($('#ServiceForm #ServiceSubject').val());
-  $('#PrintServiceForm .PrintLocation').html($('#ServiceForm #ServiceLocation').val());
-  $('#PrintServiceForm .PrintDetails').html($('#ServiceForm #ServiceDetails').val());
-  $('#PrintServiceForm .PrintStatus').html($('#ServiceForm #ServiceStatus').val());
-  $('#PrintServiceForm .PrintCategory').html($('#ServiceForm #ServiceCategory').val());
-  $('#PrintServiceForm .PrintType').html($('#ServiceForm #ServiceFormType').val());
-  $('#PrintServiceForm .PrintActualDateFrom').html( $('#ServiceForm #ServiceActualDateFrom').val());
-  $('#PrintServiceForm .PrintActualTimeFrom').html($('#ServiceForm #ActualTimeFrom').val());
-  $('#PrintServiceForm .PrintActualDateTo').html($('#ServiceForm #ServiceActualDateTo').val());
-  $('#PrintServiceForm .PrintActualTimeTo').html($('#ServiceForm #ActualTimeTo').val());
+function GetDoPrintServiceForm() {
+    $('#PrintServiceForm .PrintCaseID').html($('#ServiceForm #ServiceCaseID').val() || '');
+    $('#PrintServiceForm .PrintOrganisation').html($('#ServiceForm #ServiceOrganisation').val() || '');
+    $('#PrintServiceForm .PrintContactPerson').html($('#ServiceForm #ServiceContactPerson').val());
+    $('#PrintServiceForm .PrintEmail1').html($('#ServiceForm #ServiceEmail').val());
+    $('#PrintServiceForm .PrintContactNo1').html($('#ServiceForm #ServiceContactNo').val());
+    $('#PrintServiceForm .PrintSubject').html($('#ServiceForm #ServiceSubject').val());
+    $('#PrintServiceForm .PrintLocation').html($('#ServiceForm #ServiceLocation').val());
+    $('#PrintServiceForm .PrintDetails').html($('#ServiceForm #ServiceDetails').val());
+    $('#PrintServiceForm .PrintStatus').html($('#ServiceForm #ServiceStatus').val());
+    $('#PrintServiceForm .PrintCategory').html($('#ServiceForm #ServiceCategory').val());
+    $('#PrintServiceForm .PrintType').html($('#ServiceForm #ServiceFormType').val());
+    $('#PrintServiceForm .PrintActualDateFrom').html($('#ServiceForm #ServiceActualDateFrom').val());
+    $('#PrintServiceForm .PrintActualTimeFrom').html($('#ServiceForm #ActualTimeFrom').val());
+    $('#PrintServiceForm .PrintActualDateTo').html($('#ServiceForm #ServiceActualDateTo').val());
+    $('#PrintServiceForm .PrintActualTimeTo').html($('#ServiceForm #ActualTimeTo').val());
 
-  if ($("#ServiceForm #ServicePHWeekend").is(':checked')) {
-      $('#PrintServiceForm .PrintPHWeekend').html('Yes');
-  }else{
-    $('#PrintServiceForm .PrintPHWeekend').html('No');
-  }
+    if ($("#ServiceForm #ServicePHWeekend").is(':checked')) {
+        $('#PrintServiceForm .PrintPHWeekend').html('Yes');
+    } else {
+        $('#PrintServiceForm .PrintPHWeekend').html('No');
+    }
 
-  if ($("#ServiceForm #ServiceUrgent").is(':checked')) {
-      $('#PrintServiceForm .PrintUrgent').html('Yes');
-  }else{
-      $('#PrintServiceForm .PrintUrgent').html('No');
-  }
+    if ($("#ServiceForm #ServiceUrgent").is(':checked')) {
+        $('#PrintServiceForm .PrintUrgent').html('Yes');
+    } else {
+        $('#PrintServiceForm .PrintUrgent').html('No');
+    }
 
-  $('#PrintServiceForm .PrintActualHours').html($('#ServiceForm #ServiceActualHours').val());
-  $('#PrintServiceForm .PrintOffSetHours').html($('#ServiceForm #ServiceOffSetHours').val());
-  $('#PrintServiceForm .PrintOffSetReason').html($('#ServiceForm #ServiceReason').val());
-  $('#PrintServiceForm .PrintBillingHours').html($('#ServiceForm #ServiceBillingHours').val());
-  $('#PrintServiceForm .PrintChargeToPackage').html($('#ServiceForm #ServiceChargeToPackage').val());
-  $('#PrintServiceForm .ServiceHoursCalculation').html($('#ServiceForm #ServiceHoursCalculation').val());
-  $('#PrintServiceForm .PrintDiagnosis').html($('#ServiceForm #ServiceDiagnosis').val() );
-  $('#PrintServiceForm .PrintFollowRemarks').html($('#ServiceForm #ServiceBigRemarks').val());
+    $('#PrintServiceForm .PrintActualHours').html($('#ServiceForm #ServiceActualHours').val());
+    $('#PrintServiceForm .PrintOffSetHours').html($('#ServiceForm #ServiceOffSetHours').val());
+    $('#PrintServiceForm .PrintOffSetReason').html($('#ServiceForm #ServiceReason').val());
+    $('#PrintServiceForm .PrintBillingHours').html($('#ServiceForm #ServiceBillingHours').val());
+    $('#PrintServiceForm .PrintChargeToPackage').html($('#ServiceForm #ServiceChargeToPackage').val());
+    $('#PrintServiceForm .ServiceHoursCalculation').html($('#ServiceForm #ServiceHoursCalculation').val());
+    $('#PrintServiceForm .PrintDiagnosis').html($('#ServiceForm #ServiceDiagnosis').val());
+    $('#PrintServiceForm .PrintFollowRemarks').html($('#ServiceForm #ServiceBigRemarks').val());
 
-  if ($("#ServiceForm #ServiceCustomerAck").is(':checked')) {
-      $('#PrintServiceForm .PrintCustomerAck').html('Yes');
-  }else{
-      $('#PrintServiceForm .PrintCustomerAck').html('No');
-  }
-  $('#PrintServiceForm .PrintName2').html($('#ServiceForm #ServiceName1').val());
-  $('#PrintServiceForm .PrintEmail2').html($('#ServiceForm #ServiceEmail1').val());
-  $('#PrintServiceForm .PrintContactNo2').html($('#ServiceForm #ServiceContactNo1').val());
+    if ($("#ServiceForm #ServiceCustomerAck").is(':checked')) {
+        $('#PrintServiceForm .PrintCustomerAck').html('Yes');
+    } else {
+        $('#PrintServiceForm .PrintCustomerAck').html('No');
+    }
+    $('#PrintServiceForm .PrintName2').html($('#ServiceForm #ServiceName1').val());
+    $('#PrintServiceForm .PrintEmail2').html($('#ServiceForm #ServiceEmail1').val());
+    $('#PrintServiceForm .PrintContactNo2').html($('#ServiceForm #ServiceContactNo1').val());
 }
 function DoPrint() {
     $('.boxContent').hide();
@@ -620,11 +603,11 @@ function reviewCase(caseID) {
         alert('Invalid email!');
         return false;
     }
-    if (Contact.length>0) {
-      if (IsValidContact(Contact) == false) {
-          alert('Invalid contact!');
-          return false;
-      }
+    if (Contact.length > 0) {
+        if (IsValidContact(Contact) == false) {
+            alert('Invalid contact!');
+            return false;
+        }
     }
     var data = { 'FLID': caseID, 'Organization': Organization, 'status': status, 'ContactPerson': ContactPerson, 'Email': Email, 'ContactNo': Contact, 'Subject': Subject, 'Category': Category, 'Details': Details, 'Type': Type, 'NewLocation': NewLocation, 'PriorityLevel': PriorityLevel };
     $.ajax({
@@ -717,7 +700,7 @@ function RemoveNewInvolvement(caseID) {
     task = $('#involvementForm #task').val();
 
 
-    var data = { 'FLID': caseID, 'RoleID': staff};
+    var data = { 'FLID': caseID, 'RoleID': staff };
     $.ajax({
         url: apiSrc + "BCMain/FL1.RemoveInvolvement.json",
         method: "POST",
@@ -733,7 +716,7 @@ function RemoveNewInvolvement(caseID) {
                 if (data.d.RetData.Tbl.Rows.length > 0) {
                     if (data.d.RetData.Tbl.Rows[0].Success == true) {
                         getRemoveStaffList(caseID);
-                        GetCaseHistory(caseID);  GetCaseInvolvement(caseID);
+                        GetCaseHistory(caseID); GetCaseInvolvement(caseID);
                         $('#RemoveinvolvementForm #RemovePerson').val('');
                         $('#RemoveinvolvementForm').foundation('close');
                     } else { alert(data.d.RetData.Tbl.Rows[0].ReturnMsg); }
@@ -753,7 +736,7 @@ function addNewActivity(caseID) {
     var Description, internal, Reason, Void;
     Description = $('#activityForm #description').val();
 
-    internal = $("#activityForm [name=internal]:checked").val()||'';
+    internal = $("#activityForm [name=internal]:checked").val() || '';
     Void = false;
     if (Description.length == 0) {
         alert('Please fill in description!');
@@ -773,7 +756,7 @@ function addNewActivity(caseID) {
         }
         Void = true;
     }
-    var data = { 'FLID': caseID, 'Details': Description, 'Internal': internal, 'Reason': Reason || '', 'Void': Void||false, 'FLLogID': window.FLLogID || '' };
+    var data = { 'FLID': caseID, 'Details': Description, 'Internal': internal, 'Reason': Reason || '', 'Void': Void || false, 'FLLogID': window.FLLogID || '' };
     $.ajax({
         url: apiSrc + "BCMain/FL1.InsertActivityLog.json",
         method: "POST",
@@ -903,10 +886,10 @@ function GetCaseHistory(caseId) {
 
                             threadContainer += '<div class="top"> <span class="datetime">' + date + '<i> ' + time + '</i> by ' + caseLogs[i].CreatedBy + '</span> <span class="tag">Internal</span>'
                             if (caseLogs[i].Status != 'Voided') {
-                            threadContainer += '<span class="tag">' + caseLogs[i].Status + '</span><span class="tag" style="background:#60C2EC;cursor:pointer;color:white;" onclick=Void("' + caseLogs[i].FLLogID + '","' + caseLogs[i].Type + '","' + caseId + '")>Void</span><span class="tag" style="background:#60C2EC;cursor:pointer;color:white;" onclick=View("' + caseLogs[i].FLLogID + '","' + caseLogs[i].Type + '","' + caseId + '")>View</span></div>';
+                                threadContainer += '<span class="tag">' + caseLogs[i].Status + '</span><span class="tag" style="background:#60C2EC;cursor:pointer;color:white;" onclick=Void("' + caseLogs[i].FLLogID + '","' + caseLogs[i].Type + '","' + caseId + '")>Void</span><span class="tag" style="background:#60C2EC;cursor:pointer;color:white;" onclick=View("' + caseLogs[i].FLLogID + '","' + caseLogs[i].Type + '","' + caseId + '")>View</span></div>';
                             }
                             else {
-                            threadContainer += '<span class="tag">' + caseLogs[i].Status + '</span><span class="tag" style="background:#60C2EC;cursor:pointer;color:white;" onclick=View("' + caseLogs[i].FLLogID + '","' + caseLogs[i].Type + '","' + caseId + '")>View</span></div>';
+                                threadContainer += '<span class="tag">' + caseLogs[i].Status + '</span><span class="tag" style="background:#60C2EC;cursor:pointer;color:white;" onclick=View("' + caseLogs[i].FLLogID + '","' + caseLogs[i].Type + '","' + caseId + '")>View</span></div>';
                             }
                             threadContainer += '<div class="text">' + caseLogs[i].Details + '</div> </div>';
 
@@ -1000,25 +983,25 @@ function getServiceDetails(FLLogID, Type) {
                         if (caseDetails.VoidDate) {
                             $('#activityForm #VoidDate').val(moment(caseDetails.VoidDate).format('YYYY-MM-DD'));
                         }
-                      if (caseDetails.Status=='Voided') {
-                          $('#activityForm #ReasonDiv').show();
-                          $('#activityForm #VoidByDiv').show();
-                      }else{
-                          $('#activityForm #ReasonDiv').hide();
-                          $('#activityForm #VoidByDiv').hide();
-                      }
+                        if (caseDetails.Status == 'Voided') {
+                            $('#activityForm #ReasonDiv').show();
+                            $('#activityForm #VoidByDiv').show();
+                        } else {
+                            $('#activityForm #ReasonDiv').hide();
+                            $('#activityForm #VoidByDiv').hide();
+                        }
 
                     } else if (caseDetails.Type && caseDetails.Type == 'SF') {
                         $('#ServiceForm #submit').hide();
                         $('#ServiceForm #PrintService').hide();
-                        $('#ServiceForm #ServicePHWeekend').prop('checked', Boolean(parseFloat(caseDetails.PHWeekend||'')));
-                        $('#ServiceForm #ServiceUrgent').prop('checked',Boolean(parseFloat(caseDetails.Urgent||'')));
+                        $('#ServiceForm #ServicePHWeekend').prop('checked', Boolean(parseFloat(caseDetails.PHWeekend || '')));
+                        $('#ServiceForm #ServiceUrgent').prop('checked', Boolean(parseFloat(caseDetails.Urgent || '')));
                         $('#ServiceForm #ServiceActualHours').val(caseDetails.ActualHours);
                         $('#ServiceForm #ServiceOffSetHours').val(caseDetails.OffSetHours);
                         $('#ServiceForm #ServiceReason').val(caseDetails.OffSetReason);
                         $('#ServiceForm #ServiceFormType').val(caseDetails.ServiceFormType);
                         $('#ServiceForm #ServiceBillingHours').val(caseDetails.BillingHours);
-                        $('#ServiceForm #ServiceChargeToPackage').val(caseDetails.PackageType||'');
+                        $('#ServiceForm #ServiceChargeToPackage').val(caseDetails.PackageType || '');
                         $('#ServiceForm #ServiceHoursCalculation').val(caseDetails.HoursCalculation);
                         $('#ServiceForm #ServiceDiagnosis').val(caseDetails.Diagnosis);
                         $('#ServiceForm #ServiceBigRemarks').val(caseDetails.FollowupRemarks);
@@ -1031,10 +1014,10 @@ function getServiceDetails(FLLogID, Type) {
                         $('#ServiceForm #ServiceVoidBy').val(caseDetails.DisPlayName || '');
                         $('#ServiceForm #ServiceVoidDate').val(caseDetails.VoidDate || '');
 
-                        if(caseDetails.STATUS=='Voided'){
-                          $('#ServiceForm #ServiceVoid,#ServiceVoidByDiv').show();
-                        }else{
-                          $('#ServiceForm #ServiceVoid,#ServiceVoidByDiv').hide();
+                        if (caseDetails.STATUS == 'Voided') {
+                            $('#ServiceForm #ServiceVoid,#ServiceVoidByDiv').show();
+                        } else {
+                            $('#ServiceForm #ServiceVoid,#ServiceVoidByDiv').hide();
                         }
 
                         var CustomerAck = caseDetails.CustomerAck || '';
@@ -1121,7 +1104,7 @@ function getStaffList() {
 function getRemoveStaffList(caseID) {
     $('#RemoveinvolvementForm #RemovePerson').html('<option value="">-- Please Select --</option>');
     var html = '';
-    var data = {'FLID': caseID};
+    var data = { 'FLID': caseID };
     $.ajax({
         url: apiSrc + "BCMain/iCtc1.GetRemoveStaffList.json",
         method: "POST",
@@ -1190,14 +1173,14 @@ function getOrgnaisationList() {
 
 
 function SaveServiceForm(caseID) {
-    var ServicePHWeekend = 0, Urgent = 0, ServiceCustomerAck = 0, ServiceName1 = '', ServiceEmail1 = '', ServiceContactNo1 = '',ServiceFormType='';
+    var ServicePHWeekend = 0, Urgent = 0, ServiceCustomerAck = 0, ServiceName1 = '', ServiceEmail1 = '', ServiceContactNo1 = '', ServiceFormType = '';
     var ServiceActualDateFrom = $('#ServiceForm #ServiceActualDateFrom').val(),
-    ServiceActualDateTo = $('#ServiceForm #ServiceActualDateTo').val(),
-    ActualTimeFrom = $('#ServiceForm #ActualTimeFrom').val(),
-    ActualTimeTo = $('#ServiceForm #ActualTimeTo').val(),
-    ServiceFormType=$('#ServiceForm #ServiceFormType').val(),
-    ServiceActualDateTimeFrom = ServiceActualDateFrom + ' ' + ActualTimeFrom,
-    ServiceActualDateTimeTo = ServiceActualDateTo + ' ' + ActualTimeTo;
+        ServiceActualDateTo = $('#ServiceForm #ServiceActualDateTo').val(),
+        ActualTimeFrom = $('#ServiceForm #ActualTimeFrom').val(),
+        ActualTimeTo = $('#ServiceForm #ActualTimeTo').val(),
+        ServiceFormType = $('#ServiceForm #ServiceFormType').val(),
+        ServiceActualDateTimeFrom = ServiceActualDateFrom + ' ' + ActualTimeFrom,
+        ServiceActualDateTimeTo = ServiceActualDateTo + ' ' + ActualTimeTo;
 
     if (ServiceFormType.length == 0) {
         alert('Please fill in Type!');
@@ -1258,21 +1241,20 @@ function SaveServiceForm(caseID) {
             alert('Please fill in void reason fields!');
             return false;
         }
-    }else{
-      if ($('#ServiceForm #ServiceFormType').val()=='Onsite Support') {
-          if (!$('#ServiceForm #ServiceCustomerAck').is(':checked'))
-          {
-            alert('Please tikc Customer Acknowledgement!');
-            return false;
-          }
-      }
+    } else {
+        if ($('#ServiceForm #ServiceFormType').val() == 'Onsite Support') {
+            if (!$('#ServiceForm #ServiceCustomerAck').is(':checked')) {
+                alert('Please tikc Customer Acknowledgement!');
+                return false;
+            }
+        }
     }
     var data = {
         'FLID': caseID, 'ServiceActualDateTimeFrom': ServiceActualDateTimeFrom, 'ServiceActualDateTimeTo': ServiceActualDateTimeTo,
         'ServicePHWeekend': ServicePHWeekend, 'Urgent': Urgent, 'ServiceActualHours': ServiceActualHours, 'ServiceOffSetHours': ServiceOffSetHours, 'ServiceReason': ServiceReason,
         'ServiceBillingHours': ServiceBillingHours, 'ServiceChargeToPackage': ServiceChargeToPackage, 'ServiceHoursCalculation': ServiceHoursCalculation,
         'ServiceDiagnosis': ServiceDiagnosis, 'ServiceBigRemarks': ServiceBigRemarks, 'ServiceCustomerAck': ServiceCustomerAck, 'ServiceName1': ServiceName1,
-        'ServiceEmail1': ServiceEmail1, 'ServiceContactNo1': ServiceContactNo1, 'ServiceFormID': window.ServiceFormID, 'ServiceVoidReason': ServiceVoidReason,'ServiceFormType':ServiceFormType
+        'ServiceEmail1': ServiceEmail1, 'ServiceContactNo1': ServiceContactNo1, 'ServiceFormID': window.ServiceFormID, 'ServiceVoidReason': ServiceVoidReason, 'ServiceFormType': ServiceFormType
     };
     $.ajax({
         url: apiSrc + "BCMain/FL1.SaveServiceForm.json",
@@ -1296,7 +1278,7 @@ function SaveServiceForm(caseID) {
                         $('#ServiceForm #ServiceBillingHours').val('');
                         $('#ServiceForm #BigRemarks').val('');
                         $('#ServiceForm #ServicePHWeekend').removeAttr("checked")
-                        caseID=$('#ServiceForm #ServiceCaseID').val();
+                        caseID = $('#ServiceForm #ServiceCaseID').val();
                         GetCaseHistory(caseID);
                         alert('update success')
                         $('#ServiceForm').foundation('close');
@@ -1499,14 +1481,14 @@ function GetOrgAddressLocation(LookupCat, organization) {
     });
 }
 function SplitTime(NowTime) {
-       var Time, H, M, T;
-       T = NowTime.split(":");
-       if (parseInt(T[1]) >= 15 && parseInt(T[1]) < 45) {
-           Time = T[0] + ":30";
-       } else if (parseInt(T[1]) >= 0 && parseInt(T[1]) < 15) {
-           Time = T[0] + ":00";
-       } else if (parseInt(T[1]) >= 45) {
-           Time = (parseInt(T[0]) + 1) + ":00";
-       }
-       return (Time);
-   }
+    var Time, H, M, T;
+    T = NowTime.split(":");
+    if (parseInt(T[1]) >= 15 && parseInt(T[1]) < 45) {
+        Time = T[0] + ":30";
+    } else if (parseInt(T[1]) >= 0 && parseInt(T[1]) < 15) {
+        Time = T[0] + ":00";
+    } else if (parseInt(T[1]) >= 45) {
+        Time = (parseInt(T[0]) + 1) + ":00";
+    }
+    return (Time);
+}
