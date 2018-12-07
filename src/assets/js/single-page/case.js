@@ -335,10 +335,10 @@ function ecexHourSetting() {
         }
     }
     offSetHour = $('#ServiceForm #ServiceOffSetHours').val() || 0;
-    billingHours = parseFloat(billingHours) - parseFloat(offSetHour);
-    if (parseFloat(offSetHour) > 0) {
-        hourDeatils += 'Off Set Hours : ' + offSetHour;
-    }
+    billingHours = parseFloat(billingHours) + parseFloat(offSetHour);
+    //if (parseFloat(offSetHour) > 0) {
+        hourDeatils += 'Manual Adjust Hour : ' + offSetHour;
+    //}
     if ($('#ServiceForm #ServiceType').val() == 'Professional Service') {
         billingHours = 0;
     }
