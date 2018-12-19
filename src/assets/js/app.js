@@ -77,7 +77,7 @@ $(function(){
     Cookies.set('appCookie', appCookie);
     var LoginID=GetQueryString('Login');
 
-    if(!LoginID){
+    if((!LoginID) && (pageName.toLowerCase() != 'pwdretrieval')){
       window.location.href = appRootPath +'login.html';
     }
   }
