@@ -931,12 +931,17 @@ function Void(FLLogID, Type, FLID) {
     window.FLLogID = FLLogID;
     window.ServiceFormID = FLLogID;
     if (Type == 'SF') {
-        $.when(getServiceDetails(FLLogID, Type)).then(function () {
-            $('#ServiceForm #submit').show();
-            $('#ServiceForm #ServiceVoid').show();
-            $('#ServiceForm #ServiceVoidReason').removeAttr("disabled");
-            $("#ServiceForm").foundation('open');
-        });
+        var VoidResult=confirm("Please click OK to confirm voiding, Cancel to abort.");
+        if (VoidResult==true) {
+            $.when(getServiceDetails(FLLogID, Type)).then(function () {
+                $('#ServiceForm #submit').show();
+                $('#ServiceForm #ServiceVoid').show();
+                $('#ServiceForm #ServiceVoidReason').removeAttr("disabled");
+                $("#ServiceForm").foundation('open');
+            });
+        }else{
+          return false;
+        }
     } else if (Type == 'R') {
         $.when(getServiceDetails(FLLogID, Type)).then(function () {
             $('#activityForm #ReasonDiv').show();
