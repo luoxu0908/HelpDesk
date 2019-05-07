@@ -147,7 +147,10 @@ $(function () {
     });
     //Add New Case
     $('#caseAddForm #submit').click(function () {
-        createNewCase();
+      $(this).attr("disabled","disabled");
+      $.when(createNewCase()).then(function(){
+        $('#caseAddForm #submit').removeAttr("disabled");
+      });
     });
     $('#caseFilter .tabBoxButtonSubmit').click(function () {
         getCasesList();
@@ -176,17 +179,29 @@ $(function () {
         getProductOwn();
     });
     $('#packageAddForm #submit').click(function () {
-        addNewPackage();
+        $(this).attr("disabled","disabled");
+        $.when(addNewPackage()).then(function(){
+          $('#packageAddForm #submit').removeAttr("disabled");
+        });
     });
     $('#newUserForm #submit').click(function () {
-        addNewUser();
+        $(this).attr("disabled","disabled");
+        $.when(addNewUser()).then(function(){
+          $('#newUserForm #submit').removeAttr("disabled");
+        });
     });
     $('#newPersonForm #submit').click(function () {
-        addNewPerson();
+        $(this).attr("disabled","disabled");
+        $.when(addNewPerson()).then(function(){
+          $('#newPersonForm #submit').removeAttr("disabled");
+        });
     });
 
     $('#packageUpdateForm #submit').click(function () {
-        SaveEditPackage();
+        $(this).attr("disabled","disabled");
+        $.when(SaveEditPackage()).then(function(){
+          $('#packageUpdateForm #submit').removeAttr("disabled");
+        });
     });
 });
 
