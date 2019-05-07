@@ -63,26 +63,50 @@ $(function () {
     });
 
     $('#activityForm #submit').click(function () {
-        addNewActivity(caseID);
+        $(this).attr('disabled', 'disabled');
+        alert();
+        $.when(addNewActivity(caseID)).then(function () {
+            //$(this).removeAttr('disabled', 'disabled');
+        });
+        //addNewActivity(caseID);
     });
 
     $('#involvementForm #submit').click(function () {
-        addNewInvolvement(caseID);
+        $(this).attr('disabled', 'disabled');
+        $.when(addNewInvolvement(caseID)).then(function () {
+            $('#involvementForm #submit').removeAttr('disabled', 'disabled');
+        });
+        //addNewInvolvement(caseID);
     });
 
     $('#RemoveinvolvementForm #submit').click(function () {
-        RemoveNewInvolvement(caseID);
+        $(this).attr('disabled', 'disabled');
+        $.when(RemoveNewInvolvement(caseID)).then(function () {
+            $('#RemoveinvolvementForm #submit').removeAttr('disabled', 'disabled');
+        });
+        //RemoveNewInvolvement(caseID);
     });
     $('#reviewForm #submit').click(function () {
-        reviewCase(caseID);
+        $(this).attr('disabled', 'disabled');
+        $.when(reviewCase(caseID)).then(function () {
+            $('#reviewForm #submit').removeAttr('disabled', 'disabled');
+        });
+        //reviewCase(caseID);
     });
 
     $('#chargeForm #submit').click(function () {
-        chargeToPackage(caseID);
+        $(this).attr('disabled', 'disabled');
+        $.when(chargeToPackage(caseID)).then(function () {
+            $('#chargeForm #submit').removeAttr('disabled', 'disabled');
+        });
+        //chargeToPackage(caseID)
     });
     $('#ServiceForm #submit').click(function () {
-        //alert($('#ServiceForm #ServiceActualDateFrom').val());
-        SaveServiceForm(caseID);
+        $(this).attr('disabled', 'disabled');
+        $.when(SaveServiceForm(caseID)).then(function () {
+            $('#ServiceForm #submit').removeAttr('disabled', 'disabled');
+        });
+        //SaveServiceForm(caseID)
     });
     $('#ServiceForm #ServiceCustomerAck').click(function () {
         if ($('#ServiceForm #ServiceCustomerAck').is(':checked')) {
@@ -341,19 +365,19 @@ function ecexHourSetting() {
     if ($('#ServiceForm #ServiceType').val() == 'Professional Service') {
         billingHours = 0;
     }
-   
+
     $('#ServiceForm #ServiceActualHours').val(actualHour);
     $('#ServiceForm #ServiceBillingHours').val(billingHours);
     $('#ServiceForm #ServiceHoursCalculation').val(hourDeatils.replace('12:00 am', '00:00 am'));
 
     if ($("#ServiceForm #ServicePHWeekend").is(':checked')) {
         if ($("#ServiceForm #ServiceUrgent").is(':checked')) {
-            $('#ServiceForm #ServiceBillingHours').val(actualHour * (parseFloat(TimeTypeMap['PHWeekend']) || 2) * (parseFloat(TimeTypeMap['Urgent']) || 2));
-            $('#ServiceForm #ServiceHoursCalculation').val(('from : ' + moment(ServiceActualDateTimeFromTemp).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(ServiceActualDateTimeToTemp).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + actualHour + ' Billing Hours : ' + (actualHour * (parseFloat(TimeTypeMap['PHWeekend']) || 2) * (parseFloat(TimeTypeMap['Urgent']) || 2))).replace('12:00 am', '00:00 am'));
+            $('#ServiceForm #ServiceBillingHours').val(actualHour * (parseFloat(TimeTypeMap['PHWeekend']) || 2) * (parseFloat(TimeTypeMap['Urgent']) || 2) + parseFloat(offSetHour));
+            $('#ServiceForm #ServiceHoursCalculation').val(('from : ' + moment(ServiceActualDateTimeFromTemp).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(ServiceActualDateTimeToTemp).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + actualHour + ' Billing Hours : ' + (parseFloat(actualHour) * (parseFloat(TimeTypeMap['PHWeekend']) || 2) * (parseFloat(TimeTypeMap['Urgent']) || 2))).replace('12:00 am', '00:00 am') + '\r\nManual Adjust Hour : ' + offSetHour);
         }
         else {
-            $('#ServiceForm #ServiceBillingHours').val(actualHour *(parseFloat(TimeTypeMap['PHWeekend']) || 2));
-            $('#ServiceForm #ServiceHoursCalculation').val(('from : ' + moment(ServiceActualDateTimeFromTemp).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(ServiceActualDateTimeToTemp).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + actualHour + ' Billing Hours : ' + (actualHour * (parseFloat(TimeTypeMap['PHWeekend']) || 2))).replace('12:00 am', '00:00 am'));
+            $('#ServiceForm #ServiceBillingHours').val(actualHour * (parseFloat(TimeTypeMap['PHWeekend']) || 2) + parseFloat(offSetHour));
+            $('#ServiceForm #ServiceHoursCalculation').val(('from : ' + moment(ServiceActualDateTimeFromTemp).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(ServiceActualDateTimeToTemp).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + actualHour + ' Billing Hours : ' + (parseFloat(actualHour) * (parseFloat(TimeTypeMap['PHWeekend']) || 2) + '\r\nManual Adjust Hour : ' + offSetHour)).replace('12:00 am', '00:00 am'));
         }
     }
 }
@@ -864,7 +888,7 @@ function GetCaseDetails(caseId) {
                     $('#ServiceForm #ServiceActualDateFrom').val(moment(caseDetails.DateFrom).format('YYYY-MM-DD'));
                     $('#ServiceForm #ActualTimeFrom').val(moment(caseDetails.DateFrom).format('HH:mm'));
                     $('#ServiceForm #ServiceActualDateTo').val(moment(caseDetails.DateTo).format('YYYY-MM-DD'));
-                    $('#ServiceForm #ActualTimeTo').val(moment(caseDetails.DateTo).format('HH:mm'));
+                    $('#ServiceForm #ActualTimeTo').val(moment(caseDetails.DateTo).format('HH:mm').replace('NaN:NaN',''));
                     $('#ServiceForm #ServiceName1').val(caseDetails.ServiceName);
                     $('#ServiceForm #ServiceEmail1').val(caseDetails.ServiceEmail);
 
