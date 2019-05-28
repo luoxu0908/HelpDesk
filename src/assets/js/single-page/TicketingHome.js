@@ -111,7 +111,7 @@ $(function () {
     GetDropDownList('packageUpdateForm','EditInterval','Interval');
 
     $.when(checkRoleAccess, getOrgnaisationList()).then(function (x) {
-
+        GetCaseFilter();
         if (RoleName == 'Admin' || RoleName == 'Security Admin') {
             $('.adminView').show();
             $('.clientView').show();
@@ -153,7 +153,18 @@ $(function () {
       });
     });
     $('#caseFilter .tabBoxButtonSubmit').click(function () {
+        Cookies.set('Organization_cookie', $('#caseFilter #organisation').val() || '');
+        Cookies.set('Status_cookie', $('#caseFilter #status').val() || '');
+        Cookies.set('Subject_cookie', $('#caseFilter #subject').val() || '');
+        Cookies.set('Category_cookie', $('#caseFilter #category').val() || '');
+        Cookies.set('Product_cookie', $('#caseFilter #product').val() || '');
+        Cookies.set('Involvement_cookie', $('#caseFilter #person').val() || '');
+        Cookies.set('DateFrom_cookie', $('#caseFilter #dateCreatedFrom').val() || '');
+        Cookies.set('DateTo_cookie', $('#caseFilter #dateCreatedTo').val() || '');
         getCasesList();
+    });
+    $('#caseFilter #ResetToDefault').click(function () {
+        ClearCaseFilter();
     });
     $('#exportCase').click(function () {
         exportCase();
@@ -204,6 +215,51 @@ $(function () {
         });
     });
 });
+
+function ClearCaseFilter() {
+    $('#caseFilter #organisation').val('');
+    $('#caseFilter #status').val('');
+    $('#caseFilter #subject').val('');
+    $('#caseFilter #category').val('');
+    $('#caseFilter #product').val('');
+    $('#caseFilter #person').val('');
+    $('#caseFilter #dateCreatedFrom').val('');
+    $('#caseFilter #dateCreatedTo').val('');
+}
+
+function GetCaseFilter() {
+    var Organization_cookie = Cookies.getJSON('Organization_cookie'), Status_cookie = Cookies.getJSON('Status_cookie'),
+        Subject_cookie = Cookies.getJSON('Subject_cookie'), Category_cookie = Cookies.getJSON('Category_cookie'),
+        Product_cookie = Cookies.getJSON('Product_cookie'), Involvement_cookie = Cookies.getJSON('Involvement_cookie'),
+        DateFrom_cookie = Cookies.getJSON('DateFrom_cookie'),
+        DateTo_cookie = Cookies.getJSON('DateTo_cookie');
+
+    if (Organization_cookie != 'undefined') {
+        $('#caseFilter #organisation').val(Organization_cookie);
+    }
+    if (Status_cookie != 'undefined') {
+        $('#caseFilter #status').val(Status_cookie);
+    }
+    if (Subject_cookie != 'undefined') {
+        $('#caseFilter #subject').val(Subject_cookie);
+    }
+    if (Category_cookie != 'undefined') {
+        $('#caseFilter #category').val(Category_cookie);
+    }
+    if (Product_cookie != 'undefined') {
+        $('#caseFilter #product').val(Product_cookie);
+    }
+    if (Involvement_cookie != 'undefined') {
+        $('#caseFilter #person').val(Involvement_cookie);
+    }
+    if (DateFrom_cookie != 'undefined') {
+        $('#caseFilter #dateCreatedFrom').val(DateFrom_cookie);
+    }
+    if (DateTo_cookie != 'undefined') {
+        $('#caseFilter #dateCreatedTo').val(DateTo_cookie);
+    }
+
+}
 
 function LoadContactDetail(){
     $('#caseAddForm #email').val(''); $('#caseAddForm #contact').val('');
