@@ -237,8 +237,10 @@ function GetCaseFilter() {
     if (Organization_cookie != 'undefined') {
         $('#caseFilter #organisation').val(Organization_cookie);
     }
-    if (Status_cookie != 'undefined') {
-        $('#caseFilter #status').val(Status_cookie);
+    if (Status_cookie == '') {
+        $('#caseFilterForm #status').val('');
+    } else {
+        $('#caseFilterForm #status').val(Status_cookie || 'Open');
     }
     if (Subject_cookie != 'undefined') {
         $('#caseFilter #subject').val(Subject_cookie);
