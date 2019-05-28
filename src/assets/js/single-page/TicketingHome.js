@@ -1121,7 +1121,7 @@ function GetAddressFromPostalCode(PostalCode) {
 }
 
 function getOrgnaisationList() {
-    $.ajax({
+  return  $.ajax({
         url: apiSrc + "BCMain/iCtc1.getOrgnaisationList.json",
         method: "POST",
         dataType: "json",
