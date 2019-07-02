@@ -197,13 +197,13 @@ $(function () {
     });
     $('#newUserForm #submit').click(function () {
         $(this).attr("disabled","disabled");
-        $.when(addNewUser()).then(function(){
+        $.when(addNewUser('O')).then(function(){
           $('#newUserForm #submit').removeAttr("disabled");
         });
     });
     $('#newPersonForm #submit').click(function () {
         $(this).attr("disabled","disabled");
-        $.when(addNewPerson()).then(function(){
+        $.when(addNewPerson('I')).then(function(){
           $('#newPersonForm #submit').removeAttr("disabled");
         });
     });
@@ -751,7 +751,7 @@ function addNewPackage() {
     });
 }
 
-function addNewUser() {
+function addNewUser(NRICType) {
     var displayName, entityKey, mobile, email, country, postalCode, city, state, block, street, unit, building, role = '', poc1Name,
     poc1Contact, poc1Email, poc1Designation, poc1Department, poc2Name, poc2Contact, poc2Email, poc2Designation, poc2Department, Username = '', Password = '';
     displayName = $('#newUserForm #displayName').val();
@@ -793,7 +793,7 @@ function addNewUser() {
         return false;
     }
 
-    var data = { 'displayName': displayName, 'entityKey': entityKey, 'mobile': mobile, 'email': email, 'country': country, 'postalCode': postalCode, 'city': city, 'state': state, 'block': block, 'street': street, 'unit': unit, 'building': building, 'role': role, 'poc1Name': poc1Name, 'poc1Contact': poc1Contact, 'poc1Email': poc1Email, 'poc1Designation': poc1Designation, 'poc1Department': poc1Department, 'poc2Name': poc2Name, 'poc2Contact': poc2Contact, 'poc2Email': poc2Email, 'poc2Designation': poc2Designation, 'poc2Department': poc2Department, 'Username': Username, 'UserPassword': Password };
+    var data = { 'NRICType':NRICType,'displayName': displayName, 'entityKey': entityKey, 'mobile': mobile, 'email': email, 'country': country, 'postalCode': postalCode, 'city': city, 'state': state, 'block': block, 'street': street, 'unit': unit, 'building': building, 'role': role, 'poc1Name': poc1Name, 'poc1Contact': poc1Contact, 'poc1Email': poc1Email, 'poc1Designation': poc1Designation, 'poc1Department': poc1Department, 'poc2Name': poc2Name, 'poc2Contact': poc2Contact, 'poc2Email': poc2Email, 'poc2Designation': poc2Designation, 'poc2Department': poc2Department, 'Username': Username, 'UserPassword': Password };
 
     $.ajax({
         url: apiSrc + "BCMain/iCtc1.AddNewUser1.json",
@@ -827,7 +827,7 @@ function addNewUser() {
     });
 }
 
-function addNewPerson() {
+function addNewPerson(NRICType) {
     var displayName = '', entityKey = '', mobile = '', email = '', country = '', postalCode = '', city = '', state = '', block = '', street = '', unit = '',
     building = '', role = '', poc1Name = '', poc1Contact = '', poc1Email = '', poc1Designation = '', poc1Department = '', poc2Name = '', poc2Contact = '',
     poc2Email = '', poc2Designation = '', poc2Department = '', Username = '', Password = '';
@@ -850,7 +850,7 @@ function addNewPerson() {
         return false;
     }
 
-    var data = { 'displayName': displayName, 'entityKey': entityKey, 'mobile': mobile, 'email': email, 'country': country, 'postalCode': postalCode, 'city': city, 'state': state, 'block': block, 'street': street, 'unit': unit, 'building': building, 'role': role, 'poc1Name': poc1Name, 'poc1Contact': poc1Contact, 'poc1Email': poc1Email, 'poc1Designation': poc1Designation, 'poc1Department': poc1Department, 'poc2Name': poc2Name, 'poc2Contact': poc2Contact, 'poc2Email': poc2Email, 'poc2Designation': poc2Designation, 'poc2Department': poc2Department, 'Username': Username, 'UserPassword': Password };
+    var data = { 'NRICType':NRICType,'displayName': displayName, 'entityKey': entityKey, 'mobile': mobile, 'email': email, 'country': country, 'postalCode': postalCode, 'city': city, 'state': state, 'block': block, 'street': street, 'unit': unit, 'building': building, 'role': role, 'poc1Name': poc1Name, 'poc1Contact': poc1Contact, 'poc1Email': poc1Email, 'poc1Designation': poc1Designation, 'poc1Department': poc1Department, 'poc2Name': poc2Name, 'poc2Contact': poc2Contact, 'poc2Email': poc2Email, 'poc2Designation': poc2Designation, 'poc2Department': poc2Department, 'Username': Username, 'UserPassword': Password };
 
     $.ajax({
         url: apiSrc + "BCMain/iCtc1.AddNewUser1.json",
