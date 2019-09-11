@@ -329,11 +329,13 @@ function ecexHourSetting() {
         ActualTimeToTemp = $('#ServiceForm #ActualTimeTo').val(),
         ServiceActualDateTimeFromTemp = ServiceActualDateFromTemp + ' ' + ActualTimeFromTemp,
         ServiceActualDateTimeToTemp = ServiceActualDateToTemp + ' ' + ActualTimeToTemp;
+        if (ServiceActualDateFromTemp.length<=0||ServiceActualDateToTemp.length<=0||ActualTimeFromTemp.length<=0||ActualTimeToTemp.length<=0) {
+            return false;
+        }
     if (moment(ServiceActualDateTimeToTemp).diff(ServiceActualDateTimeFromTemp) < 0) {
         alert('Actual date to need more than actual date from.');
         return false;
     }
-
     execDays();
 
     actualHour = 0, billingHours = 0, hourDeatils = '';
