@@ -1,4 +1,4 @@
-var RoleName = '', PrintFlag = '', FileID = '', caseID = '', TargetRoleID = '', TimeTypeMap = {};
+var RoleName = '', PrintFlag = '', FileID = '', caseID = '', TargetRoleID = '', TimeTypeMap = {},Minimum2HrChargeMap = {};
 var startDate = '', endDate = '', standDate = '', execCount = 0.0, actualHour = 0.0, billingHours = 0.0, hourDeatils = '',
     offSetHour = 0.0, ServiceTimePoint9, ServiceTimePoint18, ServiceTimePoint22, ServiceTimePoint24;
 
@@ -142,10 +142,14 @@ $(function () {
                         $('#ServiceForm #CustomerNameDiv').hide();
                         $('#ServiceForm #ActualTimeTo').val(SplitTime(moment(AddTime).format("HH:mm")));
                     }
+                    ecexHourSetting();
                 });
 
 
                 GetServiceChargeToPackage('ServiceForm', 'ServiceChargeToPackage', '');
+                $('#ServiceForm #ServiceChargeToPackage').change(function(){
+                    ecexHourSetting();
+                });
                 GetOrgAddressLocation('OrgAddressLocation', TargetRoleID);
             });
             GetCaseHistory(caseID);
@@ -154,7 +158,7 @@ $(function () {
             GetCaseInvolvement(caseID);
         });
     GetServicePoint('ServiceTimePoint');
-    GetTimeClockType();
+    GetTimeClockType();GetMinimum2HrCharge();
     $("#ServiceForm #ServicePHWeekend").click(function () {
         ecexHourSetting();
         if ($('#ServiceForm #ServiceType').val() == 'Professional Service') {
@@ -232,7 +236,33 @@ function GetCaseInvolvement(caseId) {
         }
     });
 };
-
+function ReCalcBillingHours(){
+    var PackageType=$('#ServiceForm #ServiceChargeToPackage').val(),ServiceFormType=$('#ServiceForm #ServiceFormType').val(),
+    CurrentServiceActualHours=$('#ServiceForm #ServiceActualHours').val()||0,ServiceOffSetHours=parseFloat($('#ServiceForm #ServiceOffSetHours').val())||0;
+    var CurMinimum2HrCharge=PackageType+'|'+ServiceFormType;
+    if (Minimum2HrChargeMap[CurMinimum2HrCharge]) {
+         if(CurrentServiceActualHours<2){
+            var PHWeekend = 1, Urgent = 1;
+            if ($("#ServiceForm #ServicePHWeekend").is(':checked')) {
+                PHWeekend = parseFloat(TimeTypeMap['PHWeekend']) || 2;
+            }
+            if ($("#ServiceForm #ServiceUrgent").is(':checked')) {
+                Urgent = parseFloat(TimeTypeMap['Urgent']) || 2;
+            }
+            var billingHours=Minimum2HrChargeMap[CurMinimum2HrCharge]*PHWeekend*Urgent+ServiceOffSetHours;
+            $('#ServiceForm #ServiceBillingHours').val(billingHours);
+        
+            var ServiceActualDateFromTemp = $('#ServiceForm #ServiceActualDateFrom').val(),
+            ServiceActualDateToTemp = $('#ServiceForm #ServiceActualDateTo').val(),
+            ActualTimeFromTemp = $('#ServiceForm #ActualTimeFrom').val(),
+            ActualTimeToTemp = $('#ServiceForm #ActualTimeTo').val(),
+            ServiceActualDateTimeFromTemp = ServiceActualDateFromTemp + ' ' + ActualTimeFromTemp,
+            ServiceActualDateTimeToTemp = ServiceActualDateToTemp + ' ' + ActualTimeToTemp;
+            offSetHour=$('#ServiceForm #ServiceOffSetHours').val()||0
+            $('#ServiceForm #ServiceHoursCalculation').val(('from : ' + moment(ServiceActualDateTimeFromTemp).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(ServiceActualDateTimeToTemp).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + CurrentServiceActualHours + ' Billing Hours : ' + billingHours + '\r\nManual Adjust Hour : ' + offSetHour).replace('12:00 am', '00:00 am'));
+         }
+    } 
+}
 function AddNewServiceForm() {
     $('#ServiceForm #submit').show();
     $('#ServiceForm #PrintService').hide();
@@ -321,6 +351,36 @@ function GetTimeClockType() {
         }
     });
 }
+function GetMinimum2HrCharge() {
+    var data = { 'LookupCat': 'Minimum2HrCharge' };
+    return $.ajax({
+        url: apiSrc + "BCMain/iCtc1.GetTicketLookupVal.json",
+        method: "POST",
+        dataType: "json",
+        xhrFields: { withCredentials: true },
+        data: {
+            'data': JSON.stringify(data),
+            'WebPartKey': WebPartVal,
+            'ReqGUID': getGUID()
+        },
+        success: function (data) {
+            if ((data) && (data.d.RetVal === -1)) {
+                if (data.d.RetData.Tbl.Rows.length > 0) {
+                    var Result = data.d.RetData.Tbl.Rows;
+                    for (var i = 0; i < Result.length; i++) {
+                        Minimum2HrChargeMap[Result[i].LookupKey] = Result[i].Description;
+                    }
+                }
+            }
+            else {
+                alert(data.d.RetMsg);
+            }
+        },
+        error: function (data) {
+            alert("Error: " + data.responseJSON.d.RetMsg);
+        }
+    });
+}
 function ecexHourSetting() {
 
     var ServiceActualDateFromTemp = $('#ServiceForm #ServiceActualDateFrom').val(),
@@ -371,8 +431,9 @@ function ecexHourSetting() {
     $('#ServiceForm #ServiceActualHours').val(actualHour);
     $('#ServiceForm #ServiceBillingHours').val(billingHours);
     $('#ServiceForm #ServiceHoursCalculation').val(hourDeatils.replace('12:00 am', '00:00 am'));
+ 
 
-    if ($("#ServiceForm #ServicePHWeekend").is(':checked')) {
+     if ($("#ServiceForm #ServicePHWeekend").is(':checked')) {
         if ($("#ServiceForm #ServiceUrgent").is(':checked')) {
             $('#ServiceForm #ServiceBillingHours').val(actualHour * (parseFloat(TimeTypeMap['PHWeekend']) || 2) * (parseFloat(TimeTypeMap['Urgent']) || 2) + parseFloat(offSetHour));
             $('#ServiceForm #ServiceHoursCalculation').val(('from : ' + moment(ServiceActualDateTimeFromTemp).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(ServiceActualDateTimeToTemp).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + actualHour + ' Billing Hours : ' + (parseFloat(actualHour) * (parseFloat(TimeTypeMap['PHWeekend']) || 2) * (parseFloat(TimeTypeMap['Urgent']) || 2))).replace('12:00 am', '00:00 am') + '\r\nManual Adjust Hour : ' + offSetHour);
@@ -382,6 +443,7 @@ function ecexHourSetting() {
             $('#ServiceForm #ServiceHoursCalculation').val(('from : ' + moment(ServiceActualDateTimeFromTemp).format("MMM D YYYY, hh:mm a") + ' to : ' + moment(ServiceActualDateTimeToTemp).format("MMM D YYYY, hh:mm a") + ' actual hours : ' + actualHour + ' Billing Hours : ' + (parseFloat(actualHour) * (parseFloat(TimeTypeMap['PHWeekend']) || 2) + '\r\nManual Adjust Hour : ' + offSetHour)).replace('12:00 am', '00:00 am'));
         }
     }
+     ReCalcBillingHours();
 }
 
 function execDays() {
