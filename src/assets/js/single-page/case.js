@@ -147,9 +147,6 @@ $(function () {
 
 
                 GetServiceChargeToPackage('ServiceForm', 'ServiceChargeToPackage', '');
-                $('#ServiceForm #ServiceChargeToPackage').change(function(){
-                    ecexHourSetting();
-                });
                 GetOrgAddressLocation('OrgAddressLocation', TargetRoleID);
             });
             GetCaseHistory(caseID);
@@ -237,7 +234,7 @@ function GetCaseInvolvement(caseId) {
     });
 };
 function ReCalcBillingHours(){
-    var PackageType=$('#ServiceForm #ServiceChargeToPackage').val(),ServiceFormType=$('#ServiceForm #ServiceFormType').val(),
+    var PackageType=window.PackageType,ServiceFormType=$('#ServiceForm #ServiceFormType').val(),
     CurrentServiceActualHours=$('#ServiceForm #ServiceActualHours').val()||0,ServiceOffSetHours=parseFloat($('#ServiceForm #ServiceOffSetHours').val())||0;
     var CurMinimum2HrCharge=PackageType+'|'+ServiceFormType;
     if (Minimum2HrChargeMap[CurMinimum2HrCharge]) {
@@ -917,7 +914,7 @@ function GetCaseDetails(caseId) {
                     var caseDetails = data.d.RetData.Tbl.Rows[0];
                     var createdDate = convertDateTime(caseDetails.CreatedDate, 'datetime'),
                         updatedDate = convertDateTime(caseDetails.ModifiedDate, 'datetime');
-
+                    window.PackageType=caseDetails.PackageType||'';
                     $('#summary .CaseID').html(caseDetails.FLID);
                     TargetRoleID = caseDetails.TargetRoleID;
                     $('#summary .organisation').html(caseDetails.Organisation);
